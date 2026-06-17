@@ -53,9 +53,7 @@
       document.getElementById("bell").querySelector(".dot").style.display = d.bell ? "block" : "none";
       // V7 = V5 body + V6's bold streak-forward top section
       let h = P.aiMomentum(state, d)         // TOP — bold streak-forward hero + CTA (from V6)
-        + P.todayCard(state, d, "banner")    // COMBINED: goal banner + today's workouts (horizontal rail)
-        + P.statTiles(state, d)              // steps/distance/calories/reps/active/streak tiles
-        + H.workoutPicker()
+        + P.todayCard(state, d, "banner", { stats: true, addFirst: true }) // goal banner + distance/active + today's workouts (Start another first)
         + (state === "new" ? H.checklist() : "")
         + H.challenges(state, d)             // active challenges
         + P.leaderList(state, d)             // friends leaderboard

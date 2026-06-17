@@ -292,7 +292,7 @@ window.HomePro = (function () {
   /* ════ Combined "Today" card — daily goal + today's workouts in ONE card ════
      kind: 'spot' (V4, dark) · 'banner' (V5, light) · 'hero' (V6, gradient).
      The colored goal header and the workout log share a single card. */
-  function comboGoalTop(state, d, kind) {
+  function comboGoalTop(state, d, kind, opts) {
     const w = d.workout, p = d.steps;
 
     if (kind === "banner") {
@@ -304,7 +304,10 @@ window.HomePro = (function () {
       return `<div class="pb-top"><div class="pb-t">${I("target", 15)} Daily goal</div>
           <div class="pb-top-r">${shareBtn("daily goal")}</div></div>
         <div class="pb-row"><div class="pb-val">${p.value} <span>/ ${p.goal} steps</span></div><div class="pb-pct">${p.pct}%</div></div>
-        <div class="pb-bar"><i style="width:${p.pct}%"></i></div>`;
+        <div class="pb-bar"><i style="width:${p.pct}%"></i></div>
+        ${opts && opts.stats ? `<div class="pb-stats">
+          <div class="pbs"><span class="pbs-ic">${I("pin", 15)}</span><div><div class="pbs-v">${p.distance}</div><div class="pbs-l">distance</div></div></div>
+          <div class="pbs"><span class="pbs-ic">${I("clock", 15)}</span><div><div class="pbs-v">${p.active}</div><div class="pbs-l">active min</div></div></div></div>` : ""}`;
     }
 
     if (kind === "hero") {
@@ -345,7 +348,7 @@ window.HomePro = (function () {
        spot   → vertical LIST rows      (V4)
        banner → horizontal RAIL of cards (V5)
        hero   → 2-column GRID of tiles   (V6)  */
-  function comboWorkouts(state, d, kind) {
+  function comboWorkouts(state, d, kind, opts) {
     const layout = kind === "banner" ? "rail" : kind === "hero" ? "grid" : "list";
     const has = d.sessions && d.sessions.length;
     const head = `<div class="combo-sec"><h3>Today's workouts</h3>${has ? '<a href="#">See all</a>' : ""}</div>`;
@@ -370,8 +373,8 @@ window.HomePro = (function () {
       const cards = d.sessions.map((s) => `<div class="cw-card"><div class="cw-ic">${I(s.i, 22)}</div>
         <div class="cw-n">${s.n}</div><div class="cw-reps">${s.reps}<span> reps</span></div>
         <div class="cw-meta">${s.kcal} kcal · ${s.t}</div></div>`).join("");
-      return head + summary + `<div class="combo-rail">${cards}
-        <div class="cw-card cw-add" onclick="HomeData.startWorkout('another')">${I("plus", 22)}<div>Start<br>another</div></div></div>`;
+      const add = `<div class="cw-card cw-add" onclick="HomeData.startWorkout('another')">${I("plus", 22)}<div>Start<br>another</div></div>`;
+      return head + summary + `<div class="combo-rail">${opts && opts.addFirst ? add + cards : cards + add}</div>`;
     }
 
     // grid (V6)
@@ -382,9 +385,9 @@ window.HomePro = (function () {
       <div class="cw-tile cw-add" onclick="HomeData.startWorkout('another')">${I("plus", 18)} New workout</div></div>`;
   }
 
-  function todayCard(state, d, kind) {
-    return `<div class="pro-combo combo-${kind}"><div class="combo-top">${comboGoalTop(state, d, kind)}</div>
-      <div class="combo-body">${comboWorkouts(state, d, kind)}</div></div>`;
+  function todayCard(state, d, kind, opts) {
+    return `<div class="pro-combo combo-${kind}"><div class="combo-top">${comboGoalTop(state, d, kind, opts)}</div>
+      <div class="combo-body">${comboWorkouts(state, d, kind, opts)}</div></div>`;
   }
 
   return { goalSpotlight, aiBand, aiPulse, aiMomentum, goalBanner, statTiles, momentumHero, statPills,

@@ -227,6 +227,12 @@
 .pro-banner-cta { display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
 .pro-banner-cta .pb-s { font:600 12.5px var(--font); color:var(--text-tertiary); margin-top:3px; }
 .pro-banner-cta .pb-go { color:var(--primary); display:inline-flex; }
+/* banner stat chips (distance · active min) */
+.pb-stats { display:flex; gap:10px; margin-top:14px; }
+.pbs { flex:1; display:flex; align-items:center; gap:9px; background:var(--surface-alt); border-radius:var(--r-sm); padding:10px 12px; min-width:0; }
+.pbs-ic { color:var(--primary); display:inline-flex; flex:none; }
+.pbs-v { font:900 14px var(--font); color:var(--text-primary); line-height:1; white-space:nowrap; }
+.pbs-l { font:700 10.5px var(--font); color:var(--text-tertiary); margin-top:3px; }
 
 /* ════ V5: metric tiles ════ */
 .pro-tiles { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
