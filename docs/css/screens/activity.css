@@ -1,0 +1,62 @@
+/* Activity tab — 3 variants (Leaderboard · Your activity · Live). Global/friends
+   ranking grounded in the old Figma leaderboard. Reuses lb-* from challenges.css.
+   Token + palette aware. */
+.ac-scroll { padding-bottom: 92px; }
+.ac-top { display:flex; align-items:center; justify-content:space-between; padding:4px 16px 6px; }
+.ac-top .t { font:900 22px var(--font); }
+.ac-ic { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--surface); display:grid; place-items:center; color:var(--text-primary); cursor:pointer; }
+
+/* Top / Friends scope switch */
+.ac-scope { display:flex; gap:6px; background:var(--surface-alt); border-radius:var(--r-pill); padding:4px; margin:6px 16px 0; }
+.ac-scope button { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:7px; border:none; background:none; padding:10px 0; border-radius:var(--r-pill); font:800 13.5px var(--font); color:var(--text-secondary); cursor:pointer; }
+.ac-scope button.on { background:var(--surface); color:var(--primary); box-shadow:var(--shadow-card); }
+
+/* metric chips (steps + exercises) */
+.ac-metrics { display:flex; gap:8px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none; }
+.ac-metrics::-webkit-scrollbar { display:none; }
+.ac-chip { flex:none; display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:99px; border:1px solid var(--border); background:var(--surface); font:800 12.5px var(--font); color:var(--text-secondary); cursor:pointer; }
+.ac-chip.on { background:var(--primary); color:var(--on-primary); border-color:var(--primary); }
+.ac-period { display:flex; gap:6px; padding:0 16px; margin-top:10px; }
+.ac-period button { border:none; background:var(--surface-alt); color:var(--text-secondary); border-radius:99px; padding:7px 14px; font:800 12px var(--font); cursor:pointer; }
+.ac-period button.on { background:color-mix(in srgb,var(--primary) 14%,transparent); color:var(--primary); }
+.ac-board { padding:6px 16px 0; }
+.ac-note { font:700 12px var(--font); color:var(--text-tertiary); text-align:center; padding:14px 16px 4px; }
+
+/* Your activity (V2) */
+.ac-statrow { display:flex; gap:10px; padding:14px 16px 0; }
+.ac-stat { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 12px; box-shadow:var(--shadow-card); }
+.ac-stat .si { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; margin-bottom:9px; }
+.ac-stat b { font:900 20px var(--font); display:block; }
+.ac-stat span { font:700 11px var(--font); color:var(--text-tertiary); }
+.ac-card { margin:16px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; box-shadow:var(--shadow-card); }
+.ac-card .hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.ac-card .hd b { font:900 15px var(--font); }
+.ac-card .hd .pct { font:800 12px var(--font); color:var(--primary); }
+.ac-wk { display:flex; align-items:flex-end; gap:8px; height:120px; }
+.ac-wk .col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.ac-wk .col .bar { width:100%; max-width:26px; border-radius:7px 7px 0 0; background:color-mix(in srgb,var(--primary) 28%,transparent); }
+.ac-wk .col.hi .bar { background:var(--primary); }
+.ac-wk .col .lb { font:700 10px var(--font); color:var(--text-tertiary); }
+
+.ac-sec { font:800 13px var(--font); color:var(--text-tertiary); padding:18px 16px 6px; }
+.ac-sess { display:flex; align-items:center; gap:13px; padding:11px 16px; }
+.ac-sess .ic { width:44px; height:44px; border-radius:13px; display:grid; place-items:center; color:#fff; flex:none; }
+.ac-sess .nm { font:800 15px var(--font); }
+.ac-sess .mt { font:700 12px var(--font); color:var(--text-tertiary); margin-top:1px; }
+.ac-sess .rt { margin-left:auto; text-align:right; }
+.ac-sess .rt b { font:900 15px var(--font); } .ac-sess .rt span { display:block; font:700 11px var(--font); color:var(--text-tertiary); }
+
+/* Live (V3) */
+.ac-live { display:flex; align-items:center; gap:12px; padding:13px 16px; border-bottom:1px solid var(--border); }
+.ac-live .lav { width:42px; height:42px; border-radius:50%; flex:none; position:relative; }
+.ac-live .lav .x { position:absolute; right:-3px; bottom:-3px; width:20px; height:20px; border-radius:50%; display:grid; place-items:center; color:#fff; border:2px solid var(--bg-canvas); }
+.ac-live .tx { flex:1; min-width:0; }
+.ac-live .tx b { font:800 14px var(--font); }
+.ac-live .tx p { font:700 12.5px var(--font); color:var(--text-secondary); margin-top:1px; }
+.ac-live .tx .tm { font:700 11px var(--font); color:var(--text-tertiary); margin-top:2px; }
+.ac-cheer { margin-left:auto; flex:none; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-primary); border-radius:99px; padding:8px 13px; font:800 12px var(--font); cursor:pointer; }
+.ac-cheer.on { background:color-mix(in srgb,#e25b40 12%,transparent); border-color:transparent; color:#e25b40; }
+.ac-livehead { display:flex; align-items:center; gap:8px; padding:14px 16px 4px; font:800 13px var(--font); color:var(--text-secondary); }
+.ac-livehead .live { display:inline-flex; align-items:center; gap:6px; color:#e25b40; }
+.ac-livehead .live .d { width:8px; height:8px; border-radius:50%; background:#e25b40; animation:ac-pulse 1.4s infinite; }
+@keyframes ac-pulse { 0%,100%{opacity:1} 50%{opacity:.3} }

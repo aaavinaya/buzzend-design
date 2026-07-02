@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="teal" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Buzzend · Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/home.css" />
+  <link rel="stylesheet" href="../../css/screens/challenges.css" />
+  <link rel="stylesheet" href="../../css/screens/activity.css" />
+</head>
+<body>
+  <div class="state-switch">
+    <button data-v="1" onclick="setV('1')">Leaderboard</button>
+    <button data-v="2" onclick="setV('2')">Your activity</button>
+    <button data-v="3" onclick="setV('3')">Live</button>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" style="top:64px">🌙</button>
+
+  <div class="screen-box">
+    <div class="screen">
+      <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;·&nbsp;&nbsp;100%</span></div>
+      <div class="ac-top"><div class="t" id="actitle">Activity</div>
+        <button class="ac-ic" onclick="location.href='profile.html'"><i data-icon="user" data-size="18"></i></button></div>
+      <div class="scroll ac-scroll" id="content"></div>
+    </div>
+    <div class="bottom-nav">
+      <a class="nav-item" href="home-v7.html"><span class="ic"><i data-icon="home" data-size="22"></i></span>Home</a>
+      <a class="nav-item" href="challenges.html"><span class="ic"><i data-icon="trophy" data-size="22"></i></span>Challenges</a>
+      <div class="nav-fab"><button onclick="location.href='../workout/moment.html'"><i data-icon="plus" data-size="26"></i></button></div>
+      <a class="nav-item active"><span class="ic"><i data-icon="activity" data-size="22"></i></span>Activity</a>
+      <a class="nav-item" href="profile.html"><span class="ic"><i data-icon="user" data-size="22"></i></span>Profile</a>
+    </div>
+  </div>
+
+  <script src="../../js/components/dialog.js"></script>
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/social-data.js"></script>
+  <script src="../../js/screens/activity.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    const TITLES = { "1": "Leaderboard", "2": "Your activity", "3": "Live activity" };
+    function render(v) {
+      document.getElementById("content").innerHTML = Activity.render(v);
+      window.Icons.init(document.getElementById("content"));
+      document.getElementById("actitle").textContent = TITLES[v] || "Activity";
+      document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
+    }
+    function setV(v) { render(v); }
+    render(new URLSearchParams(location.search).get("v") || "1");
+  </script>
+</body>
+</html>

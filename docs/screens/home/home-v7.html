@@ -24,19 +24,19 @@
     <div class="screen home">
       <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;􀙇&nbsp;&nbsp;100%</span></div>
       <div class="home-header">
-        <div class="hh-avatar" style="background-image:linear-gradient(135deg,#6a8caf,#33566f)"></div>
+        <div class="hh-avatar" style="background-image:linear-gradient(135deg,#6a8caf,#33566f);cursor:pointer" onclick="location.href='profile.html'"></div>
         <div class="hh-greet"><div class="hi" id="hi">Good morning 👋</div><div class="nm">Ema William</div></div>
-        <button class="hh-btn"><i data-icon="search" data-size="19"></i></button>
-        <button class="hh-btn" id="bell"><i data-icon="bell" data-size="19"></i><span class="dot"></span></button>
+        <button class="hh-btn" onclick="location.href='activity.html'"><i data-icon="search" data-size="19"></i></button>
+        <button class="hh-btn" id="bell" onclick="location.href='../notifications/notifications.html'"><i data-icon="bell" data-size="19"></i><span class="dot"></span></button>
       </div>
       <div class="scroll" id="content"></div>
     </div>
     <div class="bottom-nav">
       <a class="nav-item active"><span class="ic"><i data-icon="home" data-size="22"></i></span>Home</a>
-      <a class="nav-item"><span class="ic"><i data-icon="trophy" data-size="22"></i></span>Challenges</a>
-      <div class="nav-fab"><button><i data-icon="plus" data-size="26"></i></button></div>
-      <a class="nav-item"><span class="ic"><i data-icon="activity" data-size="22"></i></span>Activity</a>
-      <a class="nav-item"><span class="ic"><i data-icon="user" data-size="22"></i></span>Profile</a>
+      <a class="nav-item" href="challenges.html"><span class="ic"><i data-icon="trophy" data-size="22"></i></span>Challenges</a>
+      <div class="nav-fab"><button onclick="location.href='../workout/moment.html'"><i data-icon="plus" data-size="26"></i></button></div>
+      <a class="nav-item" href="activity.html"><span class="ic"><i data-icon="activity" data-size="22"></i></span>Activity</a>
+      <a class="nav-item" href="profile.html"><span class="ic"><i data-icon="user" data-size="22"></i></span>Profile</a>
     </div>
   </div>
 
