@@ -1,0 +1,126 @@
+/* Streak detail — faithful port (Flutter streak_detail_screen) + Rings & Calendar
+   redesigns. States: active / broken / inactive. Token + palette aware. */
+.sk { min-height:820px; background:var(--bg-canvas); position:relative; }
+.sk-scroll { padding-bottom:40px; }
+
+/* top bar over hero */
+.sk-bar { position:absolute; top:44px; left:12px; right:12px; z-index:8; display:flex; align-items:center; justify-content:space-between; }
+.sk-bar button { width:40px; height:40px; border-radius:50%; background:rgba(0,0,0,.28); color:#fff; border:none; display:grid; place-items:center; cursor:pointer; backdrop-filter:blur(6px); }
+.sk-bar .t { color:#fff; font:900 17px var(--font); }
+
+/* ── hero ── */
+.sk-hero { padding:74px 20px 26px; color:#fff; text-align:left; position:relative; overflow:hidden; }
+.sk-hero.active { background:var(--hero-grad); }
+.sk-hero.broken { background:linear-gradient(160deg,#7a1f2a,#3a0f14); }
+.sk-hero.inactive { background:linear-gradient(160deg,#3a4650,#232b31); }
+.sk-hero .badge { display:inline-flex; align-items:center; gap:7px; font:800 11px var(--font); letter-spacing:.6px; padding:6px 12px; border-radius:99px; background:rgba(255,255,255,.16); }
+.sk-hero .badge .d { width:7px; height:7px; border-radius:50%; background:#fff; }
+.sk-hero.active .badge .d { background:#5fe3a1; } .sk-hero.broken .badge .d { background:#ff8a8a; }
+.sk-hero-main { display:flex; align-items:flex-end; justify-content:space-between; margin-top:14px; }
+.sk-num { font:900 66px var(--font); line-height:.9; }
+.sk-lbl { font:800 16px var(--font); opacity:.9; margin-left:4px; }
+.sk-hero-ic { font-size:44px; opacity:.9; }
+.sk-hero-ic svg { width:52px; height:52px; }
+.sk-sub { font:600 13.5px var(--font); opacity:.85; margin-top:12px; }
+
+/* ── stat cards ── */
+.sk-stats { display:flex; gap:12px; padding:16px; margin-top:-14px; position:relative; z-index:3; }
+.sk-stat { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:15px; box-shadow:var(--shadow-card); }
+.sk-stat .ic { display:flex; }
+.sk-stat .v { font:900 26px var(--font); color:var(--text-primary); margin-top:6px; }
+.sk-stat .l { font:700 12px var(--font); color:var(--text-tertiary); margin-top:1px; }
+
+/* ── sections ── */
+.sk-sec { padding:8px 18px 0; }
+.sk-sec .h { font:900 16px var(--font); color:var(--text-primary); }
+.sk-sec .sh { font:600 13px var(--font); color:var(--text-secondary); margin-top:3px; }
+.sk-card { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; box-shadow:var(--shadow-card); margin-top:12px; }
+
+/* ── this week ── */
+.sk-wkhd { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+.sk-wkhd .h { font:900 15px var(--font); color:var(--text-primary); }
+.sk-wkhd .r { font:700 12px var(--font); color:var(--text-tertiary); }
+.sk-week { display:flex; justify-content:space-between; }
+.sk-day { display:flex; flex-direction:column; align-items:center; gap:7px; flex:1; }
+.sk-day .dot { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:15px; }
+.sk-day.completed .dot { background:color-mix(in srgb,var(--primary) 15%,transparent); color:var(--primary); }
+.sk-day.missed .dot { background:color-mix(in srgb,#e5524a 13%,transparent); color:#e5524a; }
+.sk-day.pending .dot { border:2px dashed var(--border); }
+.sk-day.future .dot { background:var(--surface-alt); }
+.sk-day .lb { font:700 11px var(--font); color:var(--text-tertiary); }
+.sk-day.completed .lb { color:var(--text-secondary); }
+
+/* ── workout pills (OR) ── */
+.sk-pills { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:8px 10px; margin-top:12px; box-shadow:var(--shadow-card); }
+.sk-pill { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:40px; cursor:pointer; }
+.sk-pill:active { background:var(--surface-alt); }
+.sk-pill .pic { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); flex:none; }
+.sk-pill .nm { font:800 15px var(--font); color:var(--primary); }
+.sk-pill .sub { font:600 12.5px var(--font); color:var(--text-secondary); margin-top:1px; }
+.sk-pill .go { margin-left:auto; color:var(--text-tertiary); }
+.sk-or { text-align:center; font:700 11px var(--font); color:var(--text-tertiary); padding:2px 0; }
+
+/* ── restore progress ── */
+.sk-rbar { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:12px; }
+.sk-rbar .row { display:flex; align-items:center; justify-content:space-between; font:700 12.5px var(--font); }
+.sk-rbar .row b { color:var(--text-primary); } .sk-rbar .row span { color:var(--text-tertiary); }
+.sk-track { height:6px; border-radius:99px; background:var(--surface-alt); margin-top:9px; overflow:hidden; }
+.sk-track i { display:block; height:100%; border-radius:99px; background:var(--primary); }
+
+/* ── invite card ── */
+.sk-invite { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; box-shadow:var(--shadow-card); margin-top:12px; }
+.sk-invite .top { display:flex; gap:12px; }
+.sk-invite .ic { width:42px; height:42px; border-radius:12px; background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); display:grid; place-items:center; flex:none; }
+.sk-invite .nm { font:800 15px var(--font); color:var(--text-primary); }
+.sk-invite .sub { font:600 12.5px var(--font); color:var(--text-secondary); margin-top:3px; }
+.sk-invite .stat { display:flex; align-items:center; justify-content:space-between; margin-top:14px; font:700 12px var(--font); color:var(--text-tertiary); }
+.sk-invite .stat .done { color:var(--primary); font-weight:800; }
+.sk-invite .share { width:100%; height:48px; margin-top:16px; border:none; border-radius:var(--r-pill); background:var(--primary); color:var(--on-primary); font:800 14px var(--font); display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+
+/* ── reset ── */
+.sk-reset { display:block; margin:22px auto 8px; background:none; border:none; color:#e5524a; font:800 13.5px var(--font); cursor:pointer; display:inline-flex; align-items:center; gap:7px; }
+.sk-resetwrap { text-align:center; }
+
+/* reset dialog */
+.sk-ov { position:absolute; inset:0; z-index:30; background:rgba(5,10,12,.5); display:grid; place-items:center; padding:24px; animation:sk-fade .18s ease; }
+@keyframes sk-fade { from{opacity:0} to{opacity:1} }
+.sk-dlg { width:100%; max-width:300px; background:var(--surface); border-radius:20px; padding:24px; text-align:center; animation:sk-pop .2s ease; position:relative; }
+@keyframes sk-pop { from{transform:scale(.93);opacity:.5} to{transform:scale(1);opacity:1} }
+.sk-dlg .x { position:absolute; top:12px; right:12px; width:28px; height:28px; border:none; background:var(--surface-alt); border-radius:50%; color:var(--text-secondary); cursor:pointer; display:grid; place-items:center; }
+.sk-dlg .di { width:56px; height:56px; border-radius:16px; margin:0 auto 14px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 13%,transparent); }
+.sk-dlg .dt { font:900 18px var(--font); color:var(--text-primary); }
+.sk-dlg .dd { font:600 13px var(--font); color:var(--text-secondary); margin-top:8px; line-height:1.5; }
+.sk-dlg-row { display:flex; gap:10px; margin-top:20px; } .sk-dlg-row button { flex:1; height:48px; border:none; border-radius:12px; font:800 14px var(--font); cursor:pointer; }
+.sk-cancel { background:var(--surface-alt); color:var(--text-secondary); } .sk-confirm { background:var(--primary); color:var(--on-primary); }
+
+/* ── V2 Rings ── */
+.sk-ringhero { padding:74px 20px 24px; background:var(--hero-grad); color:#fff; display:flex; flex-direction:column; align-items:center; }
+.sk-ring { position:relative; width:190px; height:190px; }
+.sk-ring .c { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.sk-ring .fl { font-size:26px; opacity:.9; } .sk-ring .fl svg { width:30px; height:30px; }
+.sk-ring .n { font:900 52px var(--font); line-height:.95; }
+.sk-ring .u { font:800 13px var(--font); opacity:.9; }
+.sk-ring-badge { margin-top:14px; }
+.sk-ringstats { display:flex; gap:22px; margin-top:16px; }
+.sk-ringstats .s { text-align:center; } .sk-ringstats .s b { font:900 20px var(--font); display:block; } .sk-ringstats .s span { font:700 11px var(--font); opacity:.85; }
+
+/* ── V3 Calendar / heatmap ── */
+.sk-cal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; box-shadow:var(--shadow-card); margin-top:12px; }
+.sk-cal-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.sk-cal-hd .m { font:900 15px var(--font); color:var(--text-primary); }
+.sk-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.sk-cal-grid .cell { aspect-ratio:1; border-radius:7px; background:var(--surface-alt); display:grid; place-items:center; font:700 10px var(--font); color:var(--text-tertiary); }
+.sk-cal-grid .cell.l1 { background:color-mix(in srgb,var(--primary) 30%,transparent); color:var(--primary); }
+.sk-cal-grid .cell.l2 { background:color-mix(in srgb,var(--primary) 60%,transparent); color:#fff; }
+.sk-cal-grid .cell.l3 { background:var(--primary); color:var(--on-primary); }
+.sk-cal-grid .cell.miss { background:color-mix(in srgb,#e5524a 14%,transparent); color:#e5524a; }
+.sk-cal-legend { display:flex; align-items:center; gap:7px; margin-top:12px; font:700 11px var(--font); color:var(--text-tertiary); justify-content:flex-end; }
+.sk-cal-legend i { width:12px; height:12px; border-radius:3px; }
+.sk-miles { display:flex; gap:10px; overflow-x:auto; padding:12px 0 2px; scrollbar-width:none; }
+.sk-miles::-webkit-scrollbar { display:none; }
+.sk-mile { flex:none; width:96px; text-align:center; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 8px; box-shadow:var(--shadow-card); }
+.sk-mile.done { border-color:color-mix(in srgb,var(--primary) 40%,transparent); background:color-mix(in srgb,var(--primary) 8%,transparent); }
+.sk-mile .mi { width:40px; height:40px; border-radius:12px; margin:0 auto 8px; display:grid; place-items:center; color:var(--text-tertiary); background:var(--surface-alt); }
+.sk-mile.done .mi { color:var(--primary); background:color-mix(in srgb,var(--primary) 14%,transparent); }
+.sk-mile .mv { font:900 14px var(--font); color:var(--text-primary); }
+.sk-mile .ml { font:700 10px var(--font); color:var(--text-tertiary); margin-top:2px; }

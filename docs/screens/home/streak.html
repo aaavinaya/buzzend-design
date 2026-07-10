@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="teal" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Buzzend · Streak</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/home.css" />
+  <link rel="stylesheet" href="../../css/screens/streak.css" />
+</head>
+<body>
+  <div class="state-switch">
+    <button data-v="active" onclick="setV('active')">Active</button>
+    <button data-v="broken" onclick="setV('broken')">Broken</button>
+    <button data-v="inactive" onclick="setV('inactive')">New</button>
+    <button data-v="rings" onclick="setV('rings')">Rings</button>
+    <button data-v="calendar" onclick="setV('calendar')">Calendar</button>
+  </div>
+
+  <div class="screen-box">
+    <div class="screen">
+      <div class="statusbar" style="position:absolute;top:0;left:0;right:0;z-index:30;height:44px;color:#fff"><span>9:41</span><span>5G&nbsp;&nbsp;·&nbsp;&nbsp;100%</span></div>
+      <div class="sk scroll" id="app"></div>
+    </div>
+  </div>
+
+  <script src="../../js/components/dialog.js"></script>
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/social-data.js"></script>
+  <script src="../../js/screens/streak.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    const app = document.getElementById("app");
+    function setV(v) {
+      Streak.start(app, v);
+      document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
+    }
+    setV(new URLSearchParams(location.search).get("v") || "active");
+  </script>
+</body>
+</html>
