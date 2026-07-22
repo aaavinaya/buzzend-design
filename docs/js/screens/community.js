@@ -18,8 +18,9 @@ window.Community = (function () {
     { p: 0, kind: "competition", ex: "situp", reps: 20, cap: "20 sit-ups in 30s — first attempt, come beat it!", likes: 12, views: 260, t: "1h", owner: 0, general: true,
       assets: [V("situp")], comp: { status: { live: true, txt: "6d left" }, board: [{ pi: 0, score: 20 }] } },
     { p: 5, kind: "challenge", ch: "30-Day Squats", ex: "squat", reps: 150, cap: "New squat PR — 150 reps today!", likes: 142, views: 1820, t: "2h", general: true, assets: [V("squat")] },
-    // competition (Beat-It) ATTEMPT — poster ≠ owner, so line 2 attributes the ORIGINAL "by <owner>"
-    { p: 3, kind: "competition", ex: "squat", reps: 18, cap: "18 clean squats in 30s — who's beating this?", likes: 76, views: 1440, t: "2h", owner: 1, general: true,
+    // competition (Beat-It) ATTEMPT — poster ≠ owner ("by <owner>") AND also cross-posted to Profile + a
+    // Challenge → the maximal placement label "Competitions & Profile & Challenge".
+    { p: 3, kind: "competition", ex: "squat", reps: 18, cap: "18 clean squats in 30s — who's beating this?", likes: 76, views: 1440, t: "2h", owner: 1, general: true, ch: "30-Day Squats",
       assets: [V("squat")], comp: { status: { live: true, txt: "2d left" }, board: [{ pi: 1, score: 22 }, { pi: 3, score: 18 }, { pi: 0, score: 15 }, { pi: 4, score: 12 }] } },
     { p: 6, kind: "photo", cap: "Morning trail run. The views were unreal.", likes: 185, views: 2400, t: "5h", general: true, assets: [IM(0), IM(1), IM(2), IM(3), IM(4)] },
     { p: 1, kind: "workout", ex: "pushup", reps: 96, cap: "Crushed 96 push-ups in one set.", likes: 96, views: 1240, t: "3h", general: true, assets: [V("pushup"), IM(3)] },
@@ -167,22 +168,24 @@ window.Community = (function () {
     const pe = person(post.p);
     return `<b class="cf-nm" onclick="Community.openProfile('${pe.name}',event)">${pe.name}</b>`;
   }
-  // Line 2 (quiet metadata): time · [by owner] · <placement label>. The placement label is a single
-  // category — Competitions · Profile · Challenge · Profile & Challenge — matching where the post lives:
-  //   competition post → "Competitions" (→ leaderboard)
-  //   profile only → "Profile"  ·  challenge only → "Challenge"  ·  both → "Profile & Challenge"
-  // Each word is its own tap: Profile → profile · Challenge → its detail (1) / tagged sheet (many).
+  // Line 2 (quiet metadata): time · [by owner] · <placement label>. A post can live in ANY combination of
+  // destinations — a Beat-It competition, the author's Profile, and one/more Challenges — so the label is
+  // COMPOSED from the destinations it actually has, in a fixed order joined by " & ":
+  //   Competitions  (competition post → leaderboard)
+  //   Profile       (general post → author profile)
+  //   Challenge     (tagged → its detail (1) / tagged-challenges sheet (many))
+  // e.g. "Competitions", "Competitions & Profile", "Competitions & Profile & Challenge", "Profile & Challenge".
+  // Each word is its own tap. A profile-ONLY post shows NO label (profile is a post's default home).
   function placementLabel(post, i) {
     const pe = person(post.p);
-    if (post.kind === "competition")
-      return `<b class="cf-mseg cf-chlink" onclick="Community.openComp(${i},event)">Competitions</b>`;
-    const chs = challengesOf(post), hasProf = !!post.general, hasCh = chs.length > 0;
-    const prof = `<b class="cf-mseg" onclick="Community.openProfile('${pe.name}',event)">Profile</b>`;
-    const chal = `<b class="cf-mseg cf-chlink" onclick="Community.${chs.length > 1 ? `tagsSheet(${i},event)` : "openChallenge(event)"}">Challenge</b>`;
-    if (hasProf && hasCh) return `${prof}<span class="cf-msep"> &amp; </span>${chal}`;
-    if (hasProf) return prof;
-    if (hasCh) return chal;
-    return "";
+    const chs = challengesOf(post), isComp = post.kind === "competition", hasProf = !!post.general, hasCh = chs.length > 0;
+    // Profile-only (or nothing) → no placement word.
+    if (!isComp && !hasCh) return "";
+    const segs = [];
+    if (isComp) segs.push(`<b class="cf-mseg cf-chlink" onclick="Community.openComp(${i},event)">Competitions</b>`);
+    if (hasProf) segs.push(`<b class="cf-mseg" onclick="Community.openProfile('${pe.name}',event)">Profile</b>`);
+    if (hasCh) segs.push(`<b class="cf-mseg cf-chlink" onclick="Community.${chs.length > 1 ? `tagsSheet(${i},event)` : "openChallenge(event)"}">Challenge</b>`);
+    return segs.join(`<span class="cf-msep"> &amp; </span>`);
   }
   function metaLine(post, i) {
     const pe = person(post.p), segs = [`<span class="cf-mt">${post.t} ago</span>`];
