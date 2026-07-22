@@ -1,0 +1,11 @@
+{
+  "_note": "Workout types. challengeCode = the SHORT code on challenges; backendType = the WorkoutType enum name used by POST /v1/workouts and competitions; countable = has an AI rep counter. Both apps map these identically.",
+  "types": [
+    { "challengeCode": "SQUAT", "backendType": "SQUATS",        "display": "Squats",        "iconKey": "squat",   "countable": true },
+    { "challengeCode": "PUSHP", "backendType": "PUSHUPS",       "display": "Push-ups",      "iconKey": "pushup",  "countable": true },
+    { "challengeCode": "SITUP", "backendType": "SITUPS",        "display": "Sit-ups",       "iconKey": "situp",   "countable": true },
+    { "challengeCode": "JJACK", "backendType": "JUMPING_JACKS", "display": "Jumping Jacks", "iconKey": "jumping", "countable": true },
+    { "challengeCode": "LUNGE", "backendType": "LUNGES",        "display": "Lunges",        "iconKey": "lunge",   "countable": true },
+    { "challengeCode": "WLS",   "backendType": "STEPS",         "display": "Steps",         "iconKey": "walk",    "countable": false }
+  ]
+}

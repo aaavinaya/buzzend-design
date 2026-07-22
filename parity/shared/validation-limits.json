@@ -1,0 +1,20 @@
+{
+  "_note": "Compose / editor limits — must match on both apps (Flutter parity). Enforce client-side AND rely on the backend where it validates.",
+  "compose": {
+    "maxPhotosPerPost": 10,
+    "maxVideosPerPost": 1,
+    "allowPhotoVideoMixing": false
+  },
+  "videoEditor": {
+    "minTrimSeconds": 5,
+    "speedOptions": [0.25, 0.5, 1.0, 1.25, 1.5],
+    "music": {
+      "singleSelect": true,
+      "startOffset": false,
+      "musicVolumeControl": false,
+      "loopToClipLength": true,
+      "videoOnly": true,
+      "muteReplacesOriginal": true
+    }
+  }
+}
