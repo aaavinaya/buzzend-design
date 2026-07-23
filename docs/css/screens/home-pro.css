@@ -182,7 +182,8 @@
 .fc2-chip { display:inline-flex; align-items:center; gap:5px; font:800 12px var(--font); color:var(--text-secondary);
   background:var(--surface-alt); border-radius:99px; padding:6px 11px; }
 .fc2-chip svg { color:var(--primary); }
-.fc2-chip.fc2-steps { background:color-mix(in srgb, var(--primary) 12%, transparent); color:var(--primary); }
+/* steps chip reads identically to every other workout chip (same icon + count color) */
+.fc2-chip.fc2-steps { background:var(--surface-alt); color:var(--text-secondary); }
 .fc2-chip.fc2-steps svg { color:var(--primary); }
 .fc2-foot { display:flex; gap:14px; margin-top:12px; padding-top:11px; border-top:1px solid var(--divider); }
 .fc2-foot span { display:inline-flex; align-items:center; gap:5px; font:700 12px var(--font); color:var(--text-tertiary); }
