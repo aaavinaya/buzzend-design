@@ -1,0 +1,180 @@
+<title>Buzzend · Share Activity Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* app theme tokens (teal palette) — light + dark */
+  :root{
+    --canvas:#f5f5f5; --surface:#ffffff; --surface-alt:#f0f1f0; --text-primary:#373737; --text-secondary:#5f5f5f;
+    --text-tertiary:#8f9190; --border:#d9d9d9; --divider:#e5e5e5; --primary:#008080; --primary-deep:#006666; --accent:#ffa828;
+    --shadow-card:0 1px 3px rgba(36,38,38,.06),0 6px 20px rgba(36,38,38,.05); --font:"Nunito",-apple-system,system-ui,sans-serif;
+    --page:#eceeec;
+  }
+  @media (prefers-color-scheme:dark){ :root{ --canvas:#0f1416; --surface:#1a2123; --surface-alt:#232b2d; --text-primary:#f5f6f7;
+    --text-secondary:#b8bdbd; --text-tertiary:#7e8585; --border:#2e3739; --divider:#2e3739; --shadow-card:0 1px 3px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35); --page:#0c110f; } }
+  :root[data-theme="dark"]{ --canvas:#0f1416; --surface:#1a2123; --surface-alt:#232b2d; --text-primary:#f5f6f7; --text-secondary:#b8bdbd;
+    --text-tertiary:#7e8585; --border:#2e3739; --divider:#2e3739; --shadow-card:0 1px 3px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35); --page:#0c110f; }
+  :root[data-theme="light"]{ --canvas:#f5f5f5; --surface:#ffffff; --surface-alt:#f0f1f0; --text-primary:#373737; --text-secondary:#5f5f5f;
+    --text-tertiary:#8f9190; --border:#d9d9d9; --divider:#e5e5e5; --shadow-card:0 1px 3px rgba(36,38,38,.06),0 6px 20px rgba(36,38,38,.05); --page:#eceeec; }
+
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--page); color:var(--text-primary); font-family:var(--font); -webkit-font-smoothing:antialiased; padding:30px 20px 70px; }
+  .wrap{ max-width:1120px; margin:0 auto; }
+  h1{ font:900 26px var(--font); letter-spacing:-.4px; margin:0 0 6px; }
+  .lede{ font:600 14.5px var(--font); color:var(--text-secondary); margin:0 0 22px; max-width:74ch; line-height:1.55; }
+  .lede b{ color:var(--text-primary); font-weight:800; }
+  .bar{ position:sticky; top:0; z-index:30; display:flex; flex-wrap:wrap; gap:10px 24px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 16px; box-shadow:var(--shadow-card); margin-bottom:24px; }
+  .bgrp{ display:flex; align-items:center; gap:9px; } .blab{ font:800 11px var(--font); letter-spacing:.6px; text-transform:uppercase; color:var(--text-tertiary); }
+  .seg{ display:inline-flex; background:var(--surface-alt); border-radius:11px; padding:3px; gap:2px; }
+  .seg button{ border:0; background:transparent; font:800 12.5px var(--font); color:var(--text-secondary); padding:7px 13px; border-radius:8px; cursor:pointer; }
+  .seg button.on{ background:var(--surface); color:var(--primary); box-shadow:0 1px 3px rgba(0,0,0,.14); }
+  .wmnote{ font:700 12.5px var(--font); color:var(--primary); } .wmnote.off{ color:var(--accent); }
+  .ttoggle{ margin-left:auto; border:1px solid var(--border); background:var(--surface); color:var(--text-primary); width:38px; height:38px; border-radius:10px; cursor:pointer; font-size:16px; }
+  .deck{ display:flex; flex-wrap:wrap; gap:26px; justify-content:center; }
+  .col{ width:322px; } .col .cap{ font:900 15px var(--font); margin:0 0 3px; } .col .sub{ font:600 12px var(--font); color:var(--text-secondary); margin:0 0 12px; min-height:32px; }
+  /* dialog */
+  .dlg{ background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:12px; box-shadow:var(--shadow-card); }
+  .dlg-h{ display:flex; align-items:center; justify-content:space-between; padding:3px 5px 11px; }
+  .dlg-t{ font:900 14px var(--font); color:var(--text-primary); } .dlg-x{ width:26px; height:26px; border-radius:50%; background:var(--surface-alt); color:var(--text-secondary); display:inline-flex; align-items:center; justify-content:center; font-size:13px; }
+  .acts{ display:flex; gap:8px; margin-top:11px; } .acts button{ flex:1; border:0; border-radius:12px; padding:11px 4px; font:800 12.5px var(--font); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; color:var(--text-primary); }
+  .acts .post{ background:var(--primary); color:#fff; } .acts .save{ background:var(--surface-alt); } .acts .share{ background:#23252b; color:#fff; }
+  .acts .bz-ico{ width:15px; height:15px; } .acts button.on{ outline:3px solid var(--accent); outline-offset:1px; }
+  svg{ display:block; } .bz-ico{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  .frame{ width:100%; aspect-ratio:4/5; border-radius:20px; overflow:hidden; background:var(--surface); color:var(--text-primary); padding:14px; display:flex; flex-direction:column; }
+  .f-date{ text-align:right; font:800 12px var(--font); color:var(--text-tertiary); }
+  .brand{ margin-top:auto; padding-top:9px; display:flex; align-items:center; gap:7px; border-top:1px solid var(--divider); }
+  .brand .logo{ width:24px; height:24px; border-radius:7px; background:var(--primary); display:grid; place-items:center; color:#fff; flex:none; }
+  .brand .logo .bz-ico{ width:15px; height:15px; } .brand .bn{ font:900 14px var(--font); color:var(--primary); } .brand .bn i{ color:var(--accent); font-style:normal; }
+  .brand .tag{ margin-left:auto; font:700 10.5px var(--font); color:var(--text-tertiary); white-space:nowrap; }
+
+  /* ── V1 · Panels (teal panels on surface) ── */
+  .v1-hero{ display:flex; align-items:center; gap:12px; margin-top:9px; background:var(--primary); border-radius:18px; padding:12px; }
+  .v1-rc{ position:absolute; inset:0; display:grid; place-items:center; text-align:center; line-height:1.05; }
+  .v1-rc b{ font:900 14px var(--font); color:#fff; } .v1-rc s{ font:700 8px var(--font); color:rgba(255,255,255,.7); text-decoration:none; }
+  .v1-hm{ flex:1; min-width:0; } .v1-hl{ font:800 10.5px var(--font); color:rgba(255,255,255,.8); } .v1-hb{ font:900 24px var(--font); color:#fff; line-height:1.05; }
+  .v1-hd{ display:inline-flex; align-items:center; gap:4px; font:700 13px var(--font); color:#fff; margin-top:2px; white-space:nowrap; } .v1-hd .bz-ico{ width:12px; height:12px; color:rgba(255,255,255,.75); }
+  .v1-pill{ flex:none; background:rgba(255,255,255,.14); border-radius:12px; padding:8px 10px; text-align:center; } .v1-pill span{ display:block; font:800 9.5px var(--font); color:rgba(255,255,255,.8); } .v1-pill b{ font:900 14px var(--font); color:#fff; white-space:nowrap; }
+  .v1-grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:7px; } .v1-grid.one{ grid-template-columns:1fr; }
+  .v1-w{ background:var(--primary); border-radius:14px; padding:9px 10px; display:flex; align-items:center; gap:9px; } .v1-w > div{ min-width:0; }
+  .v1-wi{ width:33px; height:33px; flex:none; border-radius:9px; display:grid; place-items:center; background:rgba(255,255,255,.16); } .v1-wi .bz-ico{ width:18px; height:18px; }
+  .v1-wl{ font:800 10px var(--font); color:rgba(255,255,255,.85); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .v1-wv{ font:900 18px var(--font); color:#fff; white-space:nowrap; } .v1-wv s{ font:700 9.5px var(--font); color:rgba(255,255,255,.8); text-decoration:none; }
+
+  /* ── V2 · Ring-forward (light, on surface) ── */
+  .v2-hero{ display:flex; align-items:center; gap:15px; margin-top:8px; padding:6px 4px; }
+  .v2-rc{ position:absolute; inset:0; display:grid; place-items:center; } .v2-rc b{ font:900 20px var(--font); color:var(--primary); }
+  .v2-hl{ font:800 11px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.4px; } .v2-hb{ font:900 30px var(--font); color:var(--text-primary); line-height:1; }
+  .v2-hd{ display:inline-flex; align-items:center; gap:4px; font:700 13px var(--font); color:var(--text-secondary); margin-top:4px; } .v2-hd .bz-ico{ width:13px; height:13px; color:var(--primary); }
+  .v2-chips{ display:flex; gap:8px; margin-top:8px; } .v2-chip{ flex:1; background:var(--surface-alt); border-radius:13px; padding:9px 11px; }
+  .v2-chip .cv{ font:900 17px var(--font); color:var(--text-primary); display:flex; align-items:center; gap:5px; } .v2-chip .cv .bz-ico{ width:14px; height:14px; }
+  .v2-chip.cal .cv .bz-ico{ color:var(--accent); } .v2-chip.act .cv .bz-ico{ color:var(--primary); } .v2-chip .cl{ font:700 10px var(--font); color:var(--text-tertiary); text-transform:uppercase; margin-top:1px; }
+  .v2-rows{ margin-top:9px; display:flex; flex-direction:column; gap:6px; }
+  .v2-r{ display:flex; align-items:center; gap:11px; background:var(--surface-alt); border-radius:12px; padding:9px 12px; }
+  .v2-ri{ width:30px; height:30px; flex:none; border-radius:8px; display:grid; place-items:center; } .v2-ri .bz-ico{ width:18px; height:18px; }
+  .v2-rn{ flex:1; font:800 13px var(--font); color:var(--text-primary); } .v2-rv{ font:900 15px var(--font); color:var(--text-primary); } .v2-rv s{ font:700 10px var(--font); color:var(--text-tertiary); text-decoration:none; margin-left:2px; }
+
+  /* ── V3 · Gradient hero ── */
+  .v3-hero{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); border-radius:18px; padding:14px; color:#fff; position:relative; }
+  .v3-hd{ display:flex; justify-content:space-between; align-items:baseline; } .v3-hd .k{ font:800 10px var(--font); letter-spacing:.5px; text-transform:uppercase; color:rgba(255,255,255,.75); } .v3-hd .d{ font:800 11px var(--font); color:rgba(255,255,255,.8); }
+  .v3-big{ font:900 44px var(--font); line-height:.95; margin-top:6px; letter-spacing:-1px; }
+  .v3-u{ font:800 13px var(--font); color:rgba(255,255,255,.85); }
+  .v3-bar{ height:7px; border-radius:99px; background:rgba(255,255,255,.22); margin-top:10px; overflow:hidden; } .v3-bar i{ display:block; height:100%; border-radius:99px; background:#fff; }
+  .v3-goal{ font:700 10.5px var(--font); color:rgba(255,255,255,.8); margin-top:5px; }
+  .v3-dist{ display:inline-flex; align-items:center; gap:4px; font:700 12px var(--font); color:#fff; margin-top:8px; } .v3-dist .bz-ico{ width:12px; height:12px; color:rgba(255,255,255,.8); }
+  .v3-grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:8px; } .v3-grid.one{ grid-template-columns:1fr; }
+  .v3-w{ background:var(--surface-alt); border-radius:13px; padding:9px 10px; display:flex; align-items:center; gap:9px; } .v3-w > div{ min-width:0; }
+  .v3-wi{ width:32px; height:32px; flex:none; border-radius:9px; display:grid; place-items:center; } .v3-wi .bz-ico{ width:18px; height:18px; }
+  .v3-wl{ font:800 10px var(--font); color:var(--text-tertiary); white-space:nowrap; } .v3-wv{ font:900 17px var(--font); color:var(--text-primary); white-space:nowrap; } .v3-wv s{ font:700 9.5px var(--font); color:var(--text-tertiary); text-decoration:none; }
+
+  @media (max-width:700px){ .bar{ position:static; } }
+</style>
+
+<div class="wrap">
+  <h1>Share your day — themed variations</h1>
+  <p class="lede">Flutter's idea (steps-ring hero + calorie/rep stats + brand row), re-styled to the <b>app's own theme</b>
+    — teal, amber accent, Nunito, app surfaces, light &amp; dark. Three variations. Switch <b>Day</b> and <b>Destination</b>
+    (brand shows for Save/Share, drops for an in-app Post); 🌙 toggles theme.</p>
+  <div class="bar">
+    <div class="bgrp"><span class="blab">Day</span><div class="seg" id="segDay">
+      <button data-day="mixed" class="on">Steps + workouts</button><button data-day="steps">Steps only</button><button data-day="workouts">Workouts only</button></div></div>
+    <div class="bgrp"><span class="blab">Destination</span><div class="seg" id="segDest">
+      <button data-dest="share" class="on">Share</button><button data-dest="save">Save</button><button data-dest="post">Post</button></div></div>
+    <span id="wmNote" class="wmnote">Brand shown</span>
+    <button class="ttoggle" id="tt">🌙</button>
+  </div>
+  <div class="deck" id="deck"></div>
+</div>
+
+<script>
+  const ICON={
+    footprints:'<path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/>',
+    squat:'<circle cx="12" cy="4.5" r="2"/><path d="M12 6.5 9.5 14"/><path d="M11 8.5 16.5 11"/><path d="M9.5 14H16"/><path d="M16 14 13.5 21"/>',
+    pushup:'<circle cx="4" cy="10" r="1.8"/><path d="M5.5 10.3 14 11"/><path d="M14 11 20 13"/><path d="M8 11v6"/><path d="M3 18h18"/>',
+    situp:'<circle cx="5.5" cy="9.5" r="1.8"/><path d="M7 10.5 12 15"/><path d="M12 15 16 11l4 4"/><path d="M3.5 18h17"/>',
+    flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+    clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+    send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
+    download:'<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
+    share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+    activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  };
+  (function(){const t=new URLSearchParams(location.search).get('t'); if(t) document.documentElement.setAttribute('data-theme',t);})();
+  const svg=(n,s,c)=>`<svg class="bz-ico" width="${s}" height="${s}" viewBox="0 0 24 24"${c?` style="color:${c}"`:""}>${ICON[n]||""}</svg>`;
+  const META={ squat:{i:"squat",c:"#9b6cff",n:"Squats"}, pushup:{i:"pushup",c:"#ffa828",n:"Push-ups"}, situp:{i:"situp",c:"#3b6eff",n:"Sit-ups"} };
+  const fmt=v=>v.toLocaleString("en-US");
+  const DAY={ date:new Date(2026,6,24), steps:{ count:8240, goal:10000, km:6.6, min:72, cal:210 },
+    workouts:[ {ex:"squat",reps:120,cal:96,min:12}, {ex:"pushup",reps:90,cal:74,min:9}, {ex:"situp",reps:60,cal:48,min:7} ] };
+  const scen=k=> k==="steps"?{steps:DAY.steps,workouts:[]} : k==="workouts"?{steps:null,workouts:DAY.workouts} : {steps:DAY.steps,workouts:DAY.workouts};
+  const tCal=d=>(d.steps?d.steps.cal:0)+d.workouts.reduce((s,w)=>s+w.cal,0);
+  const tMin=d=>(d.steps?d.steps.min:0)+d.workouts.reduce((s,w)=>s+w.min,0);
+  const dateStr=dt=>dt.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"})+", "+dt.getFullYear();
+  const ring=(pct,size,st,col,tr)=>{ const r=(size-st)/2,c=2*Math.PI*r,off=c*(1-Math.min(1,pct));
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${tr}" stroke-width="${st}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${st}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`; };
+  const brand=b=> b?`<div class="brand"><span class="logo">${svg("activity",15)}</span><span class="bn">Buzz<i>end</i></span><span class="tag">Stay active. Stay ahead.</span></div>`:"";
+  const pctS=d=>Math.round(d.steps.count/d.steps.goal*100);
+
+  /* V1 · Panels */
+  function v1(d,b){ const cal=tCal(d),hasW=d.workouts.length>0;
+    const hero=d.steps?`<div class="v1-hero"><div style="position:relative;flex:none">${ring(d.steps.count/d.steps.goal,64,6,"#fff","rgba(255,255,255,.18)")}<div class="v1-rc"><b>${pctS(d)}%</b><s>done</s></div></div>
+      <div class="v1-hm"><div class="v1-hl">Steps</div><div class="v1-hb">${fmt(d.steps.count)}</div><div class="v1-hd">${svg("pin",12)} ${d.steps.km} km</div></div>
+      ${hasW?"":`<div class="v1-pill"><span>Calorie</span><b>${cal} cal</b></div>`}</div>`:"";
+    const items=[]; if(d.steps&&hasW) items.push(`<div class="v1-w"><div class="v1-wi">${svg("flame",18,"#ffcf5a")}</div><div><div class="v1-wl">Calorie</div><div class="v1-wv">${cal}<s> cal</s></div></div></div>`);
+    d.workouts.forEach(w=>{const m=META[w.ex];items.push(`<div class="v1-w"><div class="v1-wi">${svg(m.i,18,m.c)}</div><div><div class="v1-wl">${m.n}</div><div class="v1-wv">${w.reps}<s> reps</s></div></div></div>`);});
+    const grid=items.length?`<div class="v1-grid${items.length===1?" one":""}">${items.join("")}</div>`:"";
+    return `<div class="frame"><div class="f-date">${dateStr(DAY.date)}</div>${hero}${grid}${brand(b)}</div>`; }
+
+  /* V2 · Ring-forward */
+  function v2(d,b){ const cal=tCal(d),min=tMin(d);
+    const hero=d.steps?`<div class="v2-hero"><div style="position:relative;flex:none">${ring(d.steps.count/d.steps.goal,84,9,"var(--primary)","var(--surface-alt)")}<div class="v2-rc"><b>${pctS(d)}%</b></div></div>
+      <div><div class="v2-hl">Steps</div><div class="v2-hb">${fmt(d.steps.count)}</div><div class="v2-hd">${svg("pin",13)} ${d.steps.km} km</div></div></div>`:"";
+    const chips=`<div class="v2-chips"><div class="v2-chip cal"><div class="cv">${svg("flame",14)} ${cal}</div><div class="cl">Calories</div></div><div class="v2-chip act"><div class="cv">${svg("clock",14)} ${min}</div><div class="cl">Active min</div></div></div>`;
+    const rows=d.workouts.length?`<div class="v2-rows">${d.workouts.map(w=>{const m=META[w.ex];return `<div class="v2-r"><div class="v2-ri" style="background:${m.c}22">${svg(m.i,18,m.c)}</div><div class="v2-rn">${m.n}</div><div class="v2-rv">${w.reps}<s>reps</s></div></div>`;}).join("")}</div>`:"";
+    return `<div class="frame"><div class="f-date">${dateStr(DAY.date)}</div>${hero}${chips}${rows}${brand(b)}</div>`; }
+
+  /* V3 · Gradient hero */
+  function v3(d,b){ const cal=tCal(d),hasW=d.workouts.length>0;
+    const hero=d.steps?`<div class="v3-hero"><div class="v3-hd"><span class="k">Steps today</span><span class="d">${dateStr(DAY.date)}</span></div><div class="v3-big">${fmt(d.steps.count)}</div><div class="v3-bar"><i style="width:${Math.min(100,pctS(d))}%"></i></div><div class="v3-goal">${pctS(d)}% of ${fmt(d.steps.goal)} goal</div><div class="v3-dist">${svg("pin",12)} ${d.steps.km} km · ${d.steps.min} min active</div></div>`
+      :`<div class="v3-hero"><div class="v3-hd"><span class="k">Calories burned</span><span class="d">${dateStr(DAY.date)}</span></div><div class="v3-big">${fmt(cal)}</div><div class="v3-u">calories today</div></div>`;
+    const items=[]; if(d.steps&&hasW) items.push(`<div class="v3-w"><div class="v3-wi" style="background:${'#ffa82822'}">${svg("flame",18,"#ffa828")}</div><div><div class="v3-wl">Calorie</div><div class="v3-wv">${cal}<s> cal</s></div></div></div>`);
+    d.workouts.forEach(w=>{const m=META[w.ex];items.push(`<div class="v3-w"><div class="v3-wi" style="background:${m.c}22">${svg(m.i,18,m.c)}</div><div><div class="v3-wl">${m.n}</div><div class="v3-wv">${w.reps}<s> reps</s></div></div></div>`);});
+    const grid=items.length?`<div class="v3-grid${items.length===1?" one":""}">${items.join("")}</div>`:"";
+    return `<div class="frame"><div style="margin-top:-2px">${hero}</div>${grid}${brand(b)}</div>`; }
+
+  let DK="mixed", DEST="share"; const brandOn=()=>DEST!=="post";
+  const V=[ {cap:"V1 · Panels", sub:"Teal panels on surface — closest to today's app cards.", fn:v1},
+    {cap:"V2 · Ring-forward", sub:"Big teal ring + light stat chips + clean workout rows.", fn:v2},
+    {cap:"V3 · Gradient hero", sub:"Signature teal gradient hero band + light stat cards.", fn:v3} ];
+  function acts(){ const b=(dd,c,i,t)=>`<button class="${c}${DEST===dd?" on":""}" data-setdest="${dd}">${svg(i,15)} ${t}</button>`;
+    return `<div class="acts">${b("post","post","send","Post")}${b("save","save","download","Save")}${b("share","share","share","Share")}</div>`; }
+  function render(){ const d=scen(DK),b=brandOn();
+    document.getElementById("deck").innerHTML=V.map(x=>`<div class="col"><div class="cap">${x.cap}</div><div class="sub">${x.sub}</div>
+      <div class="dlg"><div class="dlg-h"><span class="dlg-t">Share your day</span><span class="dlg-x">✕</span></div>${x.fn(d,b)}${acts()}</div></div>`).join("");
+    document.querySelectorAll("#segDay button").forEach(x=>x.classList.toggle("on",x.dataset.day===DK));
+    document.querySelectorAll("#segDest button").forEach(x=>x.classList.toggle("on",x.dataset.dest===DEST));
+    const h=document.getElementById("wmNote"); h.textContent=b?(DEST==="save"?"Brand shown — download":"Brand shown — external share"):"Brand hidden — in-app post"; h.className="wmnote"+(b?"":" off");
+  }
+  document.getElementById("segDay").addEventListener("click",e=>{const x=e.target.closest("button"); if(x){DK=x.dataset.day; render();}});
+  document.getElementById("segDest").addEventListener("click",e=>{const x=e.target.closest("button"); if(x){DEST=x.dataset.dest; render();}});
+  document.getElementById("deck").addEventListener("click",e=>{const x=e.target.closest("[data-setdest]"); if(x){DEST=x.dataset.setdest; render();}});
+  document.getElementById("tt").addEventListener("click",()=>{ const r=document.documentElement; const dark=(r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))==="dark"; r.setAttribute("data-theme",dark?"light":"dark"); });
+  render();
+</script>

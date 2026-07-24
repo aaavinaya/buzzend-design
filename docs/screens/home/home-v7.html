@@ -12,6 +12,46 @@
   <link rel="stylesheet" href="../../css/screens/home.css" />
   <link rel="stylesheet" href="../../css/screens/home-pro.css" />
   <link rel="stylesheet" href="../../css/screens/community.css" />
+  <link rel="stylesheet" href="../../css/components/challenge-card.css" />
+  <style>
+    /* Placement-label option variations — design comparison appended at the feed bottom. */
+    .pl-sec { border-top: 10px solid var(--divider); margin-top: 10px; }
+    .pl-sech { font: 900 15px var(--font); color: var(--text-primary); padding: 16px 18px 0; }
+    .pl-sesub { font: 600 12px var(--font); color: var(--text-secondary); padding: 2px 18px 0; }
+    .pl-opt { padding: 18px 18px 4px; }
+    .pl-opt .pl-k { font: 900 11px var(--font); color: var(--primary); letter-spacing: .6px; text-transform: uppercase; }
+    .pl-opt .pl-ti { font: 900 16px var(--font); margin: 2px 0; }
+    .pl-opt .pl-de { font: 600 12px var(--font); color: var(--text-secondary); line-height: 1.4; }
+    .pl-pills { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+    .pl-pill { display: inline-flex; align-items: center; gap: 4px; background: rgba(95,95,95,.10); color: var(--text-secondary); border-radius: 99px; padding: 3px 9px; font: 800 11px var(--font); }
+    .pl-pill.comp { color: var(--primary); background: rgba(0,128,128,.12); }
+    .pl-pill svg { vertical-align: -1px; }
+    .pl-icos { display: inline-flex; align-items: center; gap: 11px; vertical-align: -3px; margin-left: 2px; }
+    .pl-ico { position: relative; color: var(--primary); display: inline-flex; }
+    .pl-ico.mut { color: var(--text-secondary); }
+    .pl-cnt { position: absolute; right: -9px; top: -6px; font: 900 9px var(--font); color: var(--primary); }
+    .pl-more { display: inline-flex; align-items: center; background: rgba(95,95,95,.12); color: var(--text-secondary); border-radius: 99px; padding: 1px 7px; font: 900 10.5px var(--font); margin-left: 5px; vertical-align: 1px; }
+    .pl-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 18px 2px; }
+    .pl-chip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--border); border-radius: 99px; padding: 6px 12px; font: 800 12px var(--font); color: var(--text-secondary); background: var(--surface); }
+    .pl-chip.comp { color: var(--primary); border-color: rgba(0,128,128,.45); }
+    .pl-chip svg { vertical-align: -2px; }
+
+    /* Option C "+N" overflow bottom sheet */
+    .pl-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
+    .pl-sheet { width: 100%; max-width: 460px; background: var(--surface); border-radius: 22px 22px 0 0; padding: 8px 0 22px; animation: plUp .22s ease; }
+    @keyframes plUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .pl-grip { width: 40px; height: 4px; border-radius: 99px; background: var(--border); margin: 6px auto 2px; }
+    .pl-stitle { font: 900 16px var(--font); color: var(--text-primary); text-align: center; padding: 12px 18px 8px; }
+    .pl-srow { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; }
+    .pl-srow:active { background: rgba(0,0,0,.04); }
+    .pl-sic { width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center; background: rgba(0,128,128,.12); color: var(--primary); }
+    .pl-sic.mut { background: rgba(95,95,95,.10); color: var(--text-secondary); }
+    .pl-stx { flex: 1; min-width: 0; }
+    .pl-stx .a { font: 800 14.5px var(--font); color: var(--text-primary); }
+    .pl-stx .b { font: 700 12px var(--font); color: var(--text-tertiary); margin-top: 1px; }
+    .pl-schev { color: var(--text-tertiary); flex: none; display: inline-flex; }
+    .pl-sdiv { height: 1px; background: var(--divider); margin: 0 20px; }
+  </style>
 </head>
 <body>
   <div class="state-switch">
@@ -46,6 +86,7 @@
   <script src="../../js/components/upload-banner.js"></script>
   <script src="../../js/components/create-menu.js"></script>
   <script src="../../js/screens/social-data.js"></script>
+  <script src="../../js/components/challenge-card.js"></script>
   <script src="../../js/screens/home-data.js"></script>
   <script src="../../js/screens/home-pro.js"></script>
   <script src="../../js/screens/community.js"></script>
@@ -68,6 +109,7 @@
       document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.st === state));
     }
     function setState(s){ render(s); }
+
     render(new URLSearchParams(location.search).get("state") || "full");
   </script>
 </body>

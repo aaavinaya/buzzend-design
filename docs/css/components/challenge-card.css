@@ -1,0 +1,67 @@
+/* ── Reusable Challenge Card (ChallengeCard component) — “Clean list” treatment (V2) ─────────────
+   ONE row design used everywhere a challenge is listed:
+     · compose "Tag a challenge"           (control: radio)
+     · feed "Change where it's shown"      (control: check)
+     · feed tagged-challenges sheet         (control: chevron)
+   Rows are borderless and grouped inside a single rounded card (.chc-group) with inset hairline
+   dividers — an iOS-style grouped list. Content is minimal: neutral circle glyph + name + "by creator".
+   Rendered by js/components/challenge-card.js. Theme-token driven (light/dark). */
+
+/* the grouped card — wraps a run of rows */
+.chc-group { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+.chc-group + .chc-lbl { margin-top: 14px; }
+
+.chc {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  padding: 14px 16px; background: transparent; border: 0; text-align: left; cursor: pointer;
+  transition: background .16s;
+}
+.chc + .chc { border-top: 1px solid var(--divider); }
+.chc:active { background: rgba(0,0,0,.035); }
+.chc.sel { background: color-mix(in srgb, var(--primary) 6%, var(--surface)); }
+
+/* exercise glyph — uniform neutral circle */
+.chc-ic {
+  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; color: var(--text-secondary);
+  background: color-mix(in srgb, var(--text-secondary) 13%, var(--surface));
+}
+
+.chc-main { flex: 1; min-width: 0; }
+.chc-name {
+  display: block; font: 800 14.5px var(--font); color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chc-sub { display: block; margin-top: 2px; font: 700 12px var(--font); color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* right-side control */
+.chc-cb, .chc-rb { width: 23px; height: 23px; flex: none; display: grid; place-items: center;
+  border: 2px solid var(--border); color: #fff; }
+.chc-cb { border-radius: 7px; }
+.chc-rb { border-radius: 50%; }
+.chc-cb.on, .chc-rb.on { background: var(--primary); border-color: var(--primary); }
+.chc-chev { color: var(--text-tertiary); flex: none; display: inline-flex; }
+.chc-chev svg { vertical-align: middle; }
+
+/* scrollable wrapper (tagged-challenges sheet) — the group scrolls as one card */
+.chc-scroll { max-height: 52vh; overflow-y: auto; padding: 2px; }
+
+/* sheet variant — full-bleed rows (edge-to-edge) + vertical scroll, for bottom sheets.
+   Cancels the sheet's 22px side padding so each row spans the full width; the list scrolls. */
+.chc-sheet {
+  margin: 6px -22px 0; max-height: 56vh; overflow-y: auto; text-align: left;
+  border-top: 1px solid var(--divider);
+}
+.chc-sheet .chc { padding: 14px 22px; border-top: 0; border-bottom: 1px solid var(--divider); }
+/* clean section label between Profile and the challenge list — no band, just quiet uppercase + breathing room */
+.chc-sheet .chc-lbl { padding: 18px 22px 8px; margin: 0; background: transparent;
+  font: 800 10.5px var(--font); letter-spacing: .7px; text-transform: uppercase; color: var(--text-tertiary); }
+/* the Profile row (first) has no divider clinging under the label gap */
+.chc-sheet .chc-lbl + .chc { border-top: 0; }
+
+/* section sub-heading above a group */
+.chc-lbl { font: 800 12px var(--font); color: var(--text-secondary);
+  letter-spacing: .2px; padding: 4px 2px 8px; }
+.chc-empty { font: 700 12.5px var(--font); color: var(--text-tertiary);
+  text-align: center; padding: 22px 12px; }

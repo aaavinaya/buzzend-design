@@ -325,11 +325,11 @@ window.Composer = (function () {
       <div class="cp-di" style="background-image:${grad(S.ME.av)}"></div>
       <div class="cp-dm"><div class="cp-dn">My Profile</div><div class="cp-dd">${I("clock", 11)} Post expires after 60 days</div></div>
       <span class="cp-check">${st.targets.profile ? I("check", 14) : ""}</span></button>`;
-    const chs = activeChallenges().map((c) => { const on = st.targets.challenges.includes(c.id); const m = ACT.find((x) => x.key === c.ex) || ACT[1];
-      return `<button class="cp-dest ${on ? "on" : ""}" onclick="Composer.tgChallenge('${c.id}')">
-        <div class="cp-di" style="background:${c.cover || grad(m.c)}">${I(m.i, 16)}</div>
-        <div class="cp-dm"><div class="cp-dn">${c.n}</div><div class="cp-dd">by ${c.by}</div></div>
-        <span class="cp-check">${on ? I("check", 14) : ""}</span></button>`; }).join("");
+    // Reusable ChallengeCard (radio control) — same design as the feed placement + tagged-challenges sheets.
+    const chRows = activeChallenges().map((c) => ChallengeCard.row(c, {
+      control: "radio", selected: st.targets.challenges.includes(c.id), onClick: `Composer.tgChallenge('${c.id}')`,
+    })).join("");
+    const chs = chRows ? `<div class="chc-group">${chRows}</div>` : "";
     const sharing = [st.targets.profile ? S.ME.av : null].concat(st.targets.challenges.map(() => null)).filter(Boolean);
     const repsNote = st.assets.some((a) => a.pose) ? `<div class="cp-repnote">${I("activity", 14)} Your workout reps are shown on this post automatically.</div>` : "";
     host.innerHTML = `<div class="cp-post">
