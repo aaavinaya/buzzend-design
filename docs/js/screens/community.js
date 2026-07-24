@@ -184,7 +184,12 @@ window.Community = (function () {
     const segs = [];
     if (isComp) segs.push(`<b class="cf-mseg cf-chlink" onclick="Community.openComp(${i},event)">Competitions</b>`);
     if (hasProf) segs.push(`<b class="cf-mseg" onclick="Community.openProfile('${pe.name}',event)">Profile</b>`);
-    if (hasCh) segs.push(`<b class="cf-mseg cf-chlink" onclick="Community.${chs.length > 1 ? `tagsSheet(${i},event)` : "openChallenge(event)"}">Challenge</b>`);
+    // Single tagged challenge → show its NAME (taps straight to that challenge). Multiple → "N Challenges"
+    // (taps the tagged-challenges sheet). This is how a viewer tells a 1-challenge post from a many-challenge one.
+    if (hasCh) {
+      const one = chs.length === 1;
+      segs.push(`<b class="cf-mseg cf-chlink" onclick="Community.${one ? "openChallenge(event)" : `tagsSheet(${i},event)`}">${one ? chs[0] : chs.length + " Challenges"}</b>`);
+    }
     return segs.join(`<span class="cf-msep"> &amp; </span>`);
   }
   function metaLine(post, i) {
@@ -232,29 +237,41 @@ window.Community = (function () {
   // tapping a row opens that challenge. Reached from the title's "N Challenges" segment.
   function tagsSheet(i, ev) {
     if (ev) ev.stopPropagation(); if (guard()) return;
-    const rows = challengesOf(FEED[i]).map((c) => `<button class="cf-pm" onclick="Community._close();Community.openChallenge(event)">${I("trophy", 18)} ${c}</button>`).join("");
-    Buzzend.sheet({ html: `<div class="cf-phead">${I("trophy", 18)} <span>Tagged Challenges</span></div><div class="cf-pmenu">${rows}</div>` });
+    // Reusable ChallengeCard, full-bleed + vertically scrollable inside the sheet.
+    const rows = ChallengeCard.list(
+      challengesOf(FEED[i]).map((c) => ChallengeCard.byName(c)),
+      { control: "chevron", onClick: "Community._close();Community.openChallenge(event)" });
+    Buzzend.sheet({ html: `<div class="cf-phead">${I("trophy", 18)} <span>Tagged challenges</span></div><div class="chc-sheet">${rows}</div>` });
   }
   // Placement editor mock (native PostPlacementSheet — "Change where it's shown"), owner-only. Profile
-  // (General Post) toggle + the user's active-challenge checkboxes; Save disables when nothing is selected
+  // toggle + the user's active-challenge checkboxes; Save disables when nothing is selected
   // (that would remove every tag and delete the post — native gates it the same way).
   function placementSheet(i) {
     const post = FEED[i], tagged = new Set(challengesOf(post));
     const active = S.CHALLENGES.filter((c) => c.joined && c.status === "active");
-    const cbRow = (label, on) => `<label class="cf-place">
-      <span class="cf-place-cb${on ? " on" : ""}">${I("check", 14)}</span><span class="cf-place-lb">${label}</span>
-      <input type="checkbox" ${on ? "checked" : ""} hidden onchange="Community._placeToggle(this)"></label>`;
-    const rows = cbRow("Profile (General Post)", !!post.general)
-      + (active.length ? active.map((c) => cbRow(c.n, tagged.has(c.n))).join("")
-        : `<div class="cf-place-empty">You have no active challenges to tag.</div>`);
-    Buzzend.sheet({ html: `<div class="cf-place-h"><b>Where should this show?</b><span>Choose your profile and any challenges to post this to.</span></div>
-      <div class="cf-place-list">${rows}</div>
+    const profOn = !!post.general;
+    // Profile destination — the post's default home; kept as its own row above the challenge cards.
+    const profRow = `<button class="chc${profOn ? " sel" : ""}" onclick="Community._placeToggle(this)">
+      <span class="chc-ic">${I("user", 22)}</span>
+      <span class="chc-main"><span class="chc-name">Profile</span>
+        <span class="chc-sub">Shows on your profile</span></span>
+      <span class="chc-cb${profOn ? " on" : ""}">${profOn ? I("check", 14) : ""}</span></button>`;
+    // Full-bleed rows + vertical scroll: Profile, then the user's active challenges (check control).
+    const chRows = active.length
+      ? active.map((c) => ChallengeCard.row(c, { control: "check", selected: tagged.has(c.n), onClick: "Community._placeToggle(this)" })).join("")
+      : `<div class="chc-empty">You have no active challenges to tag.</div>`;
+    Buzzend.sheet({ html: `<div class="cf-place-h"><b>Where should this show?</b><span>Show this post on your profile, in challenges, or both — pick any that apply.</span></div>
+      <div class="chc-sheet">${profRow}${active.length ? `<div class="chc-lbl">Your active challenges</div>` : ""}${chRows}</div>
       <button class="cf-submit" onclick="Community._close();Buzzend.alert({icon:'success',title:'Saved',message:'Updated where this post appears.'})">Save</button>` });
   }
-  function _placeToggle(input) {
-    input.closest(".cf-place").querySelector(".cf-place-cb").classList.toggle("on", input.checked);
-    const scope = input.closest(".bz-overlay") || document;
-    const any = [...scope.querySelectorAll(".cf-place input")].some((x) => x.checked);
+  // Toggle a placement card (Profile or a challenge). Works on the ChallengeCard <button> markup.
+  function _placeToggle(btn) {
+    const on = !btn.classList.contains("sel");
+    btn.classList.toggle("sel", on);
+    const cb = btn.querySelector(".chc-cb");
+    if (cb) { cb.classList.toggle("on", on); cb.innerHTML = on ? I("check", 14) : ""; }
+    const scope = btn.closest(".bz-overlay") || document;
+    const any = [...scope.querySelectorAll(".chc")].some((x) => x.classList.contains("sel"));
     const save = scope.querySelector(".cf-submit"); if (save) { save.disabled = !any; save.style.opacity = any ? "" : ".5"; }
   }
   function reportPost() {
