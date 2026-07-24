@@ -1,6 +1,6 @@
 /* Reusable buttons — any screen can use these. Token-driven, palette-aware. */
 .btn {
-  width: 100%; height: 56px; border-radius: var(--r-pill);
+  width: 100%; height: 56px; border-radius: var(--r-btn);
   font: 700 16px var(--font); display: flex; align-items: center;
   justify-content: center; gap: 10px; cursor: pointer; border: none;
   transition: transform 0.08s ease, box-shadow 0.2s ease, opacity 0.2s;
@@ -25,3 +25,33 @@
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--divider); }
 
 .link { color: var(--primary); font-weight: 800; text-decoration: none; }
+
+/* ── iOS default button shape: rounded rectangles (12px) app-wide ──
+   Loaded on every screen (app.css → this file). Overrides each screen's own
+   pill-shaped action buttons, tabs, segmented controls and interactive chips.
+   Shape only — background colors and typography are untouched. Circular icon
+   buttons, avatars, count badges, decorative status pills, pagination dots and
+   the iOS toggle switch keep their own radius (deliberately not listed). */
+.btn-pill,
+.ac-cheer, .ac-chip, .ac-period button, .ac-scope button,
+.cap-gnext, .cap-mode, .cap-next,
+.cd-chatbtn, .cd-pfollow, .cd-primary, .cd-submit, .cd2-rec, .cd4-rec,
+.ch-cat, .ch-chat, .ch-rec, .ch-seg button, .ch-up .lv,
+.ar-chip, .ar-quick button, .ar-tabs button, .hd-cheer, .hd-chip, .hd-quickcheer button, .hd-seg button,
+.cd-chip, .cl-seg button, .sheet-tabs button,
+.cf-follow, .cf-lbcta, .cf-pfollow, .cf-vfollow,
+.cp-chip, .cp-edone, .cp-ftab, .cp-next,
+.cc-addprize, .cc-cancel, .cc-chip, .cc-nextbtn, .cc-seg button, .cc-startquick button,
+.dc-follow, .dc-chip,
+.fa-cheer, .fi-follow, .pro-share-btn, .pro-tab, .ta-tab,
+.cm-finish, .cm-flip, .cm-pause, .cm-rec, .fl-btn-ghost, .fl-btn-primary,
+.nf-tab,
+.lb-ghost .beat, .plbc-comp .pc-cta, .lbs-cta, .bi2-start,
+.ed-save, .ed-txtbtn,
+.pf-seg button, .pf-today,
+.sr-act,
+.ab-up, .st-mconfirm, .st-utog button,
+.sk-invite .share,
+.wo-pause, .wo-rec {
+  border-radius: var(--r-btn) !important;
+}

@@ -1,6 +1,6 @@
 /* Settings — faithful port of the old Flutter SettingsScreen + UX improvements.
    Fitness goals (steps chip-grid · height cm↔ft/in · weight kg↔lb, all with
-   steppers + validation) · Preferences (appearance/units/notifs) · Account
+   steppers + validation) · Preferences (appearance/units/AI count-down) · Account
    (provider identity · blocked · privacy) · Support · Log out / Delete account. */
 window.Settings = (function () {
   const I = (n, s) => window.Icons.svg(n, s);
@@ -14,7 +14,7 @@ window.Settings = (function () {
   ];
   const BOUNDS = { cm: [50, 300], ft: [2, 10], in: [0, 11], kg: [35, 300], lb: [77, 661] };
 
-  let S = { units: "metric", notifs: true, reminders: true, sound: true, stepGoal: 10000,
+  let S = { units: "metric", aiCountdown: true, stepGoal: 10000,
     height: { value: "5.67", unit: "ft" }, weight: { value: "72", unit: "kg" }, identity: "google" };
   let _dlg = null, _stepSel = 0, _h = {}, _w = {};
 
@@ -64,9 +64,7 @@ window.Settings = (function () {
       ${section("Preferences", [
         row({ icon: "moon", tint: "#8b5cf6", label: "Appearance", value: themeVal(), on: "Settings.openAppearance()" }),
         row({ icon: "sliders", tint: "#3b82f6", label: "Units", value: S.units === "metric" ? "Metric" : "Imperial", on: "Settings.cycleUnits()" }),
-        row({ icon: "bell", tint: "var(--primary)", label: "Push notifications", toggle: "notifs" }),
-        row({ icon: "clock", tint: "#3b82f6", label: "Workout reminders", sub: "Daily nudge to hit your goal", toggle: "reminders" }),
-        row({ icon: "volume", tint: "#8b5cf6", label: "Sound & haptics", toggle: "sound" }),
+        row({ icon: "clock", tint: "var(--primary)", label: "AI workout count down", sub: "3 · 2 · 1 before a set starts", toggle: "aiCountdown" }),
       ])}
       ${section("Account", [
         identityRow(),

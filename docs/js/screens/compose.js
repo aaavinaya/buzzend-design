@@ -110,6 +110,8 @@ window.Composer = (function () {
     }).join("");
   }
   function thumbStrip() {
+    // a video is a single-asset post — no cover thumbnail / strip to arrange (videos only)
+    if (st.assets.length === 1 && st.assets[0].type === "video") return "";
     const canAdd = !(st.assets.length && st.assets[0].type === "video") && st.assets.length < MAX;
     const thumbs = st.assets.map((a, i) => `<div class="cp-th${i === st.idx ? " on" : ""}" draggable="true" data-i="${i}" style="background-image:${assetG(a)}" onclick="Composer.go(${i})">
       ${a.type === "video" ? `<span class="cp-thv">${I("play", 9)}</span>` : ""}
