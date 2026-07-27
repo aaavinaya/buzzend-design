@@ -25,6 +25,14 @@
 .mc-browse b { font:900 15px var(--font); } .mc-browse span { display:block; font:700 12px var(--font); opacity:.9; margin-top:1px; }
 .mc-browse .go { margin-left:auto; }
 
+/* Per-section "Show more" — each section paginates on its OWN button, so two stacked
+   infinite lists never fight over one scroll trigger. */
+.mc-more { width:100%; margin:2px 0 8px; padding:12px; border:1px solid var(--border); border-radius:13px;
+  background:var(--surface); color:var(--primary); font:800 13px var(--font); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:7px; box-shadow:var(--shadow-card); }
+.mc-more:active { transform:scale(.995); }
+.mc-more i { transform:rotate(90deg); }
+
 .mc-empty { text-align:center; padding:60px 30px; }
 .mc-empty .ic { width:80px; height:80px; border-radius:50%; margin:0 auto 16px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); }
 .mc-empty .t { font:900 18px var(--font); color:var(--text-primary); }
