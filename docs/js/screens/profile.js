@@ -295,28 +295,38 @@ window.Profile = (function () {
       ${c.self ? "" : `<div class="pf-note">${I("clock", 12)} Posts expire after 60 days</div>`}</div>`;
   }
 
-  /* ── Challenges tab: Active + Upcoming inline; the full list (which also holds
-     Completed) lives behind "See all" → my-challenges.html?from=profile. ── */
+  /* ── Challenges tab: a PREVIEW of the first few Current + Completed challenges,
+     then "See all" → my-challenges.html?from=profile (the full, per-section-paginated
+     list). The tab itself never paginates — it's a capped preview, so the two
+     sections can safely coexist; "See all" is the escape hatch. ── */
+  const CH_PREVIEW = 3;
   function challengesTab(c) {
     if (c.challenges === 0) return empty("trophy", "No challenges yet", c.self ? "Join a challenge to compete with friends." : "This user hasn't joined any challenges.");
     const mine = S.CHALLENGES.filter((x) => x.joined);
-    const active = mine.filter((x) => x.status === "active");
-    const upcoming = mine.filter((x) => x.status === "upcoming");
+    // "Current" = active + upcoming (backend NON_EXPIRED), active first; "Completed" = ended.
+    const current = mine
+      .filter((x) => x.status === "active" || x.status === "upcoming")
+      .sort((a, b) => (a.status === b.status ? 0 : a.status === "active" ? -1 : 1));
+    const completed = mine.filter((x) => x.status === "ended");
     const row = (x) => {
       const m = ACT.find((a) => a.key === x.ex) || ACT[1];
-      const up = x.status === "upcoming";
+      const up = x.status === "upcoming", done = x.status === "ended";
       const pct = up ? 0 : Math.min(100, Math.round((x.myReps / x.goal) * 100));
-      const meta = up ? `Starts in ${x.startsIn} day${x.startsIn > 1 ? "s" : ""}` : `Day ${x.day} / ${x.days} · ${fmt(x.myReps)} reps`;
+      const meta = up ? `Starts in ${x.startsIn} day${x.startsIn > 1 ? "s" : ""}`
+        : done ? `Ended · ${fmt(x.myReps)} of ${fmt(x.goal)} reps`
+        : `Day ${x.day} / ${x.days} · ${fmt(x.myReps)} reps`;
+      const bar = (up || done) ? "var(--text-tertiary)" : m.c;
       return `<div class="pf-chl" onclick="location.href='challenge-detail.html?role=${c.self ? "member" : "viewer"}'">
         <div class="ci" style="color:${m.c};background:color-mix(in srgb,${m.c} 14%,transparent)">${I(m.i, 18)}</div>
         <div class="cm"><div class="cn">${x.n}</div><div class="cd">${meta}</div>
-          <div class="cbar"><i style="width:${up ? 0 : Math.max(pct, 2)}%;background:${up ? "var(--text-tertiary)" : m.c}"></i></div></div></div>`;
+          <div class="cbar"><i style="width:${up ? 0 : Math.max(pct, 2)}%;background:${bar}"></i></div></div></div>`;
     };
-    const sec = (label, arr) => arr.length ? `<div class="pf-sublbl">${label}</div>${arr.map(row).join("")}` : "";
+    // Cap each section to a small preview; "See all" holds the rest (and paginates).
+    const sec = (label, arr) => arr.length ? `<div class="pf-sublbl">${label}</div>${arr.slice(0, CH_PREVIEW).map(row).join("")}` : "";
     const header = c.self ? `<div class="pf-chsec"><h3>Your challenges</h3><a class="pf-seeall" href="my-challenges.html?from=profile">See all ${I("chevron", 15)}</a></div>` : "";
-    const body = (active.length + upcoming.length)
-      ? sec("Active", active) + sec("Upcoming", upcoming)
-      : `<div class="pf-empty" style="padding:24px 20px"><div class="ec">${I("trophy", 26)}</div><div class="et">Nothing active right now</div><div class="ed">${c.self ? 'Your finished challenges are under "See all".' : "This user has no active or upcoming challenges."}</div></div>`;
+    const body = (current.length + completed.length)
+      ? sec("Current challenges", current) + sec("Completed", completed)
+      : `<div class="pf-empty" style="padding:24px 20px"><div class="ec">${I("trophy", 26)}</div><div class="et">No challenges yet</div><div class="ed">${c.self ? "Join a challenge to compete with friends." : "This user hasn't joined any challenges."}</div></div>`;
     return `<div class="pf-pad">${header}${body}</div>`;
   }
 

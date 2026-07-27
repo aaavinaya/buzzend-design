@@ -148,6 +148,118 @@
 .fl-prog i { display:block; height:100%; width:0; background:var(--primary); border-radius:99px; transition:width .25s; }
 .fl-prog-l { font:800 13px var(--font); color:var(--text-secondary); margin-top:12px; }
 
+/* ════════════ FEEDBACK & GUIDE ENGINE ════════════
+   Three new surfaces, one vocabulary:
+     · in-set cues     — tiered, one at a time; BLOCKING (framing/setup) vs ADVISORY (form)
+     · guide card      — per-exercise setup, shown before the set; owns the "won't count" rules
+     · form report     — after the set; explains what counted and what didn't
+   Colour law: primary/teal = counting & good · amber = adjust · red = can't count.        */
+
+/* ── in-set: blocking state ──────────────────────────────────────────────
+   The old design only DIMMED the count when tracking dropped, which reads as
+   "nothing is happening" — indistinguishable from a bug. A blocking cue now
+   says so out loud. */
+.cm-nc { display:inline-flex; align-items:center; gap:7px; margin-top:6px;
+  font:900 10.5px var(--font); letter-spacing:1.2px; text-transform:uppercase;
+  color:#0a1012; background:#ffc24d; padding:5px 11px; border-radius:99px; opacity:0; transition:opacity .25s; }
+.cm.partial .cm-nc, .cm.lost .cm-nc { opacity:1; }
+.cm.lost .cm-nc { background:#ff6a62; color:#fff; }
+
+/* cue stack: at most one blocking cue + at most one advisory note */
+.cm-cuewrap { position:relative; z-index:5; display:flex; flex-direction:column; align-items:center; gap:6px;
+  margin-bottom:14px; width:100%; padding:0 16px; box-sizing:border-box; }
+.cm-cuewrap .cm-cue { margin-bottom:0; max-width:100%; text-align:center; }
+.cm-cue.form { color:#ffc24d; font-weight:800; font-size:15px; }   /* advisory — keeps counting */
+.cm-cue.good { color:var(--primary); font-weight:800; }             /* positive reinforcement */
+.cm-why { background:none; border:0; padding:2px 6px; cursor:pointer;
+  font:800 11px var(--font); color:rgba(255,255,255,.62); text-decoration:underline; }
+
+/* per-rep verdict flash — the answer to "why didn't that one count?" */
+.cm-flash { position:absolute; top:38%; left:50%; transform:translate(-50%,-50%) scale(.9); z-index:9;
+  display:inline-flex; align-items:center; gap:9px; padding:11px 18px; border-radius:14px; white-space:nowrap;
+  font:900 13.5px var(--font); opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; }
+.cm-flash.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+.cm-flash.ok   { background:color-mix(in srgb,var(--primary) 88%,#000); color:#04120e; }
+.cm-flash.warn { background:#ffc24d; color:#241a03; }
+.cm-flash.no   { background:rgba(10,16,18,.86); color:#ff8a83; border:1px solid rgba(255,106,98,.5); }
+
+/* offending-joint highlight — the skeleton names the fault instead of the text alone */
+.cm-joint.warn { fill:#ffc24d; stroke:#ffc24d; r:6; }
+.cm-bone.warn  { stroke:#ffc24d; stroke-width:5; filter:drop-shadow(0 0 8px #ffc24d); }
+
+/* ── get-ready: readiness advisory (never blocks GO) ── */
+.cm-ready { display:inline-flex; align-items:center; gap:8px; font:800 12.5px var(--font); color:#fff;
+  padding:9px 15px; border-radius:99px; }
+.cm-ready .ic { display:inline-flex; color:var(--primary); }
+.cm.partial .cm-ready .ic, .cm.lost .cm-ready .ic { color:#ffc24d; }
+.cm-info { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; color:#fff; cursor:pointer; flex:none; }
+/* get-ready puts the facing label in the cue stack instead of pinning it, so a two-line readiness
+   cue can't collide with it */
+.cm-facing.inflow { position:static; transform:none; }
+
+/* ── guide card (app theme) ── */
+.gd-scr { padding:16px 16px 120px; overflow-y:auto; }
+.gd-diagram { position:relative; width:100%; max-width:300px; aspect-ratio:5/4; margin:6px auto 0; border-radius:var(--r-lg);
+  background:radial-gradient(120% 90% at 50% 30%, #2b3a43, #070b0e); overflow:hidden; box-shadow:var(--shadow-card); }
+.gd-diagram svg { position:absolute; inset:0; width:100%; height:100%; }
+.gd-vlabel { position:absolute; top:11px; left:11px; font:900 10.5px var(--font); letter-spacing:1.3px;
+  color:#0a1012; background:var(--primary); padding:5px 10px; border-radius:99px; }
+.gd-dist { position:absolute; bottom:11px; left:50%; transform:translateX(-50%); font:800 10.5px var(--font);
+  color:rgba(255,255,255,.8); background:rgba(0,0,0,.45); padding:5px 11px; border-radius:99px; white-space:nowrap; }
+.gd-rows { display:flex; flex-direction:column; gap:9px; margin-top:16px; }
+.gd-row { display:flex; align-items:flex-start; gap:12px; padding:13px 14px; border-radius:var(--r-md);
+  background:var(--surface); border:1px solid var(--border); }
+.gd-row .ic { width:34px; height:34px; border-radius:11px; flex:none; display:grid; place-items:center;
+  color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); }
+.gd-row b { display:block; font:800 13.5px var(--font); color:var(--text-primary); }
+.gd-row span { display:block; font:600 12.5px var(--font); color:var(--text-secondary); margin-top:2px; line-height:1.45; }
+.gd-no { margin-top:16px; padding:14px 15px; border-radius:var(--r-md);
+  background:color-mix(in srgb,#e5524a 7%,var(--surface)); border:1px solid color-mix(in srgb,#e5524a 26%,transparent); }
+.gd-no .t { display:flex; align-items:center; gap:8px; font:900 12px var(--font); letter-spacing:.6px;
+  text-transform:uppercase; color:#c2453d; }
+.gd-no ul { margin:9px 0 0; padding-left:18px; }
+.gd-no li { font:600 12.5px var(--font); color:var(--text-secondary); line-height:1.7; }
+.gd-chk { display:flex; align-items:center; gap:10px; justify-content:center; margin-top:16px; cursor:pointer;
+  font:700 12.5px var(--font); color:var(--text-secondary); }
+.gd-chk i { width:19px; height:19px; border-radius:6px; border:1.6px solid var(--border); display:grid; place-items:center; font-style:normal; }
+.gd-chk.on i { background:var(--primary); border-color:var(--primary); color:var(--on-primary); font:900 12px var(--font); }
+.gd-foot { position:absolute; bottom:22px; left:16px; right:16px; }
+
+/* ── form report (app theme) ── */
+.rp-scr { padding:14px 16px 120px; overflow-y:auto; }
+.rp-top { display:flex; align-items:center; gap:16px; padding:16px; border-radius:var(--r-lg);
+  background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow-card); }
+.rp-reps b { display:block; font:900 44px var(--font); line-height:1; color:var(--text-primary); }
+.rp-reps span { display:block; font:800 11.5px var(--font); letter-spacing:.7px; text-transform:uppercase; color:var(--text-secondary); margin-top:4px; }
+.rp-ring { margin-left:auto; width:82px; height:82px; border-radius:50%; flex:none; display:grid; place-items:center; position:relative; }
+.rp-ring::before { content:""; position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(var(--primary) calc(var(--v) * 1%), var(--divider) 0); }
+.rp-ring::after { content:""; position:absolute; inset:8px; border-radius:50%; background:var(--surface); }
+.rp-ring i { position:relative; z-index:1; font-style:normal; font:900 22px var(--font); color:var(--text-primary); }
+.rp-ring em { position:absolute; z-index:1; bottom:16px; font-style:normal;
+  font:800 8.5px var(--font); letter-spacing:.8px; text-transform:uppercase; color:var(--text-tertiary); }
+
+.rp-strip { margin-top:12px; padding:14px 15px; border-radius:var(--r-md); background:var(--surface); border:1px solid var(--border); }
+.rp-strip .t { font:800 11.5px var(--font); letter-spacing:.7px; text-transform:uppercase; color:var(--text-secondary); }
+.rp-bars { display:flex; align-items:flex-end; gap:4px; height:44px; margin-top:10px; }
+.rp-bars i { flex:1; min-width:5px; border-radius:3px; background:var(--primary); }
+.rp-bars i.warn { background:#e0922a; }
+.rp-bars i.no { background:color-mix(in srgb,#e5524a 45%,var(--divider)); }
+.rp-legend { display:flex; gap:14px; margin-top:11px; flex-wrap:wrap; }
+.rp-legend span { display:inline-flex; align-items:center; gap:6px; font:700 11px var(--font); color:var(--text-secondary); }
+.rp-legend b { width:9px; height:9px; border-radius:3px; background:var(--primary); }
+.rp-legend b.warn { background:#e0922a; } .rp-legend b.no { background:color-mix(in srgb,#e5524a 45%,var(--divider)); }
+
+.rp-card { margin-top:12px; padding:15px; border-radius:var(--r-md); background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:flex-start; gap:12px; }
+.rp-card.tip { background:color-mix(in srgb,#e0922a 8%,var(--surface)); border-color:color-mix(in srgb,#e0922a 28%,transparent); }
+.rp-card .ic { width:36px; height:36px; border-radius:12px; flex:none; display:grid; place-items:center;
+  color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); }
+.rp-card.tip .ic { color:#c07d19; background:color-mix(in srgb,#e0922a 16%,transparent); }
+.rp-card b { display:block; font:800 13.5px var(--font); color:var(--text-primary); }
+.rp-card span { display:block; font:600 12.5px var(--font); color:var(--text-secondary); margin-top:3px; line-height:1.5; }
+.rp-foot { position:absolute; bottom:22px; left:16px; right:16px; display:flex; flex-direction:column; gap:10px; }
+
 /* quit overlay (sits over the dark camera — stays dark) */
 .fl-quit { position:absolute; inset:0; z-index:12; background:rgba(5,10,12,.72); display:grid; place-items:center; padding:24px; }
 .fl-quit-card { width:100%; max-width:300px; background:#15212a; border:1px solid rgba(255,255,255,.12); border-radius:var(--r-lg); padding:24px; text-align:center; }
