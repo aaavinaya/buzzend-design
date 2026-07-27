@@ -77,6 +77,32 @@ window.Social = (function () {
       range: "20 May–20 Jun", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: true,
       day: 30, days: 30, myReps: 196, goal: 600, members: 167, cover: "linear-gradient(135deg,#7a1f2a,#ef4444)",
       desc: "A full month of lunges. Now ended — check where you finished." },
+    // ── extra JOINED challenges so both See-all sections overflow one page and the
+    //    per-section "Show more" pagination is demonstrable (current > PAGE, completed > PAGE).
+    { id: "step10", n: "10k Steps Daily", ex: "steps", by: "Priya Shrestha", byAv: "#9bc9b0,#5e997a",
+      range: "1–30 Jun", freq: "Daily", vis: "Public", status: "active", joined: true, loggedToday: false,
+      day: 8, days: 30, myReps: 62000, goal: 300000, members: 980, cover: "linear-gradient(135deg,#1f6e5f,#22c993)",
+      desc: "Ten thousand steps every day for a month. Counted from your phone automatically." },
+    { id: "sitk",  n: "Sit-up Starter · 7 Day", ex: "situp", by: "Bikash Karki", byAv: "#a6b8c9,#5e7799",
+      range: "8–15 Jul", freq: "Daily", vis: "Public", status: "upcoming", joined: true, loggedToday: false,
+      day: 0, days: 7, startsIn: 6, myReps: 0, goal: 350, members: 41, cover: "linear-gradient(135deg,#1e3a5a,#3b6eff)",
+      desc: "A gentle week-long sit-up kickstart. Starts soon — get ready." },
+    { id: "jjend", n: "Jumping Jack Jam", ex: "jumping", by: "Nina Rai", byAv: "#c9a6c2,#995e93",
+      range: "1–20 May", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: false,
+      day: 20, days: 20, myReps: 820, goal: 1000, members: 210, cover: "linear-gradient(135deg,#7a2a6a,#ec4899)",
+      desc: "Twenty days of jumping jacks. Ended — see your final standing." },
+    { id: "pshend", n: "April Push-up Month", ex: "pushup", by: "Sanjay Lama", byAv: "#c9b79b,#99855e",
+      range: "1–30 Apr", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: false,
+      day: 30, days: 30, myReps: 540, goal: 600, members: 305, cover: "linear-gradient(135deg,#8a5a1a,#ffa828)",
+      desc: "A full month of push-ups. Ended — a strong finish." },
+    { id: "sqend",  n: "Squat Squad · March", ex: "squat", by: "Deepa Thapa", byAv: "#a69bc9,#6a5e99",
+      range: "1–31 Mar", freq: "Daily", vis: "Private", status: "ended", joined: true, createdByMe: true, loggedToday: false,
+      day: 31, days: 31, myReps: 610, goal: 620, members: 18, cover: "linear-gradient(135deg,#3a2a7a,#9b6cff)",
+      desc: "My private March squat squad. Ended — thanks for competing." },
+    { id: "lngend", n: "Lunge League", ex: "lunge", by: "Arun Gurung", byAv: "#c99b9b,#996a5e",
+      range: "1–28 Feb", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: false,
+      day: 28, days: 28, myReps: 430, goal: 560, members: 142, cover: "linear-gradient(135deg,#7a1f2a,#ef4444)",
+      desc: "February lunges. Ended — check where you placed." },
   ];
   const todayTarget = (c) => Math.max(1, Math.round(c.goal / c.days));
   const daysLeft = (c) => Math.max(0, c.days - c.day);
