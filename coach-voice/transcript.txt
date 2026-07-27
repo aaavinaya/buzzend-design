@@ -89,5 +89,7 @@ camera_unstable.mp3         | Try to keep the camera steady [pause] for more acc
                               (Camera unstable: "Keep the camera steady for more accurate tracking.")
 insufficient_space.mp3      | Give yourself a bit more room [pause] so you can move safely.
                               (Insufficient space: "Give yourself more space to move safely.")
+countdown_go.mp3            | Three [pause] Two [pause] One [pause] Go!
+                              (Countdown before a set — ~0.8s beat between numbers, energetic "Go!")
 
-Total: 31 clips (generic 10 · pushups 7 · squats 6 · jumping_jacks 3 · situps 3 · lunges 2)
+Total: 32 clips (generic 11 · pushups 7 · squats 6 · jumping_jacks 3 · situps 3 · lunges 2)
