@@ -1,0 +1,93 @@
+BUZZEND — AI WORKOUT COACHING VOICE LINES
+Voice: ElevenLabs "Laura" (upbeat, friendly US female) · model eleven_multilingual_v2
+Settings: stability 0.35 · style 0.55 · similarity 0.8 · speaker-boost on
+"[pause]" = a short <break> in the audio. Lines are lightly rephrased for warmth/energy.
+Format:  file  |  SPOKEN LINE   (original cue)
+
+============================================================
+PUSH-UPS  (coach-voice/pushups/)
+============================================================
+not_deep_enough.mp3    | Lower a little more! [pause] Aim to bring your chest closer to the floor.
+                         (Not deep enough: "Lower a little more — aim to bring your chest closer to the floor.")
+hips_sagging.mp3       | Engage that core [pause] and keep your hips from dropping.
+                         (Hips sagging: "Engage your core and keep your hips from dropping.")
+hips_piked.mp3         | Lower your hips [pause] — keep your body in one straight line.
+                         (Hips piked too high: "Lower your hips and keep your body in a straight line.")
+hands_too_narrow.mp3   | Move your hands slightly wider [pause] — about shoulder-width apart.
+                         (Hands too narrow: "Move your hands slightly wider — about shoulder-width apart.")
+hands_too_wide.mp3     | Bring your hands a little closer [pause] — roughly under your shoulders.
+                         (Hands too wide: "Bring your hands slightly closer together — roughly under your shoulders.")
+uneven_arms.mp3        | Even it out [pause] — share the effort evenly between both arms.
+                         (Uneven arms: "Distribute the effort evenly between both arms.")
+bouncing_too_fast.mp3  | Slow it down [pause] and stay in control through the whole movement.
+                         (Bouncing / too fast: "Slow down and maintain control throughout the movement.")
+
+============================================================
+SQUATS  (coach-voice/squats/)
+============================================================
+not_deep_enough.mp3    | Lower a little more! [pause] Bring your hips down toward knee level.
+                         (Not deep enough: "Lower a little more — aim to bring your hips toward knee level.")
+leaning_forward.mp3    | Chest up [pause] — shift your weight back into your heels.
+                         (Leaning too far forward: "Keep your chest more upright and shift your weight back toward your heels.")
+knees_past_toes.mp3    | Sit your hips back [pause] and keep your knees in line with your feet.
+                         (Knees past toes: "Shift your hips back and keep your knees aligned with your feet.")
+uneven_legs.mp3        | Even it out [pause] — drive evenly through both legs.
+                         (Uneven legs: "Distribute your weight evenly between both legs.")
+hips_shifting.mp3      | Keep your hips centered [pause] and aligned as you squat.
+                         (Hips shifting sideways: "Keep your hips centered and aligned as you squat.")
+bouncing_too_fast.mp3  | Slow it down [pause] — control the movement through the bottom position.
+                         (Bouncing / too fast: "Slow down and control the movement through the bottom position.")
+
+============================================================
+JUMPING JACKS  (coach-voice/jumping_jacks/)
+============================================================
+arms_not_high.mp3          | Reach those arms all the way overhead!
+                             (Arms not high enough: "Raise your arms fully overhead.")
+feet_not_wide.mp3          | Jump your feet wider apart!
+                             (Feet not wide enough: "Jump your feet wider apart.")
+arms_feet_out_of_sync.mp3  | Sync it up [pause] — raise your arms as your feet jump out.
+                             (Arms and feet out of sync: "Coordinate the movement — raise your arms as your feet move outward.")
+
+============================================================
+SIT-UPS  (coach-voice/situps/)
+============================================================
+not_up_far_enough.mp3   | Lift a little higher [pause] — bring your chest toward your knees.
+                          (Not coming up far enough: "Lift higher and bring your chest closer toward your knees.")
+not_lowering_fully.mp3  | All the way down [pause] — return to the start between each rep.
+                          (Not lowering fully: "Return fully to the starting position between repetitions.")
+yanking_too_fast.mp3    | Slow it down [pause] — smooth and controlled the whole way.
+                          (Yanking / too fast: "Slow down and use a controlled movement throughout.")
+
+============================================================
+LUNGES  (coach-voice/lunges/)
+============================================================
+not_deep_enough.mp3  | Drop a little lower [pause] — aim for about ninety degrees at your front knee.
+                       (Not deep enough: "Lower further — aim for approximately 90 degrees at the front knee.")
+too_fast.mp3         | Slow it down [pause] — control the way down and the way back up.
+                       (Too fast: "Slow down and control both the lowering and rising phases.")
+
+============================================================
+GENERIC — camera / setup prompts  (coach-voice/generic/)
+============================================================
+not_in_frame.mp3            | Let's step back a little [pause] so your full body is in view.
+                              (Not in frame: "Step back slightly so your full body is visible.")
+partially_out_of_frame.mp3  | Adjust your position [pause] so your whole body stays in frame.
+                              (Partially out of frame: "Adjust your position so your entire body stays in frame.")
+too_close.mp3               | Move back a little from the camera [pause] — that helps me track you better.
+                              (Too close: "Move slightly farther from the camera for better tracking.")
+too_far.mp3                 | Come a little closer [pause] so I can track your movements clearly.
+                              (Too far: "Move a little closer so your movements can be tracked clearly.")
+too_dark.mp3                | Let's find a brighter spot [pause] so your movements are easier to track.
+                              (Too dark: "Move to a brighter area so your movements are easier to track.")
+body_obstructed.mp3         | Make sure your whole body is clearly visible to the camera.
+                              (Body obstructed: "Make sure your body is clearly visible to the camera.")
+multiple_people.mp3         | Just one person in frame, please [pause] — that keeps the tracking accurate.
+                              (Multiple people: "Only one person should be visible for accurate tracking.")
+tracking_lost.mp3           | Oops, I lost track of you. [pause] Adjust your position just a little.
+                              (Tracking lost: "I lost track of your movement. Adjust your position slightly.")
+camera_unstable.mp3         | Try to keep the camera steady [pause] for more accurate tracking.
+                              (Camera unstable: "Keep the camera steady for more accurate tracking.")
+insufficient_space.mp3      | Give yourself a bit more room [pause] so you can move safely.
+                              (Insufficient space: "Give yourself more space to move safely.")
+
+Total: 31 clips (generic 10 · pushups 7 · squats 6 · jumping_jacks 3 · situps 3 · lunges 2)

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(say --version)",
+      "Bash(say -v '?')",
+      "Bash(say -v Samantha -r 172 -o _test.aiff \"Go a little lower, bend your elbows until your chest nearly touches down.\")",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -i _test.aiff -codec:a libmp3lame -q:a 2 _test.mp3)",
+      "Bash(rm -f _test.aiff _test.mp3)",
+      "Bash(umask 077)",
+      "Bash(printf '%s' 'sk_42d5d8d17313a6fc5c712b34cc1b9342bb7731ff3ef7c464')",
+      "Bash(cat /private/tmp/claude-501/-Users-avinayaacharya-Development-Buzzend-Design/72b5ae0e-2a10-425e-a925-72c2632877f7/scratchpad/.el_key)",
+      "Bash(curl -s -o /private/tmp/claude-501/-Users-avinayaacharya-Development-Buzzend-Design/72b5ae0e-2a10-425e-a925-72c2632877f7/scratchpad/voices.json -w '%{http_code}' -H 'xi-api-key: __TRACKED_VAR__' https://api.elevenlabs.io/v1/voices)",
+      "Bash(echo 'HTTP __TRACKED_VAR__')",
+      "Bash(python3 el_tts.py)"
+    ]
+  }
+}
