@@ -190,6 +190,57 @@ window.HomeData = (function () {
     </div>`;
   }
 
-  return { DATA, WORKOUTS, sec, ring, startWorkout, empty, workoutHero, workoutPicker,
+
+  /* ═══ Share your day ═══════════════════════════════════════════════════════════════════════════
+     The I·Sticker board card (design: screens/home/share-card.html), same renderer Profile Stats
+     uses, so Home's "Share your day" and Profile's day card are literally the same component.
+
+     Numbers come straight off the Home tile's own pre-formatted labels (`d.steps.distance`,
+     `d.steps.active`, `d.steps.pct`) rather than being recomputed here — that mirrors the native
+     `ShareStepItem(count, goal, distanceLabel, activeLabel)`, which is fed from the Home tile for
+     exactly this reason: the card must never disagree with the tile it was shared from.
+
+     PROTOTYPE GLUE: the page owns the state (`render(state)`), so resolve it the same way the page
+     does — the active state-switch button, then the ?state= param, then "full". */
+  function currentState() {
+    const on = document.querySelector(".state-switch button.active");
+    if (on && on.dataset.st) return on.dataset.st;
+    return new URLSearchParams(location.search).get("state") || "full";
+  }
+
+  function shareDay() {
+    const d = DATA[currentState()] || DATA.full;
+    const p = d.steps, sessions = d.sessions || [];
+    if (!p && !sessions.length)
+      return Buzzend.alert({ icon: "share", title: "Nothing to share yet", message: "Log a workout or take some steps first — then your day card will be ready." });
+
+    const kcal = (p ? p.kcal : 0) + sessions.reduce((a, x) => a + x.kcal, 0);
+    const meta = WORKOUTS.reduce((m, w) => (m[w.i] = w.n, m), {});
+    const ACCENT = { squat: "#C56DE2", pushup: "#F5A623", situp: "#6466E3", lunge: "#E74F5E", jumping: "#E670B7", walk: "#34D094" };
+
+    const stickers = [];
+    if (p && sessions.length) stickers.push({ icon: "flame", color: "#F5455C", label: "Calories", value: kcal, unit: "cal" });
+    sessions.forEach((x) => stickers.push({ icon: x.i, color: ACCENT[x.i] || "#34D094", label: x.n || meta[x.i], value: x.reps, unit: "reps" }));
+    if (!stickers.length) stickers.push({ icon: "flame", color: "#F5455C", label: "Calories", value: kcal, unit: "cal" });
+
+    const now = new Date();
+    const DOWF = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const MONF = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    Buzzend.shareCard({
+      sheetTitle: "Share your day",
+      dateLabel: `${DOWF[now.getDay()]}, ${now.getDate()} ${MONF[now.getMonth()]} ${now.getFullYear()}`,
+      hero: p
+        ? { icon: "footprints", label: "Steps today", value: p.value, unit: "steps",
+            meta: [{ icon: "pin", text: p.distance }, { text: `${p.active} active` }] }
+        : { icon: "flame", label: "Calories burned", value: kcal, unit: "cal",
+            meta: [{ icon: "clock", text: `${sessions.length} ${sessions.length === 1 ? "workout" : "workouts"}` }] },
+      seal: p ? { big: p.pct + "%", small: "of goal" }
+              : { big: sessions.length, small: sessions.length === 1 ? "workout" : "workouts" },
+      stickers,
+    });
+  }
+
+  return { DATA, WORKOUTS, sec, ring, startWorkout, shareDay, empty, workoutHero, workoutPicker,
     sessionLog, progressCard, checklist, challenges, friends, feed, activityCard, bento };
 })();

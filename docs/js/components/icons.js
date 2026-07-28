@@ -28,6 +28,7 @@ window.Icons = (function () {
     play: '<polygon points="6 3 20 12 6 21 6 3"/>',
     eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
     target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    locate: '<line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.4"/>',
     check: '<polyline points="20 6 9 17 4 12"/>',
     chevron: '<path d="m9 18 6-6-6-6"/>',
     x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
@@ -102,6 +103,20 @@ window.Icons = (function () {
     const s = size || 22;
     return `<svg class="bz-ico ${cls||''}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
   }
+  /* The real Buzzend mark — orange field + two-tone bolt, verbatim from
+     app/src/main/res/drawable/app_logo.xml (the drawable BuzzendLogo renders). Fixed brand colour: it
+     does NOT follow the palette or the theme, exactly as on device. `r` is the corner radius in px,
+     matching whatever `cornerRadius` the native call site passes. */
+  function brandMark(size, r) {
+    const s = size || 26;
+    return `<span class="bz-mark" style="display:block;width:${s}px;height:${s}px;border-radius:${r == null ? 7 : r}px;overflow:hidden;flex:none">`
+      + `<svg viewBox="0 0 512 512" width="100%" height="100%" role="img" aria-label="Buzzend">`
+      + `<path fill="#ff5d00" d="M0 0h512v512H0z"/>`
+      + `<path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M355.363 470.736L174.057 313.194L221.51 298.208L130.294 218.948L260.279 177.038L158.354 39.3873L339.046 196.396L291.818 211.308L383.106 290.631L253.187 332.71L355.363 470.736ZM264.592 284.339L210.446 237.291L248.895 225.258L303.255 272.493L264.592 284.339Z"/>`
+      + `<path fill="#008080" fill-rule="evenodd" clip-rule="evenodd" d="M355.197 470.559L173.891 313.017L221.344 298.031L303.089 272.316L248.729 225.081L291.652 211.131L382.94 290.454L253.021 332.532L355.197 470.559Z"/>`
+      + `</svg></span>`;
+  }
+
   function init(root) {
     (root || document).querySelectorAll("[data-icon]").forEach(el => {
       const n = el.getAttribute("data-icon");
@@ -110,5 +125,5 @@ window.Icons = (function () {
     });
   }
   document.addEventListener("DOMContentLoaded", () => init());
-  return { svg, init, has: (n) => !!P[n] };
+  return { svg, init, brandMark, has: (n) => !!P[n] };
 })();

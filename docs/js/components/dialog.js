@@ -93,7 +93,7 @@
   };
 
   window.Buzzend.sheet = function (opts) {
-    build(Object.assign({ sheet: true }, opts));
+    return build(Object.assign({ sheet: true }, opts));
   };
 
   // non-dismissible loading dialog → returns a handle with .close()

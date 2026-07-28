@@ -1,0 +1,1080 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Profile Stats — share the period</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../css/tokens.css" />
+<link rel="stylesheet" href="../../css/palettes.css" />
+<link rel="stylesheet" href="../../css/fonts.css" />
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg-canvas); color:var(--text-primary); font-family:var(--font); -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:22px 20px 90px; }
+  .top{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+  .back{ font:800 12px var(--font); color:var(--text-tertiary); text-decoration:none; }
+  h1{ font:900 24px var(--font); margin:6px 0 0; letter-spacing:-.5px; }
+  h2{ font:900 17px var(--font); margin:34px 0 4px; letter-spacing:-.3px; }
+  h2 .num{ display:inline-grid; place-items:center; width:22px; height:22px; border-radius:7px; background:var(--primary); color:var(--on-primary); font-size:12px; margin-right:8px; vertical-align:2px; }
+  .lede{ font:600 13.5px/1.62 var(--font); color:var(--text-secondary); margin:10px 0 0; max-width:78ch; }
+  .lede b{ color:var(--text-primary); font-weight:800; }
+  .theme-toggle{ border:1px solid var(--border); background:var(--surface); color:var(--text-primary); border-radius:99px; padding:7px 13px; font:800 12px var(--font); cursor:pointer; flex:none; }
+  code{ font:700 11.5px ui-monospace,Menlo,monospace; background:var(--surface-alt); padding:1px 5px; border-radius:5px; }
+
+  /* ── control bar ── */
+  .bar{ display:flex; flex-wrap:wrap; gap:18px; align-items:center; margin-top:18px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:12px 14px; }
+  .bar>div{ display:flex; align-items:center; gap:9px; }
+  .blab{ font:900 9.5px var(--font); letter-spacing:.8px; text-transform:uppercase; color:var(--text-tertiary); }
+  .seg{ display:inline-flex; background:var(--surface-alt); border-radius:99px; padding:3px; gap:2px; }
+  .seg button{ border:0; background:transparent; color:var(--text-secondary); font:800 11.5px var(--font); padding:6px 11px; border-radius:99px; cursor:pointer; white-space:nowrap; }
+  .seg button.on{ background:var(--surface); color:var(--primary); box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  [data-swatch]::before{ content:''; width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:-1px; }
+  [data-swatch="teal"]::before{ background:#008080 } [data-swatch="neomint"]::before{ background:#00e6a0 }
+  [data-swatch="electricblue"]::before{ background:#2f6bff } [data-swatch="blackgold"]::before{ background:#f5c518 }
+  [data-swatch="energyorange"]::before{ background:#ff6b35 } [data-swatch="aipurple"]::before{ background:#8b5cf6 }
+
+  svg{ display:block; } .ic{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ── PART 1 · the Stats header row (mirrors ProfileStatsSection.ChartHeader) ── */
+  .hdemo{ display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:14px; margin-top:16px; }
+  .hcard{ background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; }
+  .hcap{ font:900 11px var(--font); letter-spacing:.6px; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:11px; display:flex; align-items:center; gap:7px; }
+  .hcap .pill{ background:var(--surface-alt); color:var(--text-secondary); padding:2px 7px; border-radius:99px; font-size:9.5px; letter-spacing:.4px; }
+  .hcap .pill.bad{ background:#f5455c1f; color:#f5455c; } .hcap .pill.good{ background:#22c9931f; color:#12996d; }
+  /* the header itself */
+  .sh{ display:flex; align-items:center; gap:6px; }
+  .sh-t{ font:900 15px var(--font); color:var(--text-primary); text-align:center; flex:1; white-space:nowrap; }
+  .sh-arrow{ width:28px; height:28px; flex:none; border:1px solid var(--border); border-radius:var(--r-sm); display:grid; place-items:center; color:var(--text-primary); }
+  .sh-arrow.off{ border-color:transparent; opacity:.3; }
+  .sh-arrow .ic, .sh-btn .ic{ width:18px; height:18px; }
+  .sh-btn{ width:30px; height:30px; flex:none; border-radius:var(--r-sm); display:grid; place-items:center; color:var(--text-primary); cursor:pointer; }
+  .sh-btn.acc{ color:var(--primary); }
+  .sh-btn.acc.tint{ background:color-mix(in srgb,var(--primary) 13%,transparent); }
+  .sh-now-old{ font:700 11px var(--font); color:var(--primary); padding:3px 8px; border-radius:99px; flex:none; }
+  .icpick{ display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+  .icpick button{ display:flex; align-items:center; gap:7px; border:1.5px solid var(--border); background:transparent; color:var(--text-secondary); border-radius:10px; padding:7px 10px; font:800 11px var(--font); cursor:pointer; }
+  .icpick button.on{ border-color:var(--primary); color:var(--primary); background:color-mix(in srgb,var(--primary) 9%,transparent); }
+  .icpick .ic{ width:16px; height:16px; }
+  .why{ font:600 12px/1.6 var(--font); color:var(--text-secondary); margin-top:11px; }
+  .why b{ color:var(--text-primary); font-weight:800; }
+
+  /* ── the exported card (4:5 = 1080×1350) ── */
+  .deck{ display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:22px; margin-top:16px; align-items:start; }
+  .col .cap{ font:900 13.5px var(--font); color:var(--text-primary); display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .col .tag{ font:900 8.5px var(--font); letter-spacing:.7px; text-transform:uppercase; padding:2.5px 6px; border-radius:5px; }
+  .tag.day{ background:#22c9932e; color:#12996d } .tag.week{ background:#3b6eff2e; color:#3b6eff }
+  .tag.month{ background:#9b6cff2e; color:#8250f0 } .tag.rec{ background:var(--primary); color:var(--on-primary) }
+  .col .sub{ font:600 11.5px/1.55 var(--font); color:var(--text-secondary); margin:5px 0 10px; }
+  .dlg{ background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:11px; }
+  .dlg-h{ display:flex; align-items:center; justify-content:space-between; padding:2px 4px 10px; }
+  .dlg-t{ font:900 13.5px var(--font); color:var(--text-primary); } .dlg-x{ width:24px; height:24px; border-radius:50%; background:var(--surface-alt); color:var(--text-secondary); display:grid; place-items:center; font-size:11px; }
+
+  .acts{ display:flex; gap:7px; margin-top:10px; }
+  .acts button{ flex:1; border:0; border-radius:11px; padding:10px 4px; font:800 12px var(--font); font-family:var(--font); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; transition:background .12s ease, filter .12s ease, transform .12s ease; }
+  .acts button:hover{ filter:brightness(1.06); } .acts button:active{ transform:translateY(1px); }
+  .acts .ic{ width:14px; height:14px; }
+  .acts .post{ background:color-mix(in srgb,var(--primary) 15%,transparent); color:var(--primary); box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--primary) 40%,transparent); }
+  .acts .post:hover{ background:color-mix(in srgb,var(--primary) 24%,transparent); }
+  .acts .save{ background:transparent; color:var(--text-primary); box-shadow:inset 0 0 0 1.5px var(--border); } .acts .save:hover{ background:var(--tile); }
+  .acts .share{ background:#23252b; color:#fff; } html[data-theme="dark"] .acts .share{ background:#3a3a3f; }
+
+  /* page-local neutrals — deliberately palette-independent (same rule as share-card.html) */
+  :root{ --tile:#f4f4f5; --tile-line:#eaeaec; --ink:#111318; --p-glow:color-mix(in srgb, var(--primary) 46%, transparent); }
+  html[data-theme="dark"]{ --tile:#232326; --tile-line:#2c2c31; }
+
+  .frame{ width:100%; aspect-ratio:4/5; border-radius:var(--r-lg); overflow:hidden; padding:13px; display:flex; flex-direction:column; background:var(--surface); color:var(--text-primary); }
+  /* real Buzzend mark (app_logo.xml) + wordmark, mirroring ShareActivityCard.kt's brand Row */
+  .brand{ margin-top:auto; padding-top:8px; display:flex; align-items:center; gap:8px; border-top:1px solid var(--tile-line); }
+  .brand .logo{ width:26px; height:26px; border-radius:7px; overflow:hidden; flex:none; } .brand .logo svg{ width:100%; height:100%; }
+  .brand .bn{ font:900 14px var(--font); color:var(--primary); }
+  .brand .sl{ margin-left:auto; font:700 10.5px var(--font); color:var(--text-tertiary); }
+
+  /* ── STICKER-BOARD DNA (lifted from share-card.html I, so the family reads as one system) ── */
+  .frame.sb{ background:var(--surface); background-image:radial-gradient(var(--tile-line) 1.4px, transparent 1.4px); background-size:13px 13px; }
+  .sb-date{ font:900 10px var(--font); letter-spacing:1.4px; text-transform:uppercase; color:var(--text-tertiary); text-align:center; }
+  .sb-stage{ flex:1; position:relative; margin-top:6px; display:flex; flex-direction:column; }
+  .sb-stage.spread{ justify-content:space-between; }
+  .stick{ border-radius:16px; box-shadow:0 5px 14px rgba(0,0,0,.14); border:2.5px solid #fff; }
+  html[data-theme="dark"] .stick{ border-color:#0e0e11; box-shadow:0 5px 16px rgba(0,0,0,.5); }
+  .sb-main{ position:relative; padding:12px 13px; color:#fff; background:linear-gradient(150deg,#252830,#0e1013); transform:rotate(-2deg); }
+  .sb-mh{ display:flex; align-items:center; gap:8px; font:900 9.5px var(--font); letter-spacing:.8px; text-transform:uppercase; opacity:.75; }
+  .sb-mh .ic{ width:23px; height:23px; }                        /* enlarged, matching share-card I */
+  .sb-mb{ font:900 38px var(--font); line-height:1; letter-spacing:-1.6px; margin-top:5px; }
+  .sb-mb.sm{ font-size:31px; letter-spacing:-1.2px; }
+  .sb-mb s{ font:800 12px var(--font); text-decoration:none; letter-spacing:0; opacity:.7; margin-left:5px; }
+  .sb-ms{ font:800 10.5px var(--font); opacity:.8; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sb-ms .ic{ width:12px; height:12px; }
+  .sb-seal{ position:absolute; right:-4px; top:-16px; width:62px; height:62px; border-radius:50%; background:var(--primary); color:var(--on-primary); display:flex; flex-direction:column; align-items:center; justify-content:center; transform:rotate(9deg); box-shadow:0 5px 14px rgba(0,0,0,.2); border:2.5px solid #fff; text-align:center; }
+  html[data-theme="dark"] .sb-seal{ border-color:#0e0e11; }
+  .sb-seal b{ font:900 17px var(--font); line-height:1; } .sb-seal.tight b{ font-size:14px; }
+  .sb-seal span{ font:900 7.5px var(--font); letter-spacing:.8px; text-transform:uppercase; opacity:.85; margin-top:1px; line-height:1.15; }
+  .sb-row{ display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+  .sb-st{ flex:1 1 42%; display:flex; align-items:center; gap:7px; padding:8px 9px; background:var(--surface); }
+  .sb-st .ic{ width:17px; height:17px; flex:none; }
+  .sb-st>div{ min-width:0; } .sb-sl{ font:800 9px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); white-space:nowrap; }
+  .sb-sv{ font:900 15px var(--font); color:var(--text-primary); white-space:nowrap; } .sb-sv s{ font:700 9px var(--font); text-decoration:none; color:var(--text-tertiary); }
+  .sb-row .sb-st:nth-child(1){ transform:rotate(1.6deg) } .sb-row .sb-st:nth-child(2){ transform:rotate(-1.8deg) }
+  .sb-row .sb-st:nth-child(3){ transform:rotate(-1.2deg) } .sb-row .sb-st:nth-child(4){ transform:rotate(2deg) }
+
+  /* ── week: 7 day chips ── */
+  .wk-days{ display:flex; gap:5px; margin-top:12px; }
+  .wk-d{ flex:1; background:var(--surface); padding:7px 3px 6px; display:flex; flex-direction:column; align-items:center; gap:5px; border-radius:11px; box-shadow:0 3px 9px rgba(0,0,0,.11); border:2px solid #fff; }
+  html[data-theme="dark"] .wk-d{ border-color:#0e0e11; }
+  .wk-d:nth-child(odd){ transform:rotate(-1.6deg) } .wk-d:nth-child(even){ transform:rotate(1.4deg) }
+  .wk-dn{ font:900 8px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); }
+  .wk-bar{ width:9px; height:38px; border-radius:99px; background:var(--tile); display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+  .wk-bar i{ display:block; width:100%; }
+  .wk-dot{ width:5px; height:5px; border-radius:50%; background:var(--primary); }
+  .wk-dot.off{ background:var(--tile-line); }
+
+  /* ── week: stacked column chart ── */
+  .wk-chart{ display:flex; align-items:flex-end; gap:5px; height:96px; margin-top:11px; }
+  .wk-col{ flex:1; display:flex; flex-direction:column; justify-content:flex-end; gap:2px; }
+  .wk-col i{ display:block; border-radius:3px; }
+  .wk-col .empty{ height:3px; border-radius:99px; background:rgba(255,255,255,.2); }
+  .wk-axis{ display:flex; gap:5px; margin-top:6px; }
+  .wk-axis span{ flex:1; text-align:center; font:900 8px var(--font); letter-spacing:.3px; text-transform:uppercase; opacity:.6; }
+  .wk-axis span.pk{ opacity:1; color:var(--primary); }
+
+  /* ── month: calendar heatmap ── */
+  .mo-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:11px; }
+  .mo-h{ font:900 8px var(--font); letter-spacing:.4px; text-transform:uppercase; text-align:center; opacity:.55; padding-bottom:1px; }
+  .mo-c{ aspect-ratio:1; border-radius:5px; background:var(--tile); display:grid; place-items:center; font:800 8px var(--font); color:var(--text-tertiary); }
+  .mo-c.pad{ background:transparent; }
+  .mo-c.on{ color:var(--text-secondary); } .mo-c.on.deep{ color:#fff; }
+  .mo-c.pk{ box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px var(--primary); }
+  .mo-lg{ display:flex; align-items:center; gap:6px; margin-top:9px; font:800 8.5px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); }
+  .mo-lg i{ display:block; width:13px; height:9px; border-radius:2px; }
+
+  /* ── month: skyline ── */
+  .sky{ display:flex; align-items:flex-end; gap:1.5px; height:74px; margin-top:11px; }
+  .sky i{ flex:1; border-radius:2px 2px 0 0; background:rgba(255,255,255,.26); min-height:2px; }
+  .sky i.on{ background:#fff; } .sky i.pk{ background:var(--primary); }
+
+  /* ── ranked type ladder ── */
+  .lad{ margin-top:11px; display:flex; flex-direction:column; gap:8px; }
+  .lad-r{ display:flex; align-items:center; gap:8px; }
+  .lad-r .ic{ width:16px; height:16px; flex:none; }
+  .lad-n{ width:56px; flex:none; font:800 9px var(--font); letter-spacing:.3px; text-transform:uppercase; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lad-t{ flex:1; height:9px; border-radius:99px; background:var(--tile); overflow:hidden; } .lad-t i{ display:block; height:100%; border-radius:99px; }
+  .lad-v{ width:52px; text-align:right; font:900 11.5px var(--font); color:var(--text-primary); font-variant-numeric:tabular-nums; }
+
+  /* ── consistency ring ── */
+  .ring-wrap{ display:flex; align-items:center; gap:13px; margin-top:6px; }
+  .ring-c{ position:relative; flex:none; }
+  .ring-in{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-b{ font:900 22px var(--font); line-height:1; } .ring-s{ font:900 8px var(--font); letter-spacing:.7px; text-transform:uppercase; opacity:.7; margin-top:2px; }
+
+  /* ══════════════════════════════════════════════════════════════════════════════════════════════
+     THE OTHER DESIGN LANGUAGES. Ported verbatim from share-card.html so a week/month card in one of
+     these reads as the same system as the day card in that language — same tokens, same type ramp.
+     ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+  /* shared hero band (A · Ink hero) */
+  .hero{ border-radius:18px; padding:14px; color:#fff; position:relative; overflow:hidden; }
+  .hero-top{ display:flex; justify-content:space-between; align-items:center; position:relative; }
+  .hkey{ display:inline-flex; align-items:center; gap:6px; font:900 10px var(--font); letter-spacing:.6px; text-transform:uppercase; color:rgba(255,255,255,.8); }
+  .hkey .badge{ width:20px; height:20px; border-radius:6px; background:rgba(255,255,255,.15); display:grid; place-items:center; }
+  .hkey .badge .ic{ width:13px; height:13px; color:#fff; }
+  .hdate{ font:800 11px var(--font); color:rgba(255,255,255,.72); }
+  .hbig{ font:900 40px var(--font); line-height:1; letter-spacing:-1px; margin-top:8px; position:relative; }
+  .hbig s{ font:800 13px var(--font); text-decoration:none; letter-spacing:0; color:rgba(255,255,255,.7); margin-left:5px; }
+  .hbar{ height:7px; border-radius:99px; background:rgba(255,255,255,.2); margin-top:10px; overflow:hidden; position:relative; }
+  .hbar i{ display:block; height:100%; border-radius:99px; }
+  .hgoal{ font:700 10.5px var(--font); color:rgba(255,255,255,.78); margin-top:5px; position:relative; }
+  .hmeta{ display:inline-flex; align-items:center; gap:5px; font:800 12px var(--font); color:#fff; margin-top:9px; position:relative; }
+  .hmeta .ic{ width:12px; height:12px; color:rgba(255,255,255,.8); }
+  /* the 7 mini bars that live inside an ink hero */
+  .h-week{ display:flex; align-items:flex-end; gap:4px; height:34px; margin-top:11px; position:relative; }
+  .h-week i{ flex:1; border-radius:3px 3px 0 0; background:rgba(255,255,255,.28); min-height:3px; }
+  .h-week i.on{ background:#fff; }
+
+  /* neutral stat tiles (A) */
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:8px; } .grid.one{ grid-template-columns:1fr; }
+  .tile{ background:var(--tile); border-radius:13px; padding:9px 10px; display:flex; align-items:center; gap:9px; } .tile>div{ min-width:0; }
+  .tico{ width:32px; height:32px; flex:none; border-radius:9px; display:grid; place-items:center; } .tico .ic{ width:18px; height:18px; }
+  .tl{ font:800 10px var(--font); color:var(--text-tertiary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tv{ font:900 17px var(--font); color:var(--text-primary); white-space:nowrap; } .tv s{ font:700 9.5px var(--font); color:var(--text-tertiary); text-decoration:none; }
+
+  /* ── B · Editorial light ── */
+  .b-date{ font:800 11px var(--font); color:var(--text-tertiary); letter-spacing:.4px; text-transform:uppercase; }
+  .b-key{ display:inline-flex; align-items:center; gap:7px; margin-top:9px; }
+  .b-key .g{ width:28px; height:28px; border-radius:9px; background:var(--tile); display:grid; place-items:center; color:var(--text-primary); } .b-key .g .ic{ width:17px; height:17px; }
+  .b-key span{ font:900 11px var(--font); letter-spacing:.7px; text-transform:uppercase; color:var(--text-tertiary); }
+  .b-big{ font:900 38px var(--font); line-height:1; letter-spacing:-1.4px; margin-top:7px; color:var(--text-primary); }
+  .b-big s{ font:800 13px var(--font); text-decoration:none; letter-spacing:0; color:var(--text-tertiary); margin-left:6px; }
+  .b-bar{ height:6px; border-radius:99px; background:var(--tile); margin-top:10px; overflow:hidden; } .b-bar i{ display:block; height:100%; border-radius:99px; background:var(--primary); }
+  .b-goal{ font:800 10.5px var(--font); color:var(--text-secondary); margin-top:5px; }
+  .b-chips{ display:flex; gap:7px; margin-top:9px; }
+  .b-chip{ flex:1; background:var(--tile); border-radius:12px; padding:7px 9px; }
+  .b-chip .cv{ font:900 14px var(--font); display:flex; align-items:center; gap:4px; color:var(--text-primary); white-space:nowrap; } .b-chip .cv .ic{ width:13px; height:13px; flex:none; }
+  .b-chip .cl{ font:800 9.5px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); margin-top:1px; }
+  .b-rows{ margin-top:6px; display:flex; flex-direction:column; }
+  .b-r{ display:flex; align-items:center; gap:10px; padding:5px 2px; border-bottom:1px solid var(--tile-line); } .b-r:last-child{ border-bottom:0; }
+  .b-ri{ width:27px; height:27px; flex:none; border-radius:9px; display:grid; place-items:center; } .b-ri .ic{ width:16px; height:16px; }
+  .b-rn{ flex:1; font:800 12.5px var(--font); color:var(--text-primary); }
+  .b-rv{ font:900 14px var(--font); color:var(--text-primary); } .b-rv s{ font:700 9.5px var(--font); color:var(--text-tertiary); text-decoration:none; margin-left:2px; }
+
+  /* ── D · Dark card (fixed dark, whatever the theme) ── */
+  .frame.dark{ background:#121316; color:#fff; }
+  .d-top{ display:flex; align-items:center; justify-content:space-between; }
+  .d-key{ display:inline-flex; align-items:center; gap:7px; font:900 10px var(--font); letter-spacing:.6px; text-transform:uppercase; color:#8a8f98; }
+  .d-key .g{ width:22px; height:22px; border-radius:7px; background:#1e2025; display:grid; place-items:center; color:var(--primary); } .d-key .g .ic{ width:13px; height:13px; }
+  .d-date{ font:800 10.5px var(--font); color:#6e737c; }
+  .d-hero{ display:flex; align-items:center; gap:14px; margin-top:12px; }
+  .d-big{ font:900 33px var(--font); line-height:1; letter-spacing:-1.2px; } .d-big s{ font:800 12px var(--font); text-decoration:none; letter-spacing:0; color:#8a8f98; margin-left:5px; }
+  .d-sub{ font:800 11.5px var(--font); color:#8a8f98; margin-top:5px; display:inline-flex; align-items:center; gap:5px; } .d-sub .ic{ width:12px; height:12px; }
+  .d-grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:11px; } .d-grid.one{ grid-template-columns:1fr; }
+  .d-tile{ background:#1b1d21; border-radius:13px; padding:9px 10px; display:flex; align-items:center; gap:9px; } .d-tile>div{ min-width:0; }
+  .d-tl{ font:800 10px var(--font); color:#8a8f98; white-space:nowrap; }
+  .d-tv{ font:900 16px var(--font); color:#fff; white-space:nowrap; } .d-tv s{ font:700 9.5px var(--font); color:#8a8f98; text-decoration:none; }
+  .frame.dark .brand{ border-top-color:#232529; } .frame.dark .brand .sl{ color:#6e737c; }
+  .d-week{ display:flex; align-items:flex-end; gap:4px; height:40px; margin-top:11px; }
+  .d-week i{ flex:1; border-radius:3px 3px 0 0; background:#22252a; min-height:3px; }
+
+  /* ── E · Poster ── */
+  .frame.e{ background:#f7f5ef; color:#111; padding:0; }
+  html[data-theme="dark"] .frame.e{ background:#14140f; color:#f6f3e9; }
+  .e-in{ flex:1; display:flex; flex-direction:column; padding:14px 14px 14px 30px; position:relative; overflow:hidden; }
+  .e-rail{ position:absolute; left:8px; bottom:14px; writing-mode:vertical-rl; transform:rotate(180deg); font:900 10px var(--font); letter-spacing:3px; text-transform:uppercase; color:var(--primary); }
+  .e-rail::after{ content:''; display:block; width:2px; height:38px; background:currentColor; margin:8px auto 0; }
+  .e-wm{ position:absolute; right:-24px; top:34px; opacity:.07; pointer-events:none; }
+  .e-wm .ic{ width:172px; height:172px; stroke-width:1.1; }
+  .e-date{ font:900 10px var(--font); letter-spacing:2.4px; text-transform:uppercase; opacity:.5; }
+  .e-big{ font:900 58px var(--font); line-height:.86; letter-spacing:-3px; margin-top:auto; font-variant-numeric:tabular-nums; }
+  .e-unit{ font:900 11px var(--font); letter-spacing:3px; text-transform:uppercase; opacity:.55; margin-top:4px; }
+  .e-rule{ height:3px; background:currentColor; margin:11px 0 8px; }
+  .e-goal{ font:800 10px var(--font); letter-spacing:1.1px; text-transform:uppercase; opacity:.62; line-height:1.5; }
+  .e-list{ list-style:none; margin:9px 0 0; padding:0; }
+  .e-list li{ display:flex; align-items:baseline; gap:8px; font:800 11px var(--font); letter-spacing:.6px; text-transform:uppercase; padding:3.5px 0; border-top:1px solid currentColor; }
+  .e-list li em{ font-style:normal; opacity:.4; font-size:9px; } .e-list li span{ flex:1; } .e-list li b{ font-weight:900; font-variant-numeric:tabular-nums; }
+  .e-list li.tot{ border-top-width:3px; color:var(--primary); }
+  .frame.e .brand{ border-top:0; padding:0 14px 12px 30px; }
+  .frame.e .brand .sl{ color:inherit; opacity:.5; }
+
+  /* ── F · Receipt ── */
+  .frame.f{ background:#e7e4dd; padding:11px; } html[data-theme="dark"] .frame.f{ background:#191a1d; }
+  .f-paper{ --z:7px; background:#fbfaf7; color:#16181c; flex:1; padding:14px 15px calc(var(--z) + 10px); font-family:ui-monospace,"SFMono-Regular",Menlo,monospace; display:flex; flex-direction:column;
+    -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/14px var(--z) repeat-x, linear-gradient(#000 0 0) top/100% calc(100% - var(--z)) no-repeat;
+            mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/14px var(--z) repeat-x, linear-gradient(#000 0 0) top/100% calc(100% - var(--z)) no-repeat; }
+  html[data-theme="dark"] .f-paper{ background:#e9e7e1; }
+  .f-hd{ display:flex; align-items:center; gap:6px; font:700 11px ui-monospace,monospace; letter-spacing:1.4px; }
+  .f-hd .ic{ width:14px; height:14px; color:var(--primary); }
+  .f-meta{ font:400 9.5px ui-monospace,monospace; letter-spacing:.6px; opacity:.55; margin-top:3px; }
+  .f-sep{ border-top:1px dashed #16181c44; margin:7px 0; }
+  .f-li{ display:flex; align-items:baseline; gap:5px; font:400 10.5px ui-monospace,monospace; padding:2px 0; }
+  .f-li i{ flex:1; border-bottom:1.5px dotted #16181c33; transform:translateY(-3px); font-style:normal; }
+  .f-li b{ font-weight:700; } .f-li span.q{ opacity:.5; font-size:9px; }
+  .f-tot{ display:flex; justify-content:space-between; align-items:baseline; font:700 15px ui-monospace,monospace; letter-spacing:-.3px; }
+  .f-tot em{ font-style:normal; font-size:10px; letter-spacing:1.2px; opacity:.6; }
+  .f-gauge{ display:flex; gap:2px; margin-top:9px; } .f-gauge i{ flex:1; height:9px; background:#16181c1a; } .f-gauge i.on{ background:var(--primary); }
+  .f-code{ margin-top:auto; padding-top:8px; display:flex; gap:1.5px; align-items:flex-end; height:20px; }
+  .f-code i{ flex:1; background:#16181c; } .f-thx{ text-align:center; font:700 8.5px ui-monospace,monospace; letter-spacing:2.2px; margin-top:5px; opacity:.65; }
+
+  /* ── G · Data bars ── */
+  .g-top{ display:flex; align-items:center; justify-content:space-between; }
+  .g-key{ display:inline-flex; align-items:center; gap:6px; font:900 10px var(--font); letter-spacing:.6px; text-transform:uppercase; color:var(--text-tertiary); } .g-key .ic{ width:15px; height:15px; color:var(--primary); }
+  .g-date{ font:800 10.5px var(--font); color:var(--text-tertiary); }
+  .g-big{ font:900 36px var(--font); line-height:1; letter-spacing:-1.4px; margin-top:9px; color:var(--text-primary); } .g-big s{ font:800 12px var(--font); text-decoration:none; letter-spacing:0; color:var(--text-tertiary); margin-left:5px; }
+  .g-chart{ display:flex; align-items:flex-end; gap:3px; height:72px; margin-top:10px; padding:0 1px; border-bottom:1.5px solid var(--tile-line); }
+  .g-chart.tight{ gap:1.5px; }
+  .g-chart i{ flex:1; border-radius:3px 3px 0 0; background:var(--tile); min-height:2px; }
+  .g-chart i.on{ background:color-mix(in srgb,var(--primary) 34%,transparent); } .g-chart i.pk{ background:var(--primary); }
+  .g-axis{ display:flex; justify-content:space-between; font:800 8.5px var(--font); letter-spacing:.6px; color:var(--text-tertiary); margin-top:5px; text-transform:uppercase; }
+  .g-rows{ margin-top:9px; display:flex; flex-direction:column; gap:6px; }
+  .g-r{ display:flex; align-items:center; gap:8px; }
+  .g-r .ic{ width:15px; height:15px; flex:none; }
+  .g-rn{ width:58px; flex:none; font:800 9.5px var(--font); text-transform:uppercase; letter-spacing:.3px; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .g-track{ flex:1; height:10px; border-radius:99px; background:var(--tile); overflow:hidden; } .g-track i{ display:block; height:100%; border-radius:99px; }
+  .g-rv{ width:48px; text-align:right; font:900 11.5px var(--font); color:var(--text-primary); font-variant-numeric:tabular-nums; }
+
+  /* ── H · Mesh story ── */
+  .frame.h{ position:relative; color:#fff; background:#0d0f14; }
+  .h-mesh{ position:absolute; inset:0; background:
+      radial-gradient(60% 55% at 12% 8%, color-mix(in srgb,var(--primary) 92%,transparent), transparent 70%),
+      radial-gradient(55% 50% at 92% 18%, #9b6cffcc, transparent 68%),
+      radial-gradient(65% 55% at 82% 92%, #3b6effcc, transparent 70%),
+      radial-gradient(55% 45% at 8% 88%, #f5455cb3, transparent 70%), #0d0f14; }
+  .h-in{ position:relative; flex:1; display:flex; flex-direction:column; }
+  .glass{ background:rgba(255,255,255,.14); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.22); border-radius:14px; }
+  .h-hd{ display:flex; align-items:center; justify-content:space-between; padding:7px 10px; }
+  .h-key{ display:inline-flex; align-items:center; gap:6px; font:900 9.5px var(--font); letter-spacing:.7px; text-transform:uppercase; } .h-key .ic{ width:13px; height:13px; }
+  .h-date{ font:800 9.5px var(--font); opacity:.8; }
+  .h-big{ font:900 42px var(--font); line-height:.95; letter-spacing:-2px; margin-top:12px; text-shadow:0 3px 22px rgba(0,0,0,.28); }
+  .h-unit{ font:900 10.5px var(--font); letter-spacing:2.4px; text-transform:uppercase; opacity:.85; margin-top:1px; }
+  .h-bar{ height:6px; border-radius:99px; background:rgba(255,255,255,.28); margin-top:9px; overflow:hidden; } .h-bar i{ display:block; height:100%; border-radius:99px; background:#fff; }
+  .h-goal{ font:800 10px var(--font); opacity:.85; margin-top:5px; }
+  .h-chips{ display:flex; gap:6px; margin-top:9px; } .h-chip{ flex:1; padding:6px 8px; text-align:center; }
+  .h-chip b{ display:block; font:900 13px var(--font); } .h-chip span{ font:800 8.5px var(--font); letter-spacing:.7px; text-transform:uppercase; opacity:.8; }
+  .h-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; } .h-grid.one{ grid-template-columns:1fr; }
+  .h-w{ display:flex; align-items:center; gap:7px; padding:6px 9px; } .h-w .ic{ width:15px; height:15px; flex:none; }
+  .h-w div{ min-width:0; } .h-wl{ font:800 8.5px var(--font); letter-spacing:.5px; text-transform:uppercase; opacity:.8; white-space:nowrap; } .h-wv{ font:900 14px var(--font); }
+  .frame.h .brand{ border-top-color:rgba(255,255,255,.2); } .frame.h .brand .sl{ color:rgba(255,255,255,.75); }
+  .frame.h .brand .bn{ color:#fff; }
+
+  /* ── data-derivation panel ── */
+  .dtable{ margin-top:14px; border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; background:var(--surface); }
+  .dtable table{ width:100%; border-collapse:collapse; }
+  .dtable th{ text-align:left; font:900 9.5px var(--font); letter-spacing:.7px; text-transform:uppercase; color:var(--text-tertiary); padding:11px 13px; background:var(--surface-alt); white-space:nowrap; }
+  .dtable td{ font:600 12px/1.5 var(--font); color:var(--text-secondary); padding:10px 13px; border-top:1px solid var(--tile-line); vertical-align:top; }
+  .dtable td b{ color:var(--text-primary); font-weight:800; }
+  .dtable td.n{ white-space:nowrap; font-weight:800; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .verd{ font:900 8.5px var(--font); letter-spacing:.6px; text-transform:uppercase; padding:3px 7px; border-radius:5px; white-space:nowrap; }
+  .verd.hero{ background:#22c9932e; color:#12996d } .verd.sec{ background:#3b6eff2e; color:#3b6eff }
+  .verd.skip{ background:var(--surface-alt); color:var(--text-tertiary) } .verd.cost{ background:#ffa8282e; color:#b06d00 }
+  .note{ margin-top:12px; border-left:3px solid var(--primary); background:var(--surface); padding:11px 13px; border-radius:0 var(--r-md) var(--r-md) 0; font:600 12px/1.62 var(--font); color:var(--text-secondary); }
+  .note b{ color:var(--text-primary); font-weight:800; }
+  .qs{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; }
+  .q{ background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:13px; }
+  .q h4{ font:900 12px var(--font); margin:0 0 6px; display:flex; align-items:center; gap:7px; }
+  .q p{ font:600 11.5px/1.6 var(--font); color:var(--text-secondary); margin:0; }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <a class="back" href="../../index.html">← Home launcher</a>
+      <h1>Profile Stats — the header fix + sharing a period</h1>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+  </div>
+  <p class="lede">Two changes to the Stats section on Profile. <b>One</b>, the “Today” pill becomes an icon — it has to,
+    because in Week and Month mode it doesn’t jump to <i>today</i>, it jumps to <i>this week</i> / <i>this month</i>, so the
+    word is wrong two thirds of the time. <b>Two</b>, Stats gets a <b>share</b> action. A single day is exactly the
+    <b>I · Sticker board</b> card we just picked for Home, fed from Stats data instead of the Home tile. Week and Month
+    need their own cards — a week isn’t “one workout”, so the numbers that carry it are different. Eight candidates each below: four in the
+    <b>sticker-board</b> language so they match the day card, and four in the other languages from the Share-your-day deck,
+    because a period summary may want a different voice from a one-day brag.</p>
+
+  <div class="bar">
+    <div><span class="blab">Color set</span>
+      <div class="seg" id="segPal">
+        <button data-swatch="teal" onclick="setPalette('teal')">Teal</button>
+        <button data-swatch="neomint" onclick="setPalette('neomint')">Mint</button>
+        <button data-swatch="electricblue" onclick="setPalette('electricblue')">Blue</button>
+        <button data-swatch="blackgold" onclick="setPalette('blackgold')">Gold</button>
+        <button data-swatch="energyorange" onclick="setPalette('energyorange')">Orange</button>
+        <button data-swatch="aipurple" onclick="setPalette('aipurple')">Purple</button>
+      </div></div>
+    <div><span class="blab">Data</span>
+      <div class="seg" id="segScen">
+        <button data-s="mixed" class="on">Typical</button>
+        <button data-s="steps">Steps only</button>
+        <button data-s="reps">Reps only</button>
+        <button data-s="sparse">Sparse</button>
+      </div></div>
+  </div>
+
+  <!-- ══ PART 1 ══ -->
+  <h2><span class="num">1</span>The header row</h2>
+  <p class="lede">Faithful to <code>ProfileStatsSection.ChartHeader</code> — the two nav arrows, the centred period title, the
+    jump-to-current affordance, and the calendar picker. The share button is new. Tap an icon candidate to swap it into the
+    “after” header.</p>
+  <div id="hdemo"></div>
+
+  <!-- ══ PART 2 ══ -->
+  <h2><span class="num">2</span>Day — reuse I · Sticker board</h2>
+  <p class="lede">Identical to the Home card, only the source changes: <code>DayStat.counts</code> + <code>caloriesByDate</code>
+    instead of the Home tile’s <code>DailyGoal</code>. Steps lead when the day has them; a reps-only day promotes calories to
+    the hero and the seal shows the type count instead of goal&nbsp;%. One card, no variations needed.</p>
+  <div class="deck" id="deckDay"></div>
+
+  <!-- ══ PART 3 ══ -->
+  <h2><span class="num">3</span>Week — sticker board family</h2>
+  <p class="lede">A week has seven days of shape that a day card has nowhere to put. Each candidate spends that shape
+    differently: as chips, as a chart, as a single best-day story, or as ranked totals.</p>
+  <div class="deck" id="deckWeek"></div>
+
+  <!-- ══ PART 4 ══ -->
+  <h2><span class="num">4</span>Week — the other design languages</h2>
+  <p class="lede">The same week, same numbers, in four of the languages from the Share-your-day deck. Worth a look even if
+    you keep sticker board for the day card — a period summary is a <i>different kind of object</i> from a day brag, and it
+    may well want a different voice. <b>WA</b> and <b>WB</b> in particular carry more numbers per square inch than any
+    sticker layout can, because they aren’t spending space on borders and rotation.</p>
+  <div class="deck" id="deckWeekAlt"></div>
+
+  <!-- ══ PART 5 ══ -->
+  <h2><span class="num">5</span>Month — sticker board family</h2>
+  <p class="lede">A month is too long for per-day bars to stay readable at 1080px wide, so three of the four lead with
+    <b>consistency</b> rather than volume — which is also the more flattering story for most months.</p>
+  <div class="deck" id="deckMonth"></div>
+
+  <!-- ══ PART 6 ══ -->
+  <h2><span class="num">6</span>Month — the other design languages</h2>
+  <p class="lede">A month is where the non-sticker languages pull ahead hardest. <b>MB · Receipt</b> is the surprise: a month
+    genuinely <i>is</i> an itemised statement, so the till-receipt format stops being a gimmick and starts being the
+    honest shape of the data. <b>MA · Poster</b> is the one people screenshot.</p>
+  <div class="deck" id="deckMonthAlt"></div>
+
+  <!-- ══ PART 7 ══ -->
+  <h2><span class="num">7</span>What a multi-day card can actually say</h2>
+  <p class="lede">Everything below is derived from state Stats <b>already has</b> — <code>days: List&lt;DayStat&gt;</code>,
+    <code>caloriesByDate</code>, <code>performedTypes</code>, <code>periodMaxUnits</code> — with no new endpoint and no second
+    query. Live values for the current Data selection:</p>
+  <div class="dtable" id="dtable"></div>
+  <div class="note" id="dnote"></div>
+
+  <h2><span class="num">8</span>Decisions taken</h2>
+  <div class="note" style="border-left-color:#f5455c"><b>No streak on any share card.</b> Streak is
+    <b>100% backend-computed</b> (<code>GET /v1/streaks/status</code>) with freezes, missed-day restore and
+    invite-to-restore — <code>StreakModels.kt</code> says outright that the math is never reimplemented client-side. Stats
+    doesn’t load it, so a card could only show a <i>locally recomputed</i> “longest run of non-empty days”, which would be
+    wrong three ways: it ignores freezes and restores, it truncates at the period boundary, and — the one that actually
+    bites — <code>ProfileScreen</code> already renders the real <code>currentStreak</code> as “Day streak” a few hundred
+    pixels <b>above</b> the Stats section, so the two numbers would contradict each other on the same screen. Every card
+    above now uses <b>days active</b> as its consistency figure and <b>strongest on ⟨weekday⟩</b> where a second
+    consistency line was wanted; both are period-scoped, unambiguous, and derived from data Stats already holds.</div>
+
+  <h2><span class="num">9</span>The open question, answered</h2>
+  <div class="qs">
+    <div class="q"><h4>Ship daily only, first?</h4><p>No — but ship it <b>first</b>. Day is free (the Home card already exists,
+      it only needs a different data source), so it can land in the same change as the header icon. Week and Month are a
+      second, separate change once you pick a candidate below.</p></div>
+    <div class="q"><h4>Why not one card for all three?</h4><p>The hero number has no honest equivalent. A day’s hero is
+      “8,240 steps”. A month’s hero as a raw total (“186,400 steps”) is a number nobody has intuition for, and it makes a
+      quiet month look like a failure. Consistency (“24 of 31 days”) reads well at any volume.</p></div>
+    <div class="q"><h4>What about an empty period?</h4><p>Suppress the share button entirely when <code>hasNoData</code> — the
+      Stats section already computes it. There is no dignified share card for a zero week, and offering one invites the user
+      to post it.</p></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   Icons. The six workout glyphs + accents mirror HomeIcons.kt exactly, so a card built from this
+   page lands in code without a colour or glyph decision left open.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+const ICON={
+ footprints:'<path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/>',
+ squat:'<circle cx="12" cy="4.5" r="2"/><path d="M12 6.5 9.5 14"/><path d="M11 8.5 16.5 11"/><path d="M9.5 14H16"/><path d="M16 14 13.5 21"/>',
+ pushup:'<circle cx="4" cy="10" r="1.8"/><path d="M5.5 10.3 14 11"/><path d="M14 11 20 13"/><path d="M8 11v6"/><path d="M3 18h18"/>',
+ situp:'<circle cx="5.5" cy="9.5" r="1.8"/><path d="M7 10.5 12 15"/><path d="M12 15 16 11l4 4"/><path d="M3.5 18h17"/>',
+ jumping:'<circle cx="12" cy="3.8" r="1.8"/><path d="M12 5.8v6"/><path d="M12 7 6.5 4.2"/><path d="M12 7 17.5 4.2"/><path d="M12 11.8 8 20"/><path d="M12 11.8 16 20"/>',
+ lunge:'<circle cx="7.5" cy="4.2" r="1.8"/><path d="M7.5 6.2v5.2"/><path d="M7.5 11.4 4 19"/><path d="M7.5 11.4 15 14.6"/><path d="M15 14.6V19"/><path d="M3 19h18"/>',
+ flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+ send:'<path d="M14.54 21.69a.5.5 0 0 0 .94-.03l6.5-19a.5.5 0 0 0-.64-.63l-19 6.5a.5.5 0 0 0-.02.93l7.93 3.18a2 2 0 0 1 1.11 1.11z"/><path d="m21.85 2.15-10.94 10.94"/>',
+ download:'<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
+ share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+ chevL:'<polyline points="15 18 9 12 15 6"/>',
+ chevR:'<polyline points="9 18 15 12 9 6"/>',
+ calendar:'<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>',
+ /* jump-to-current candidates */
+ locate:'<line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.4"/>',
+ reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/>',
+ calNow:'<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/><circle cx="12" cy="15.5" r="1.8" fill="currentColor" stroke="none"/>',
+ last:'<polyline points="7 18 13 12 7 6"/><line x1="17" x2="17" y1="6" y2="18"/>',
+ trophy:'<path d="M6 4h12v4a6 6 0 0 1-12 0z"/><path d="M6 6H4a2 2 0 0 0 2 2M18 6h2a2 2 0 0 1-2 2"/><path d="M12 14v4M8 21h8"/>',
+ spark:'<path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/>',
+ check:'<polyline points="20 6 9 17 4 12"/>'};
+const svg=(n,s,c)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24"${c?` style="color:${c}"`:''}>${ICON[n]||''}</svg>`;
+
+/* the real brand mark — app/src/main/res/drawable/app_logo.xml, verbatim */
+const LOGO=`<span class="logo"><svg viewBox="0 0 512 512" role="img" aria-label="Buzzend">
+ <path fill="#ff5d00" d="M0 0h512v512H0z"/>
+ <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M355.363 470.736L174.057 313.194L221.51 298.208L130.294 218.948L260.279 177.038L158.354 39.3873L339.046 196.396L291.818 211.308L383.106 290.631L253.187 332.71L355.363 470.736ZM264.592 284.339L210.446 237.291L248.895 225.258L303.255 272.493L264.592 284.339Z"/>
+ <path fill="#008080" fill-rule="evenodd" clip-rule="evenodd" d="M355.197 470.559L173.891 313.017L221.344 298.031L303.089 272.316L248.729 225.081L291.652 211.131L382.94 290.454L253.021 332.532L355.197 470.559Z"/>
+</svg></span>`;
+const brand=()=>`<div class="brand">${LOGO}<span class="bn">Buzzend</span><span class="sl">Stay active. Stay ahead.</span></div>`;
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   Domain — WorkoutType (wire name, unitScale, label) from WorkoutStats.kt; accents from HomeIcons.kt.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+const WT={
+ STEPS:        {n:'Steps',         short:'Steps',  i:'footprints', c:'#22c993', scale:2000, u:'steps'},
+ PUSHUPS:      {n:'Push-ups',      short:'Push',   i:'pushup',     c:'#ffa828', scale:20,   u:'reps'},
+ SQUATS:       {n:'Squats',        short:'Squat',  i:'squat',      c:'#9b6cff', scale:20,   u:'reps'},
+ SITUPS:       {n:'Sit-ups',       short:'Sit',    i:'situp',      c:'#3b6eff', scale:20,   u:'reps'},
+ JUMPING_JACKS:{n:'Jumping Jacks', short:'Jacks',  i:'jumping',    c:'#ec4899', scale:40,   u:'reps'},
+ LUNGES:       {n:'Lunges',        short:'Lunge',  i:'lunge',      c:'#ef4444', scale:20,   u:'reps'}};
+const ORDER=['STEPS','PUSHUPS','SQUATS','SITUPS','JUMPING_JACKS','LUNGES'];
+
+/* WorkoutMetrics.kt — the real constants, so every number on these mocks is what the app would render. */
+const H=1.7, KG=60;
+const STRIDE=0.414, PACE=0.95, STEPS_MET=3.0, ACT_STRIDE=0.415, ACT_SPEED=1.4;
+const REP_MET={PUSHUPS:8,SQUATS:5.5,SITUPS:3.8,JUMPING_JACKS:8,LUNGES:5};
+const REP_SEC={PUSHUPS:2,SQUATS:2.5,SITUPS:3,JUMPING_JACKS:1.5,LUNGES:2.5};
+const ACT_SEC={PUSHUPS:2,SQUATS:1.5};
+const distKm=s=>H*STRIDE*s/1000;
+const calFor=(t,n)=> t==='STEPS'
+  ? ((H*STRIDE*n)/PACE)*STEPS_MET*3.5*KG/(200*60)
+  : ((n*REP_SEC[t])/60)*REP_MET[t]*3.5*KG/200;
+const dayCal=c=>Math.round(ORDER.reduce((s,t)=>s+((c[t]>0)?calFor(t,c[t]):0),0));
+const activeSec=c=>{ let s=c.STEPS>0?Math.round(c.STEPS*H*ACT_STRIDE/ACT_SPEED):0;
+  ORDER.forEach(t=>{ if(t!=='STEPS'&&c[t]>0) s+=Math.round(c[t]*(ACT_SEC[t]??2)); }); return s; };
+const units=c=>ORDER.reduce((s,t)=>s+((c[t]>0)?c[t]/WT[t].scale:0),0);
+
+const fmt=v=>Math.round(v).toLocaleString('en-US');
+const hm=sec=>{ const m=Math.round(sec/60); return m>=60?`${Math.floor(m/60)}h ${m%60}m`:`${m}m`; };
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DOW_FULL=['Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays','Sundays'];
+const PAD=2;   /* July 2026 starts on a Wednesday */
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── Mock periods. Fixed arrays (no randomness) so screenshots are stable. July 2026: 1st = Wednesday. ─── */
+const c=o=>{ const m={}; ORDER.forEach(t=>m[t]=o[t]||0); return m; };
+const WEEK_MIXED=[            /* Mon 20 → Sun 26 Jul 2026 */
+  c({STEPS:9120,PUSHUPS:40}), c({STEPS:6480,SQUATS:60,SITUPS:30}), c({STEPS:12240,PUSHUPS:70,SQUATS:80,JUMPING_JACKS:60}),
+  c({STEPS:4100}),            c({STEPS:8240,PUSHUPS:90,SQUATS:120,SITUPS:60}), c({}), c({STEPS:7360,LUNGES:40,SQUATS:50})];
+const WEEK_STEPS=[c({STEPS:9120}),c({STEPS:6480}),c({STEPS:12240}),c({STEPS:4100}),c({STEPS:8240}),c({}),c({STEPS:7360})];
+const WEEK_REPS =[c({PUSHUPS:40}),c({SQUATS:60,SITUPS:30}),c({PUSHUPS:70,SQUATS:80,JUMPING_JACKS:60}),c({}),
+                  c({PUSHUPS:90,SQUATS:120,SITUPS:60}),c({}),c({LUNGES:40,SQUATS:50})];
+const WEEK_SPARSE=[c({}),c({STEPS:3100}),c({}),c({}),c({STEPS:8240,PUSHUPS:90}),c({}),c({})];
+/* month = the week pattern tiled with gaps, so active-days/streak are interesting rather than uniform */
+const MONTH_SHAPE=[1,1,1,0,1,0,1, 1,1,0,1,1,1,0, 0,1,1,1,1,0,1, 1,0,1,1,1,1,1, 1,1,1];
+function buildMonth(base){ return MONTH_SHAPE.map((on,i)=> on? base[i%base.length] : c({})); }
+
+const SCEN={
+  mixed :{week:WEEK_MIXED, month:buildMonth(WEEK_MIXED), day:WEEK_MIXED[4], dayIdx:4},
+  steps :{week:WEEK_STEPS, month:buildMonth(WEEK_STEPS), day:WEEK_STEPS[4], dayIdx:4},
+  reps  :{week:WEEK_REPS,  month:buildMonth(WEEK_REPS),  day:WEEK_REPS[4],  dayIdx:4},
+  sparse:{week:WEEK_SPARSE,month:buildMonth(WEEK_SPARSE),day:WEEK_SPARSE[4],dayIdx:4}};
+let SC='mixed', NOWICON='locate';
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   Derivation. Everything a week/month card can show, computed from `days` alone.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+function derive(days,labels,wdOffset){
+  const totals={}; ORDER.forEach(t=>totals[t]=0);
+  days.forEach(d=>ORDER.forEach(t=>totals[t]+=d[t]||0));
+  const perDay=days.map(units);
+  const cals=days.map(dayCal), secs=days.map(activeSec);
+  const activeIdx=perDay.map((u,i)=>u>0?i:-1).filter(i=>i>=0);
+  /* Deliberately NO streak. Streak is 100% backend-computed (/v1/streaks/status — freezes, missed-day
+     restore, invite-restore), Profile already renders `currentStreak` a few hundred px above Stats, and a
+     within-period "longest run of non-empty days" would contradict it. See the note under the decks. */
+  const wd=[0,0,0,0,0,0,0]; perDay.forEach((u,i)=>{ wd[(i+(wdOffset||0))%7]+=u; });
+  let bw=0; wd.forEach((v,i)=>{ if(v>wd[bw])bw=i; });
+  let bi=0; perDay.forEach((u,i)=>{ if(u>perDay[bi])bi=i; });
+  const performed=ORDER.filter(t=>totals[t]>0);
+  return {
+    days, labels, totals, performed,
+    perDay, maxUnits:Math.max(...perDay,0),
+    cal:cals.reduce((a,b)=>a+b,0), sec:secs.reduce((a,b)=>a+b,0),
+    activeDays:activeIdx.length, periodDays:days.length,
+    bestWeekday: DOW_FULL[bw], weekdayUnits: wd,
+    bestIdx:bi, bestUnits:perDay[bi], bestCal:cals[bi], bestLabel:labels[bi],
+    reps:ORDER.filter(t=>t!=='STEPS').reduce((s,t)=>s+totals[t],0),
+    km:distKm(totals.STEPS),
+    avgSteps: activeIdx.length? totals.STEPS/activeIdx.length : 0,
+    typeMix: performed.map(t=>({t, u:totals[t]/WT[t].scale})).sort((a,b)=>b.u-a.u),
+    empty: activeIdx.length===0 };
+}
+const weekD=()=>derive(SCEN[SC].week, DOW, 0);
+const monthD=()=>derive(SCEN[SC].month, MONTH_SHAPE.map((_,i)=>String(i+1)), PAD);
+
+/* ── shared card pieces ─────────────────────────────────────────────────────────────────────── */
+const seal=(b,s,tight)=>`<div class="sb-seal${tight?' tight':''}"><b>${b}</b><span>${s}</span></div>`;
+function stickers(items){ return `<div class="sb-row">${items.slice(0,4).map(t=>
+  `<div class="sb-st stick"><span style="color:${t.c}">${svg(t.i,17)}</span>
+   <div><div class="sb-sl">${t.n}</div><div class="sb-sv">${t.v}${t.u?`<s> ${t.u}</s>`:''}</div></div></div>`).join('')}</div>`; }
+/* the stat stickers a period card carries below its hero — ordered by what earns the space */
+function periodStickers(D,skipSteps){
+  const it=[];
+  it.push({i:'flame',c:'#f5455c',n:'Calories',v:fmt(D.cal),u:'cal'});
+  it.push({i:'clock',c:'#3b6eff',n:'Active',v:hm(D.sec),u:''});
+  if(!skipSteps&&D.totals.STEPS>0) it.push({i:'pin',c:'#22c993',n:'Distance',v:D.km.toFixed(1),u:'km'});
+  if(D.reps>0) it.push({i:'squat',c:'#9b6cff',n:'Total reps',v:fmt(D.reps),u:'reps'});
+  return stickers(it);
+}
+const acts=()=>`<div class="acts">
+  <button class="post">${svg('send',14)} Post</button>
+  <button class="save">${svg('download',14)} Save</button>
+  <button class="share">${svg('share',14)} Share</button></div>`;
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   DAY — I · Sticker board, unchanged. Only the data source differs.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+function dayCard(){
+  const d=SCEN[SC].day, hasS=d.STEPS>0, cal=dayCal(d), goal=10000;
+  const pct=Math.min(100,Math.round(d.STEPS/goal*100));
+  const perf=ORDER.filter(t=>d[t]>0);
+  if(!perf.length) return `<div class="frame sb"><div class="sb-date">Friday, Jul 24, 2026</div>
+    <div class="sb-stage" style="justify-content:center;align-items:center;text-align:center">
+      <div class="sb-main stick" style="transform:rotate(-1.5deg);padding:20px 18px">
+        <div class="sb-mh">${svg('flame',23)} Nothing recorded</div>
+        <div class="sb-ms" style="opacity:.7">Stats hides Share when the period is empty.</div></div>
+    </div>${brand()}</div>`;
+  const main=hasS
+    ? `<div class="sb-mh">${svg('footprints',23)} Steps today</div><div class="sb-mb">${fmt(d.STEPS)}<s>steps</s></div>
+       <div class="sb-ms">${svg('pin',12)} ${distKm(d.STEPS).toFixed(1)} km · ${hm(activeSec(d))} active</div>`
+    : `<div class="sb-mh">${svg('flame',23)} Calories burned</div><div class="sb-mb">${fmt(cal)}<s>cal</s></div>
+       <div class="sb-ms">${svg('clock',12)} ${hm(activeSec(d))} active</div>`;
+  const sl=hasS?seal(pct+'%','of goal'):seal(perf.length,perf.length>1?'workouts':'workout');
+  const it=[]; if(hasS&&perf.length>1) it.push({i:'flame',c:'#f5455c',n:'Calories',v:fmt(cal),u:'cal'});
+  perf.filter(t=>t!=='STEPS').forEach(t=>it.push({i:WT[t].i,c:WT[t].c,n:WT[t].n,v:fmt(d[t]),u:'reps'}));
+  if(!it.length) it.push({i:'flame',c:'#f5455c',n:'Calories',v:fmt(cal),u:'cal'});
+  return `<div class="frame sb"><div class="sb-date">Friday, Jul 24, 2026</div><div class="sb-stage">
+      <div class="sb-main stick">${main}${sl}</div>${stickers(it)}</div>${brand()}</div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   WEEK — four candidates.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+const RANGE_W='Mon 20 – Sun 26 Jul 2026';
+
+/* W1 · Day chips — the week's shape as seven little stickers under the total. */
+function w1(){ const D=weekD(); if(D.empty) return emptyCard(RANGE_W);
+  const lead=D.totals.STEPS>0;
+  const main=lead
+    ? `<div class="sb-mh">${svg('footprints',23)} Steps this week</div><div class="sb-mb">${fmt(D.totals.STEPS)}<s>steps</s></div>
+       <div class="sb-ms">${svg('pin',12)} ${D.km.toFixed(1)} km · ${fmt(D.avgSteps)}/active day</div>`
+    : `<div class="sb-mh">${svg('spark',23)} Reps this week</div><div class="sb-mb">${fmt(D.reps)}<s>reps</s></div>
+       <div class="sb-ms">${svg('clock',12)} ${hm(D.sec)} active</div>`;
+  const chips=`<div class="wk-days">${D.days.map((d,i)=>{ const u=units(d), h=D.maxUnits?Math.max(4,Math.round(u/D.maxUnits*38)):0;
+    const segs=ORDER.filter(t=>d[t]>0);
+    const fill=segs.length?segs.map(t=>`<i style="height:${Math.max(2,Math.round(h*(d[t]/WT[t].scale)/u))}px;background:${WT[t].c}"></i>`).join(''):'';
+    return `<div class="wk-d"><div class="wk-dn">${DOW[i][0]}</div><div class="wk-bar">${fill}</div>
+      <div class="wk-dot${u>0?'':' off'}"></div></div>`; }).join('')}</div>`;
+  return `<div class="frame sb"><div class="sb-date">${RANGE_W}</div><div class="sb-stage">
+      <div class="sb-main stick">${main}${seal(`${D.activeDays}/7`,'days active',true)}</div>
+      ${chips}${periodStickers(D,!lead)}</div>${brand()}</div>`;
+}
+
+/* W2 · Stacked week chart — the Stats chart itself, inside the hero sticker. */
+function w2(){ const D=weekD(); if(D.empty) return emptyCard(RANGE_W);
+  const cols=D.days.map((d,i)=>{ const u=units(d);
+    if(!u) return `<div class="wk-col"><i class="empty"></i></div>`;
+    const h=Math.max(8,Math.round(u/D.maxUnits*88));
+    return `<div class="wk-col">${ORDER.filter(t=>d[t]>0).map(t=>
+      `<i style="height:${Math.max(3,Math.round(h*(d[t]/WT[t].scale)/u))}px;background:${WT[t].c}"></i>`).join('')}</div>`; }).join('');
+  return `<div class="frame sb"><div class="sb-date">${RANGE_W}</div><div class="sb-stage">
+      <div class="sb-main stick">
+        <div class="sb-mh">${svg('spark',23)} My week</div>
+        <div class="sb-mb sm">${fmt(D.cal)}<s>cal burned</s></div>
+        <div class="wk-chart">${cols}</div>
+        <div class="wk-axis">${DOW.map((n,i)=>`<span class="${i===D.bestIdx?'pk':''}">${n[0]}</span>`).join('')}</div>
+        ${seal(`${D.activeDays}/7`,'days active',true)}
+      </div>${periodStickers(D)}</div>${brand()}</div>`;
+}
+
+/* W3 · Best day — leads with the single best day, week totals demoted to stickers. */
+function w3(){ const D=weekD(); if(D.empty) return emptyCard(RANGE_W);
+  const bd=D.days[D.bestIdx], hasS=bd.STEPS>0;
+  return `<div class="frame sb"><div class="sb-date">${RANGE_W}</div><div class="sb-stage spread">
+      <div class="sb-main stick">
+        <div class="sb-mh">${svg('trophy',23)} Best day · ${D.bestLabel}</div>
+        <div class="sb-mb">${hasS?fmt(bd.STEPS):fmt(D.bestCal)}<s>${hasS?'steps':'cal'}</s></div>
+        <div class="sb-ms">${svg('flame',12)} ${fmt(D.bestCal)} cal · ${hm(activeSec(bd))} active</div>
+        ${seal(`${D.activeDays}/7`,'days active',true)}
+      </div>
+      <div class="sb-row">
+        ${D.totals.STEPS>0
+          ? `<div class="sb-st stick"><span style="color:#22c993">${svg('footprints',17)}</span>
+              <div><div class="sb-sl">Week steps</div><div class="sb-sv">${fmt(D.totals.STEPS)}</div></div></div>`
+          : `<div class="sb-st stick"><span style="color:#9b6cff">${svg('squat',17)}</span>
+              <div><div class="sb-sl">Week reps</div><div class="sb-sv">${fmt(D.reps)}<s> reps</s></div></div></div>`}
+        <div class="sb-st stick"><span style="color:#f5455c">${svg('flame',17)}</span>
+          <div><div class="sb-sl">Week calories</div><div class="sb-sv">${fmt(D.cal)}<s> cal</s></div></div></div>
+        ${D.totals.STEPS>0
+          ? `<div class="sb-st stick"><span style="color:#22c993">${svg('pin',17)}</span>
+              <div><div class="sb-sl">Distance</div><div class="sb-sv">${D.km.toFixed(1)}<s> km</s></div></div></div>`
+          : `<div class="sb-st stick"><span style="color:#9b6cff">${svg('squat',17)}</span>
+              <div><div class="sb-sl">Total reps</div><div class="sb-sv">${fmt(D.reps)}<s> reps</s></div></div></div>`}
+        <div class="sb-st stick"><span style="color:#3b6eff">${svg('clock',17)}</span>
+          <div><div class="sb-sl">Active</div><div class="sb-sv">${hm(D.sec)}</div></div></div>
+      </div></div>${brand()}</div>`;
+}
+
+/* W4 · Ranked ladder — every type the week touched, proportional. Best for rep-heavy weeks. */
+function w4(){ const D=weekD(); if(D.empty) return emptyCard(RANGE_W);
+  const top=D.typeMix[0].u;
+  const rows=D.typeMix.map(({t,u})=>`<div class="lad-r"><span style="color:${WT[t].c}">${svg(WT[t].i,16)}</span>
+      <span class="lad-n">${WT[t].short}</span>
+      <span class="lad-t"><i style="width:${Math.max(6,Math.round(u/top*100))}%;background:${WT[t].c}"></i></span>
+      <span class="lad-v">${fmt(D.totals[t])}</span></div>`).join('');
+  return `<div class="frame sb"><div class="sb-date">${RANGE_W}</div><div class="sb-stage spread">
+      <div class="sb-main stick" style="padding:12px 13px 14px">
+        <div class="sb-mh">${svg('flame',23)} Week total</div>
+        <div class="sb-mb sm">${fmt(D.cal)}<s>calories</s></div>
+        ${seal(`${D.activeDays}/7`,'days active',true)}
+      </div>
+      <div style="background:var(--surface);margin-top:12px;padding:11px 12px 13px;transform:rotate(.8deg)" class="stick">
+        <div class="sb-sl" style="margin-bottom:2px">What I did</div>
+        <div class="lad">${rows}</div>
+      </div></div>${brand()}</div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   MONTH — four candidates. July 2026 starts on a Wednesday (pad 2).
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+const RANGE_M='July 2026', M_ABBR='Jul';
+const heat=(u,max)=>{ if(!u) return null; const r=u/max; return r>.75?1:r>.5?.78:r>.25?.56:.36; };
+
+/* M1 · Calendar heatmap — the month's rhythm, instantly readable. */
+function m1(){ const D=monthD(); if(D.empty) return emptyCard(RANGE_M);
+  const cells=[...Array(PAD)].map(()=>`<div class="mo-c pad"></div>`).concat(
+    D.days.map((d,i)=>{ const a=heat(units(d),D.maxUnits);
+      return `<div class="mo-c${a?' on':''}${a>=.56?' deep':''}${i===D.bestIdx?' pk':''}"${a?` style="background:color-mix(in srgb,var(--primary) ${Math.round(a*100)}%,transparent)"`:''}>${i+1}</div>`; })).join('');
+  return `<div class="frame sb"><div class="sb-date">${RANGE_M}</div><div class="sb-stage spread">
+      <div class="sb-main stick" style="padding:11px 12px 13px">
+        <div class="sb-mh">${svg('calendar',23)} Days active</div>
+        <div class="sb-mb">${D.activeDays}<s>of ${D.periodDays} days</s></div>
+        <div class="sb-ms">${svg('spark',12)} strongest on ${D.bestWeekday} · ${fmt(D.cal)} cal</div>
+      </div>
+      <div style="background:var(--surface);margin-top:12px;padding:10px 11px 12px;transform:rotate(-.7deg)" class="stick">
+        <div class="mo-grid">${['M','T','W','T','F','S','S'].map(x=>`<div class="mo-h">${x}</div>`).join('')}${cells}</div>
+        <div class="mo-lg"><i style="background:color-mix(in srgb,var(--primary) 36%,transparent)"></i>
+          <i style="background:color-mix(in srgb,var(--primary) 56%,transparent)"></i>
+          <i style="background:color-mix(in srgb,var(--primary) 78%,transparent)"></i>
+          <i style="background:var(--primary)"></i><span style="margin-left:2px">lighter → bigger day</span></div>
+      </div></div>${brand()}</div>`;
+}
+
+/* M2 · Consistency ring — one number, the most flattering framing of a quiet month. */
+function m2(){ const D=monthD(); if(D.empty) return emptyCard(RANGE_M);
+  const p=D.activeDays/D.periodDays, size=92, st=10, r=(size-st)/2, cc=2*Math.PI*r;
+  const ring=`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="${st}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--primary)" stroke-width="${st}" stroke-linecap="round"
+      stroke-dasharray="${cc}" stroke-dashoffset="${cc*(1-p)}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`;
+  return `<div class="frame sb"><div class="sb-date">${RANGE_M}</div><div class="sb-stage">
+      <div class="sb-main stick" style="padding:14px 13px">
+        <div class="sb-mh">${svg('calendar',23)} Consistency</div>
+        <div class="ring-wrap">
+          <div class="ring-c">${ring}<div class="ring-in"><div class="ring-b" style="font-size:17px">${D.activeDays}/${D.periodDays}</div><div class="ring-s">days</div></div></div>
+          <div>
+            <div class="sb-mb sm" style="margin-top:0">${Math.round(p*100)}%<s>of July</s></div>
+            <div class="sb-ms" style="margin-top:7px">${svg('spark',12)} strongest on ${D.bestWeekday}</div>
+          </div>
+        </div>
+      </div>${periodStickers(D)}</div>${brand()}</div>`;
+}
+
+/* M3 · Skyline — 31 thin columns. Volume-forward; the "big month" card. */
+function m3(){ const D=monthD(); if(D.empty) return emptyCard(RANGE_M);
+  const bars=D.days.map((d,i)=>{ const u=units(d);
+    if(!u) return `<i></i>`;
+    const h=Math.max(4,Math.round(u/D.maxUnits*74));
+    return `<i class="${i===D.bestIdx?'pk':'on'}" style="height:${h}px"></i>`; }).join('');
+  const lead=D.totals.STEPS>0;
+  return `<div class="frame sb"><div class="sb-date">${RANGE_M}</div><div class="sb-stage">
+      <div class="sb-main stick" style="padding:12px 13px 13px">
+        <div class="sb-mh">${lead?svg('footprints',23):svg('spark',23)} ${lead?'Steps in July':'Reps in July'}</div>
+        <div class="sb-mb sm">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+        <div class="sky">${bars}</div>
+        <div class="sb-ms" style="margin-top:7px">${svg('trophy',12)} biggest day ${M_ABBR} ${D.bestIdx+1} · ${D.activeDays}/${D.periodDays} days active</div>
+      </div>${periodStickers(D,!lead)}</div>${brand()}</div>`;
+}
+
+/* M4 · Ranked ladder + streak seal — the month as a scoreboard of types. */
+function m4(){ const D=monthD(); if(D.empty) return emptyCard(RANGE_M);
+  const top=D.typeMix[0].u;
+  const rows=D.typeMix.map(({t,u})=>`<div class="lad-r"><span style="color:${WT[t].c}">${svg(WT[t].i,16)}</span>
+      <span class="lad-n">${WT[t].short}</span>
+      <span class="lad-t"><i style="width:${Math.max(6,Math.round(u/top*100))}%;background:${WT[t].c}"></i></span>
+      <span class="lad-v">${fmt(D.totals[t])}</span></div>`).join('');
+  return `<div class="frame sb"><div class="sb-date">${RANGE_M}</div><div class="sb-stage spread">
+      <div class="sb-main stick" style="padding:12px 13px 14px">
+        <div class="sb-mh">${svg('flame',23)} July total</div>
+        <div class="sb-mb sm">${fmt(D.cal)}<s>calories</s></div>
+        <div class="sb-ms">${svg('clock',12)} ${hm(D.sec)} active · ${D.activeDays}/${D.periodDays} days</div>
+        ${seal(`${D.activeDays}/${D.periodDays}`,'days active',true)}
+      </div>
+      <div style="background:var(--surface);margin-top:12px;padding:11px 12px 13px;transform:rotate(.7deg)" class="stick">
+        <div class="sb-sl" style="margin-bottom:2px">The month, by exercise</div>
+        <div class="lad">${rows}</div>
+      </div></div>${brand()}</div>`;
+}
+
+function emptyCard(range){ return `<div class="frame sb"><div class="sb-date">${range}</div>
+  <div class="sb-stage" style="justify-content:center;align-items:center;text-align:center">
+    <div class="sb-main stick" style="transform:rotate(-1.5deg);padding:20px 18px">
+      <div class="sb-mh">${svg('calendar',23)} Nothing recorded</div>
+      <div class="sb-ms" style="opacity:.7;justify-content:center">Share is hidden when <code style="color:inherit;background:rgba(255,255,255,.12)">hasNoData</code>.</div></div>
+  </div>${brand()}</div>`; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   THE OTHER DESIGN LANGUAGES. Same data, same derivations — only the visual system changes. Each
+   borrows a language from share-card.html so the period card matches whatever the day card becomes.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* shared: a ranked exercise list in the G language */
+function gRows(D){ const top=D.typeMix[0].u;
+  return `<div class="g-rows">${D.typeMix.map(({t,u})=>`<div class="g-r"><span style="color:${WT[t].c}">${svg(WT[t].i,15)}</span>
+    <span class="g-rn">${WT[t].short}</span>
+    <span class="g-track"><i style="width:${Math.max(6,Math.round(u/top*100))}%;background:${WT[t].c}"></i></span>
+    <span class="g-rv">${fmt(D.totals[t])}</span></div>`).join('')}</div>`; }
+
+/* ── WA · Data bars (G) — no decoration, the week as an actual chart ──────────────────────────── */
+function wa(){ const D=weekD(); if(D.empty) return emptyPlain(RANGE_W);
+  const lead=D.totals.STEPS>0;
+  const bars=D.days.map((d,i)=>{ const u=units(d); if(!u) return `<i></i>`;
+    return `<i class="${i===D.bestIdx?'pk':'on'}" style="height:${Math.max(5,Math.round(u/D.maxUnits*70))}px"></i>`; }).join('');
+  return `<div class="frame">
+    <div class="g-top"><span class="g-key">${svg(lead?'footprints':'spark',15)} ${lead?'Steps this week':'Reps this week'}</span><span class="g-date">${RANGE_W}</span></div>
+    <div class="g-big">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+    <div class="g-chart">${bars}</div>
+    <div class="g-axis"><span>${D.activeDays} of 7 days active</span><span>${fmt(D.cal)} cal · ${hm(D.sec)}</span></div>
+    ${gRows(D)}${brand()}</div>`; }
+
+/* ── WB · Editorial light (B) — no hero band at all, big ink numerals ─────────────────────────── */
+function wb(){ const D=weekD(); if(D.empty) return emptyPlain(RANGE_W);
+  const lead=D.totals.STEPS>0, p=Math.round(D.activeDays/7*100);
+  return `<div class="frame">
+    <div class="b-date">${RANGE_W}</div>
+    <div class="b-key"><span class="g">${svg(lead?'footprints':'spark',17)}</span><span>${lead?'Steps this week':'Reps this week'}</span></div>
+    <div class="b-big">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+    <div class="b-bar"><i style="width:${p}%"></i></div>
+    <div class="b-goal">${D.activeDays} of 7 days active · strongest on ${D.bestWeekday}</div>
+    <div class="b-chips">
+      <div class="b-chip"><div class="cv">${svg('flame',13,'var(--text-secondary)')} ${fmt(D.cal)}</div><div class="cl">Calories</div></div>
+      <div class="b-chip"><div class="cv">${svg('clock',13,'var(--text-secondary)')} ${hm(D.sec)}</div><div class="cl">Active</div></div>
+      ${lead?`<div class="b-chip"><div class="cv">${svg('pin',13,'var(--text-secondary)')} ${D.km.toFixed(1)}</div><div class="cl">km</div></div>`:''}
+    </div>
+    <div class="b-rows">${D.typeMix.map(({t})=>`<div class="b-r"><span class="b-ri" style="background:${WT[t].c}29;color:${WT[t].c}">${svg(WT[t].i,16)}</span>
+      <span class="b-rn">${WT[t].n}</span><span class="b-rv">${fmt(D.totals[t])}<s>${t==='STEPS'?'':' reps'}</s></span></div>`).join('')}</div>
+    ${brand()}</div>`; }
+
+/* ── WC · Dark card (D) — fixed dark whatever the theme, days-active ring ─────────────────────── */
+function wc(){ const D=weekD(); if(D.empty) return emptyPlain(RANGE_W,'dark');
+  const lead=D.totals.STEPS>0;
+  const it=[{i:'flame',c:'#f5455c',n:'Calories',v:fmt(D.cal),u:' cal'},{i:'clock',c:'#3b6eff',n:'Active',v:hm(D.sec),u:''}];
+  if(lead) it.push({i:'pin',c:'#22c993',n:'Distance',v:D.km.toFixed(1),u:' km'});
+  if(D.reps>0) it.push({i:'squat',c:'#9b6cff',n:'Total reps',v:fmt(D.reps),u:' reps'});
+  return `<div class="frame dark">
+    <div class="d-top"><span class="d-key"><span class="g">${svg('calendar',13)}</span>My week</span><span class="d-date">${RANGE_W}</span></div>
+    <div class="d-hero"><div style="position:relative;flex:none">${ring(D.activeDays/7,70,7,'var(--primary)','#22252a')}
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font:900 15px var(--font)">${D.activeDays}/7</div><div style="font:900 7px var(--font);letter-spacing:.7px;text-transform:uppercase;color:#8a8f98">days</div></div></div>
+      <div><div class="d-big">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+        <div class="d-sub">${svg('spark',12)} strongest on ${D.bestWeekday}</div></div></div>
+    <div class="d-week">${D.days.map((d,i)=>{ const u=units(d);
+      return `<i style="height:${u?Math.max(4,Math.round(u/D.maxUnits*40)):3}px${u?';background:'+(i===D.bestIdx?'var(--primary)':'#3a3f47'):''}"></i>`; }).join('')}</div>
+    <div class="d-grid${it.length===1?' one':''}">${it.map(t=>`<div class="d-tile"><span class="tico" style="background:${t.c}29;width:29px;height:29px">${svg(t.i,17,t.c)}</span>
+      <div><div class="d-tl">${t.n}</div><div class="d-tv">${t.v}<s>${t.u}</s></div></div></div>`).join('')}</div>
+    ${brand()}</div>`; }
+
+/* ── WD · Ink hero (A) — graphite band lit by a primary glow, 7 bars inside it ─────────────────── */
+function wd(){ const D=weekD(); if(D.empty) return emptyPlain(RANGE_W);
+  const lead=D.totals.STEPS>0;
+  const glow=`<div style="position:absolute;top:-46px;right:-34px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--p-glow),transparent 68%)"></div>`;
+  const it=[{i:'flame',c:'#f5455c',n:'Calories',v:fmt(D.cal),u:' cal'},{i:'clock',c:'#3b6eff',n:'Active',v:hm(D.sec),u:''}];
+  if(lead) it.push({i:'pin',c:'#22c993',n:'Distance',v:D.km.toFixed(1),u:' km'});
+  if(D.reps>0) it.push({i:'squat',c:'#9b6cff',n:'Total reps',v:fmt(D.reps),u:' reps'});
+  return `<div class="frame">
+    <div class="hero" style="background:linear-gradient(150deg,#252830,#0e1013)">${glow}
+      <div class="hero-top"><span class="hkey"><span class="badge">${svg(lead?'footprints':'spark',13)}</span>${lead?'Steps this week':'Reps this week'}</span><span class="hdate">${RANGE_W}</span></div>
+      <div class="hbig">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+      <div class="hbar"><i style="width:${Math.round(D.activeDays/7*100)}%;background:linear-gradient(90deg,var(--primary),color-mix(in srgb,var(--primary) 55%,#fff))"></i></div>
+      <div class="hgoal">${D.activeDays} of 7 days active</div>
+      <div class="h-week">${D.days.map((d,i)=>{ const u=units(d);
+        return `<i class="${i===D.bestIdx?'on':''}" style="height:${u?Math.max(4,Math.round(u/D.maxUnits*34)):3}px"></i>`; }).join('')}</div>
+    </div>
+    <div class="grid${it.length===1?' one':''}">${it.map(t=>`<div class="tile"><div class="tico" style="background:${t.c}29">${svg(t.i,18,t.c)}</div>
+      <div><div class="tl">${t.n}</div><div class="tv">${t.v}<s>${t.u}</s></div></div></div>`).join('')}</div>
+    ${brand()}</div>`; }
+
+/* ── MA · Poster (E) — paper, giant tabular numerals, rotated spine, heatmap as the index ─────── */
+function ma(){ const D=monthD(); if(D.empty) return emptyPlain(RANGE_M,'e');
+  const lead=D.totals.STEPS>0;
+  return `<div class="frame e"><div class="e-in">
+      <div class="e-wm">${svg('calendar',172)}</div>
+      <div class="e-rail">July 2026</div>
+      <div class="e-date">01 – 31 July 2026</div>
+      <div class="e-big">${D.activeDays}<span style="font-size:26px;letter-spacing:-1px">/${D.periodDays}</span></div>
+      <div class="e-unit">days active</div>
+      <div class="e-rule"></div>
+      <div class="e-goal">Strongest on ${D.bestWeekday}<br>${fmt(D.cal)} cal · ${hm(D.sec)} active${lead?` · ${D.km.toFixed(1)} km`:''}</div>
+      <ul class="e-list">${D.typeMix.slice(0,4).map(({t},i)=>`<li><em>${String(i+1).padStart(2,'0')}</em><span>${WT[t].n}</span><b>${fmt(D.totals[t])}</b></li>`).join('')}
+        <li class="tot"><em>—</em><span>${lead?'Total steps':'Total reps'}</span><b>${lead?fmt(D.totals.STEPS):fmt(D.reps)}</b></li></ul>
+    </div>${brand()}</div>`; }
+
+/* ── MB · Receipt (F) — the month as an itemised statement ────────────────────────────────────── */
+function mb(){ const D=monthD(); if(D.empty) return emptyPlain(RANGE_M,'f');
+  const li=(n,v,q)=>`<div class="f-li"><span>${n}</span><i></i><b>${v}</b>${q?`<span class="q">${q}</span>`:''}</div>`;
+  /* top 4 itemised, remainder rolled up — a 4:5 receipt cannot carry six line items plus the footer */
+  const shown=D.typeMix.slice(0,4), rest=D.typeMix.slice(4);
+  const rows=shown.map(({t})=>li(WT[t].short.toUpperCase(),fmt(D.totals[t]),t==='STEPS'?'':'REPS')).join('')
+    + (rest.length?li(`+ ${rest.length} MORE`,fmt(rest.reduce((a,{t})=>a+D.totals[t],0)),'REPS'):'');
+  const pct=Math.round(D.activeDays/D.periodDays*100);
+  const bars=Array.from({length:30},(_,i)=>`<i style="height:${[100,62,88,45,74,100,55][i%7]}%;opacity:${i%3?1:.75}"></i>`).join('');
+  return `<div class="frame f"><div class="f-paper">
+      <div class="f-hd">${svg('calendar',14)} BUZZEND MONTHLY</div>
+      <div class="f-meta">JULY 2026 · ${D.activeDays}/${D.periodDays} DAYS ACTIVE<br>STRONGEST ON ${D.bestWeekday.toUpperCase()}</div>
+      <div class="f-sep"></div>${rows}
+      <div class="f-sep"></div>
+      ${D.totals.STEPS>0?li('DISTANCE',D.km.toFixed(1),'KM'):''}${li('ACTIVE',hm(D.sec),'')}
+      <div class="f-sep"></div>
+      <div class="f-tot"><em>TOTAL BURN</em><span>${fmt(D.cal)} CAL</span></div>
+      <div class="f-li" style="margin-top:6px"><span>SHOWED UP</span><i></i><b>${pct}%</b></div>
+      <div class="f-gauge">${Array.from({length:10},(_,i)=>`<i class="${i*10<pct?'on':''}"></i>`).join('')}</div>
+      <div class="f-code">${bars}</div>
+    </div></div>`; }
+
+/* ── MC · Data bars (G) — 31 hairline columns, zero decoration ────────────────────────────────── */
+function mc(){ const D=monthD(); if(D.empty) return emptyPlain(RANGE_M);
+  const lead=D.totals.STEPS>0;
+  const bars=D.days.map((d,i)=>{ const u=units(d); if(!u) return `<i></i>`;
+    return `<i class="${i===D.bestIdx?'pk':'on'}" style="height:${Math.max(4,Math.round(u/D.maxUnits*70))}px"></i>`; }).join('');
+  return `<div class="frame">
+    <div class="g-top"><span class="g-key">${svg(lead?'footprints':'spark',15)} ${lead?'Steps in July':'Reps in July'}</span><span class="g-date">${RANGE_M}</span></div>
+    <div class="g-big">${lead?fmt(D.totals.STEPS):fmt(D.reps)}<s>${lead?'steps':'reps'}</s></div>
+    <div class="g-chart tight">${bars}</div>
+    <div class="g-axis"><span>Jul 1</span><span>Jul ${D.periodDays}</span></div>
+    <div class="g-axis" style="margin-top:7px"><span>${D.activeDays} of ${D.periodDays} days · peak ${M_ABBR} ${D.bestIdx+1}</span><span>${fmt(D.cal)} cal · ${hm(D.sec)}</span></div>
+    ${gRows(D)}${brand()}</div>`; }
+
+/* ── MD · Mesh story (H) — full-bleed mesh + frosted glass, story format ──────────────────────── */
+function md(){ const D=monthD(); if(D.empty) return emptyPlain(RANGE_M,'h');
+  const lead=D.totals.STEPS>0;
+  const chips=`<div class="h-chips">
+    <div class="h-chip glass"><b>${fmt(D.cal)}</b><span>cal</span></div>
+    <div class="h-chip glass"><b>${hm(D.sec)}</b><span>active</span></div>
+    ${lead?`<div class="h-chip glass"><b>${D.km.toFixed(1)}</b><span>km</span></div>`:`<div class="h-chip glass"><b>${fmt(D.reps)}</b><span>reps</span></div>`}</div>`;
+  const tiles=D.typeMix.slice(0,4);
+  return `<div class="frame h"><div class="h-mesh"></div><div class="h-in">
+      <div class="h-hd glass"><span class="h-key">${svg('calendar',13)} July 2026</span><span class="h-date">strongest on ${D.bestWeekday}</span></div>
+      <div class="h-big">${D.activeDays}<span style="font-size:20px;letter-spacing:-.5px;opacity:.85">/${D.periodDays}</span></div>
+      <div class="h-unit">days active</div>
+      <div class="h-bar"><i style="width:${Math.round(D.activeDays/D.periodDays*100)}%"></i></div>
+      <div class="h-goal">${lead?fmt(D.totals.STEPS)+' steps':fmt(D.reps)+' reps'} this month</div>
+      ${chips}
+      <div class="h-grid${tiles.length===1?' one':''}">${tiles.map(({t})=>`<div class="h-w glass">${svg(WT[t].i,15)}
+        <div><div class="h-wl">${WT[t].short}</div><div class="h-wv">${fmt(D.totals[t])}</div></div></div>`).join('')}</div>
+      ${brand()}
+    </div></div>`; }
+
+/* the goal ring used by WC */
+function ring(p,size,st,col,tr){ const r=(size-st)/2,c=2*Math.PI*r;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${tr}" stroke-width="${st}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${st}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(1,p))}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`; }
+
+/* empty state for the non-sticker languages */
+function emptyPlain(range,lang){
+  const inner=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;opacity:.6">
+    ${svg('calendar',30)}<div style="font:800 12px var(--font)">Nothing recorded in ${range}</div>
+    <div style="font:700 10.5px var(--font)">Share is hidden when hasNoData.</div></div>`;
+  if(lang==='f') return `<div class="frame f"><div class="f-paper">${inner}</div></div>`;
+  if(lang==='e') return `<div class="frame e"><div class="e-in">${inner}</div>${brand()}</div>`;
+  if(lang==='h') return `<div class="frame h"><div class="h-mesh"></div><div class="h-in">${inner}${brand()}</div></div>`;
+  return `<div class="frame${lang==='dark'?' dark':''}">${inner}${brand()}</div>`; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   Render
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+const NOW_CANDIDATES=[
+  {k:'locate', n:'Locate / recenter', why:'The maps “recenter on me” metaphor. Reads as <b>snap back to now</b> in every mode, and shares no shape with the arrows or the calendar beside it.'},
+  {k:'reset',  n:'Reset',             why:'Unambiguous “undo my navigation”, but it reads as <i>reload</i> to some people, and a spinner-like glyph next to a chart invites a “is it loading?” beat.'},
+  {k:'calNow', n:'Calendar · today',  why:'Most literal, but it collides with the calendar <i>picker</i> sitting immediately to its right — two calendars, two meanings, 4&nbsp;px apart.'},
+  {k:'last',   n:'Skip to latest',    why:'Cheap to read as “jump to the end”, but it is the same chevron family as the ›&nbsp;next arrow it sits beside, so it looks like a faster version of that button.'}];
+
+function headerRow(iconKey,withShare){
+  return `<div class="sh">
+    <span class="sh-arrow">${svg('chevL',18)}</span>
+    <span class="sh-t">Fri, Jul 24</span>
+    <span class="sh-btn acc tint">${svg(iconKey,18)}</span>
+    <span class="sh-arrow off">${svg('chevR',18)}</span>
+    <span class="sh-btn">${svg('calendar',18)}</span>
+    ${withShare?`<span class="sh-btn">${svg('share',18)}</span>`:''}
+  </div>`;
+}
+
+function renderHeader(){
+  const cand=NOW_CANDIDATES.find(x=>x.k===NOWICON);
+  document.getElementById('hdemo').innerHTML=`<div class="hdemo">
+    <div class="hcard">
+      <div class="hcap">Now · shipping <span class="pill bad">wrong label in 2 of 3 modes</span></div>
+      <div class="sh">
+        <span class="sh-arrow">${svg('chevL',18)}</span>
+        <span class="sh-t">Fri, Jul 24</span>
+        <span class="sh-now-old">Today</span>
+        <span class="sh-arrow off">${svg('chevR',18)}</span>
+        <span class="sh-btn">${svg('calendar',18)}</span>
+      </div>
+      <div class="why">A text pill with no bounds, no hit-target of its own size, and <b>no share action anywhere</b>. In Week
+        mode the same pill jumps to <i>this week</i> while still saying “Today”; in Month mode, to <i>this month</i>.</div>
+    </div>
+    <div class="hcard">
+      <div class="hcap">After <span class="pill good">icon + share</span></div>
+      ${headerRow(NOWICON,true)}
+      <div class="why"><b>${cand.n}.</b> ${cand.why}</div>
+      <div class="icpick">${NOW_CANDIDATES.map(x=>
+        `<button class="${x.k===NOWICON?'on':''}" data-now="${x.k}">${svg(x.k,16)} ${x.n}</button>`).join('')}</div>
+      <div class="why" style="margin-top:10px">Both new buttons are <b>30&nbsp;dp</b> squares with <code>radius.sm</code>, matching the
+        existing calendar button — so the row becomes four equal targets instead of three plus a floating word. The
+        jump-to-current button keeps its <code>!isAtCurrentPeriod</code> gate; <b>share</b> is additionally hidden when
+        <code>hasNoData</code>.</div>
+    </div>
+  </div>`;
+}
+
+const card=(cap,tag,tagc,sub,html)=>`<div class="col">
+  <div class="cap">${cap}${tag?`<span class="tag ${tagc}">${tag}</span>`:''}</div>
+  <div class="sub">${sub}</div>
+  <div class="dlg"><div class="dlg-h"><span class="dlg-t">Share your stats</span><span class="dlg-x">✕</span></div>
+  ${html}${acts()}</div></div>`;
+
+function renderDecks(){
+  document.getElementById('deckDay').innerHTML=card(
+    'Day · I · Sticker board','ship as-is','day',
+    'The Home card, unchanged. Steps hero + goal seal, calories and each exercise as a rotated sticker. Reps-only days swap the hero to calories and the seal to a workout count.',
+    dayCard());
+
+  document.getElementById('deckWeek').innerHTML=[
+    ['W1 · Day chips','recommended','rec','Total on top, then the week as seven little day stickers — bar height is that day’s effort, the dot marks whether you showed up. Closest to the daily card, and the “I moved 6 of 7 days” story is legible at a glance.',w1()],
+    ['W2 · Week chart','','week','The Stats chart itself, promoted into the hero sticker and stacked by exercise colour. Most informative, and it makes the shared card recognisably the same chart the app shows.',w2()],
+    ['W3 · Best day','','week','Leads with your best day of the week and demotes the totals to stickers. The most social framing — it is a brag, not a report.',w3()],
+    ['W4 · Ranked ladder','','week','Calories on top, then every exercise the week touched as a proportional bar. The card that survives a week with no steps at all.',w4()],
+  ].map(a=>card(a[0],a[1],a[2],a[3],a[4])).join('');
+
+  document.getElementById('deckWeekAlt').innerHTML=[
+    ['WA · Data bars','densest','week','Zero decoration — the week as an actual chart with the peak called out, then every exercise as a proportional track. Carries the most numbers of any week card, and reads as a tool rather than a sticker.',wa()],
+    ['WB · Editorial light','lightest','week','No hero band at all. Big ink numerals, a thin primary bar for days-active, chips for the totals, then a clean row per exercise. The most screenshot-friendly on a light feed.',wb()],
+    ['WC · Dark card','','week','Goes dark regardless of theme, with days-active as a ring and the week shape as a bar strip. Best on a social feed, where a dark card separates from the surrounding UI.',wc()],
+    ['WD · Ink hero','','week','Graphite band lit by a primary glow, the seven-day strip living inside the hero, neutral tiles below. The closest of the four to the current app chrome.',wd()],
+  ].map(a=>card(a[0],a[1],a[2],a[3],a[4])).join('');
+
+  document.getElementById('deckMonth').innerHTML=[
+    ['M1 · Calendar heatmap','recommended','rec','Days active as the hero, then the actual month grid tinted by effort with the biggest day ringed. The only layout where a reader instantly sees the <i>rhythm</i> — weekends off, a strong second week.',m1()],
+    ['M2 · Consistency ring','','month','One number, ring-framed: the share of days you showed up, plus the best streak. Kindest to a quiet month, and the least data on the card.',m2()],
+    ['M3 · Skyline','','month','Volume-forward — the month total with all 31 days as thin columns and the peak called out. The “big month” card; it punishes a sparse month.',m3()],
+    ['M4 · Exercise scoreboard','','month','Month calories on top, streak in the seal, then every exercise ranked. The numbers-person card, and the one that scales to six exercise types without redesign.',m4()],
+  ].map(a=>card(a[0],a[1],a[2],a[3],a[4])).join('');
+
+  document.getElementById('deckMonthAlt').innerHTML=[
+    ['MA · Poster','most shared','month','Paper stock, giant tabular numerals, a rotated July spine and a calendar watermark, with the exercises as a numbered index closed by a total rule. The one people screenshot for the format alone.',ma()],
+    ['MB · Receipt','best fit','month','A month genuinely <i>is</i> an itemised statement, so the till-receipt format stops being a gimmick — line items per exercise, dotted leaders, TOTAL BURN, a showed-up gauge and a barcode. Carries every number without a hero decision.',mb()],
+    ['MC · Data bars','densest','month','All 31 days as hairline columns with the peak marked, plus the ranked exercise tracks. No decoration; the quantified-self card.',mc()],
+    ['MD · Mesh story','','month','Full-bleed mesh mixed from the exercise accents with frosted-glass panels floating on it. Built for a story, not for the app — 9:16 crops from this better than any other candidate.',md()],
+  ].map(a=>card(a[0],a[1],a[2],a[3],a[4])).join('');
+}
+
+function renderTable(){
+  const W=weekD(), M=monthD();
+  const rows=[
+    ['Total steps','<code>sum(counts[STEPS])</code>',fmt(W.totals.STEPS),fmt(M.totals.STEPS),'hero','Hero','The one number people already understand. Falls apart on a reps-only period — every card must have a fallback hero.'],
+    ['Days active','<code>days.count { !isEmpty }</code>',`${W.activeDays}/7`,`${M.activeDays}/${M.periodDays}`,'hero','Hero','The best multi-day headline: it is a <b>consistency</b> claim, so a light month still reads as a win. Nothing else on this list survives a quiet period as well.'],
+    ['Longest streak','consecutive non-empty days','—','—','skip','Do not ship','<b>Collides with the Streak feature.</b> Streak is backend-owned (freezes, missed-day restore, invite-restore) and <code>ProfileScreen</code> already shows the real <code>currentStreak</code> above Stats. A locally recomputed run would contradict it on the same screen. Removed from every card.'],
+    ['Strongest weekday','<code>units</code> summed by day-of-week',W.bestWeekday,M.bestWeekday,'hero','Hero','The replacement for streak: period-scoped by construction, so it cannot disagree with anything else in the app, and on a month it is genuinely interesting (“Fridays were your day”). Free from <code>days</code>.'],
+    ['Calories burned','<code>sum(caloriesByDate)</code>',fmt(W.cal),fmt(M.cal),'hero','Hero','Already computed per day for the drill-down sheet, and the only metric that puts steps and reps in the same unit — so it is the natural hero when a period has no steps.'],
+    ['Total reps','sum of the five rep types',fmt(W.reps),fmt(M.reps),'sec','Support','Honest aggregate, but adding 90 push-ups to 120 squats is apples-to-oranges. Use as a sticker, never as the hero.'],
+    ['Distance','<code>WorkoutMetrics.distanceKm(totalSteps)</code>',W.km.toFixed(1)+' km',M.km.toFixed(1)+' km','sec','Support','Free from the step total. Respect the Metric/Imperial setting — <code>formatDistance</code> already does.'],
+    ['Active time','<code>WorkoutMetrics.activeSeconds</code>',hm(W.sec),hm(M.sec),'sec','Support','Steps-walking time plus per-rep seconds. Reads well as “4h 12m active” — better than a raw minute count.'],
+    ['Best day','<code>maxBy { it.units }</code>',W.bestLabel,'Jul '+(M.bestIdx+1),'sec','Support','<code>units</code> already normalizes by <code>unitScale</code>, so a 12k-step day and a 300-rep day compare fairly. Powers W3 and the ring/marker in M1/M3.'],
+    ['Per-day shape','<code>units</code> per day vs <code>periodMaxUnits</code>','7 bars',M.periodDays+' cols','sec','Support','The whole reason a week/month card differs from a day card. Seven bars read fine; 31 must become a grid or hairlines.'],
+    ['Exercise mix','<code>totals[t] / unitScale</code>, sorted',W.typeMix.length+' types',M.typeMix.length+' types','sec','Support','Scales to all six types without a redesign, and it is the only view that makes a rep-only period look substantial.'],
+    ['Daily average','total ÷ <b>active</b> days',fmt(W.avgSteps)+' steps',fmt(M.avgSteps)+' steps','skip','Skip','Divide by active days and it flatters; divide by calendar days and it punishes. Either way the reader cannot tell which you did, so it is a number that argues with itself.'],
+    ['Goal hit rate','needs the step goal per day','—','—','skip','Skip','Stats never loads the goal — only Home does. Adding it means threading <code>DEFAULT_STEP_GOAL</code> (or the user’s) into the stats path for one line of copy.'],
+    ['Vs last period','a second <code>/workouts/stat</code> call','—','—','cost','Costs a call','“+18% on last week” is the most engaging line available and the only item here that is not free. Worth doing, but as its own change — it doubles the query and needs an empty-previous-period story.'],
+  ];
+  document.getElementById('dtable').innerHTML=`<table>
+    <thead><tr><th>Metric</th><th>Derived from</th><th>This week</th><th>This month</th><th>Verdict</th><th>Why</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="n">${r[2]}</td><td class="n">${r[3]}</td>
+      <td><span class="verd ${r[4]}">${r[5]}</span></td><td>${r[6]}</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('dnote').innerHTML=`<b>The shape of the answer.</b> A day card leads with <i>volume</i> because one
+    day of volume is a fact you can feel. A week or month card should lead with <b>consistency</b> — days active, streak — and
+    keep volume as support, because volume across 31 days is a number without a reference point, and because consistency is the
+    only headline that still reads as an achievement in a light period. Every recommended candidate above is built that way:
+    the seal is always a consistency figure, never a total.`;
+}
+
+function render(){ renderHeader(); renderDecks(); renderTable();
+  document.querySelectorAll('#segScen button').forEach(b=>b.classList.toggle('on',b.dataset.s===SC)); }
+
+document.addEventListener('click',e=>{
+  const s=e.target.closest('#segScen button'); if(s){ SC=s.dataset.s; render(); return; }
+  const n=e.target.closest('[data-now]');      if(n){ NOWICON=n.dataset.now; renderHeader(); }
+});
+render();
+</script>
+<script src="../../js/app.js"></script>

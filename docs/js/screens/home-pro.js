@@ -31,8 +31,11 @@ window.HomePro = (function () {
     return "Let's get moving!";
   }
 
+  /* Opens the real I·Sticker board day card (js/components/share-card.js) — the same component
+     Profile Stats shares from. `label` is kept for the aria-label only; every call site shares the
+     same day, so there is nothing per-label left to vary. */
   const shareBtn = (label) =>
-    `<button class="pro-share-btn" onclick="event.stopPropagation();Buzzend.alert({icon:'share',title:'Share your progress',message:'Post your ${label} to the community feed and challenge friends.'})">${I("share", 14)} Share</button>`;
+    `<button class="pro-share-btn" aria-label="Share your ${label}" onclick="event.stopPropagation();HomeData.shareDay()">${I("share", 14)} Share</button>`;
 
   /* ── Combined goal + stats spotlight (dark premium) — V4 / V6 ──
      Mirrors the Figma hero: ring (steps / goal) + distance + calories +
