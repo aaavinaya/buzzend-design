@@ -1,0 +1,107 @@
+/* Post-AI-workout Congratulations screen — 4 variations, all token/palette driven,
+   SVG icons only, matching the app's Nunito typography. Renders inside .screen-box
+   via AIFlow's `congrats` step (deep-link ?step=congrats:A|B|C|D).
+     A · Burst medal   B · Clean stat card   C · Immersive gradient   D · Streak & progress */
+
+.cg { position: relative; width: 100%; min-height: 820px; display: flex; flex-direction: column;
+  padding: 30px 20px 24px; overflow: hidden; background: var(--bg-canvas); }
+.cg.vC { background: var(--hero-grad); }
+
+.cg-x { position: absolute; top: 16px; right: 16px; z-index: 6; width: 38px; height: 38px; border: none;
+  border-radius: 50%; background: var(--surface-alt); color: var(--text-secondary); display: grid; place-items: center; cursor: pointer; }
+.cg.vC .cg-x { background: rgba(255,255,255,.16); color: #fff; }
+
+.cg-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 2; }
+
+/* shared bits */
+.cg-elabel { display: inline-flex; align-items: center; gap: 6px; font: 800 12.5px var(--font); color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent); padding: 6px 12px; border-radius: 100px; margin-bottom: 14px; }
+.cg-elabel.light { color: #fff; background: rgba(255,255,255,.18); }
+.cg-title { font: 900 30px var(--font); color: var(--text-primary); letter-spacing: -.5px; }
+.cg-sub { font: 600 14.5px var(--font); color: var(--text-secondary); margin-top: 8px; max-width: 290px; line-height: 1.45; }
+.cg.vC .cg-title { color: #fff; }
+.cg-sub.light { color: rgba(255,255,255,.88); }
+
+.cg-hero { margin: 22px 0 2px; display: flex; flex-direction: column; align-items: center; }
+.cg-hero b { font: 900 76px var(--font); line-height: 1; color: var(--primary); letter-spacing: -2px; }
+.cg-hero span { font: 800 12px var(--font); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1.4px; margin-top: 4px; }
+.cg-hero.light b { color: #fff; } .cg-hero.light span { color: rgba(255,255,255,.82); }
+
+/* stat pills (A · C) */
+.cg-stats3, .cg-chips { display: flex; gap: 10px; margin-top: 22px; width: 100%; }
+.cg-pill { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 13px 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cg-pill .i { color: var(--primary); display: inline-flex; }
+.cg-pill b { font: 900 19px var(--font); color: var(--text-primary); }
+.cg-pill .l { font: 700 10.5px var(--font); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .4px; }
+.cg.vC .cg-pill { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.22); backdrop-filter: blur(6px); }
+.cg.vC .cg-pill .i, .cg.vC .cg-pill b { color: #fff; } .cg.vC .cg-pill .l { color: rgba(255,255,255,.8); }
+
+/* ── A · burst medal ── */
+.cg-burst { position: relative; width: 104px; height: 104px; margin: 0 auto 20px; display: grid; place-items: center; }
+.cg-rays { position: absolute; inset: -16px; width: 136px; height: 136px; color: color-mix(in srgb, var(--primary) 42%, transparent); animation: cg-spin 16s linear infinite; }
+.cg-rays rect { fill: currentColor; }
+.cg-medal { width: 88px; height: 88px; border-radius: 50%; background: var(--hero-grad); color: #fff; display: grid; place-items: center;
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--primary) 42%, transparent); }
+@keyframes cg-spin { to { transform: rotate(360deg); } }
+
+/* ── B · card + tick ── */
+.cg-card { width: 100%; align-self: stretch; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 28px 20px; box-shadow: var(--shadow-card); }
+.cg-tick { width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 16px; }
+.cg-tick.soft { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+.cg-tick.glass { background: rgba(255,255,255,.2); color: #fff; border: 1px solid rgba(255,255,255,.32); backdrop-filter: blur(6px); }
+.cg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; }
+.cg-st { display: flex; align-items: center; gap: 11px; background: var(--bg-canvas); border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px; text-align: left; }
+.cg-st .i { width: 34px; height: 34px; border-radius: 10px; background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); display: grid; place-items: center; flex: none; }
+.cg-st b { display: block; font: 900 18px var(--font); color: var(--text-primary); line-height: 1.1; }
+.cg-st span { font: 700 11px var(--font); color: var(--text-tertiary); }
+
+/* ── C · immersive glass tick ── */
+.cg-immhead { display: flex; flex-direction: column; align-items: center; }
+
+/* ── D · streak + weekly bars ── */
+.cg-streak { display: flex; width: 100%; box-sizing: border-box; align-items: center; gap: 12px; border-radius: 16px; padding: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, #ff7a1a 16%, transparent), color-mix(in srgb, #ff4d4d 7%, transparent));
+  border: 1px solid color-mix(in srgb, #ff7a1a 24%, transparent); }
+.cg-streak .cg-flame { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #ff8a2a, #ff4d4d); color: #fff; display: grid; place-items: center; flex: none; }
+.cg-streak .cg-sk-tx { flex: 1; min-width: 0; text-align: left; }
+.cg-streak b { display: block; font: 900 16px var(--font); color: var(--text-primary); }
+.cg-streak span { font: 700 12px var(--font); color: var(--text-secondary); }
+.cg-streak .plus { margin-left: auto; font: 900 14px var(--font); color: #ff5a1a; background: rgba(255,90,26,.15); padding: 5px 11px; border-radius: 100px; flex: none; }
+.cg-week { margin-top: 18px; }
+.cg-week .wk-t { font: 800 11.5px var(--font); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+.cg-bars { display: flex; align-items: flex-end; gap: 8px; height: 92px; }
+.cg-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; height: 100%; justify-content: flex-end; }
+.cg-bar i { width: 100%; max-width: 22px; border-radius: 6px; background: var(--surface-alt); display: block; }
+.cg-bar.on i { background: var(--primary); }
+.cg-bar span { font: 800 10px var(--font); color: var(--text-tertiary); }
+.cg-bar.on span { color: var(--primary); }
+.cg-mini { display: flex; gap: 12px; margin-top: 18px; }
+.cg-mini .cg-st { flex: 1; }
+.cg .cg-elabel.row { margin: 18px 0 0; }
+
+/* ── actions ── */
+.cg-actions { display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+.cg-btn { height: 52px; width: 100%; border: none; border-radius: var(--r-btn, 12px); font: 800 15px var(--font);
+  display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.cg-btn:active { transform: scale(.985); }
+.cg-btn.primary { background: var(--primary); color: var(--on-primary); box-shadow: var(--shadow-btn); }
+.cg-btn.ghost { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border); }
+.cg-btn.text { height: auto; padding: 6px; background: none; color: var(--text-tertiary); font-weight: 800; }
+.cg.vC .cg-btn.primary { background: #fff; color: var(--primary); }
+.cg.vC .cg-btn.ghost { color: #fff; border-color: rgba(255,255,255,.5); }
+.cg.vC .cg-btn.text { color: rgba(255,255,255,.85); }
+
+/* ── confetti ── */
+.cg-confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.cg-confetti span { position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px; opacity: .85; animation: cg-fall 3.4s linear infinite; }
+.cg-confetti span.c0 { background: var(--primary); }
+.cg-confetti span.c1 { background: #f59e0b; }
+.cg-confetti span.c2 { background: #3b82f6; }
+.cg-confetti span.c3 { background: #ec4899; }
+.cg-confetti span.c4 { background: var(--success); }
+@keyframes cg-fall { 0% { transform: translateY(-20px) rotate(0); opacity: 0; } 12% { opacity: .9; } 100% { transform: translateY(880px) rotate(460deg); opacity: .7; } }
+
+/* the workout host renders the flow into a flex-centered .screen-box; keep it from
+   shrink-wrapping to narrow content so the congrats screen fills the full frame. */
+.screen-box { flex-shrink: 0; }
