@@ -70,6 +70,10 @@ window.AIFlow = (function () {
   const say = (t) => { try { if (!window.speechSynthesis) return; const u = new SpeechSynthesisUtterance("" + t); u.rate = 1.15; u.volume = .7; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
   const buzz = () => { try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} };
   const mmss = (s) => Math.floor(s / 60) + ":" + ("" + (s % 60)).padStart(2, "0");
+  // derived stats (no backend change): calories ≈ reps × 0.55 (same factor as top-activities);
+  // form score reuses the report's own component math so celebration and report never disagree.
+  const kcalOf = (reps) => Math.max(1, Math.round(reps * 0.55));
+  const formScore = (reps) => Math.max(40, 100 - 2 * 7 - ((reps > 3 ? 1 : 0) + (reps > 10 ? 1 : 0)) * 4);
   const home = () => location.href = "index.html";
   function clear() { (S.timers || []).forEach((t) => clearInterval(t)); if (S.raf) cancelAnimationFrame(S.raf); S.timers = []; S.raf = null; try { speechSynthesis.cancel(); } catch (e) {} }
   function go(step) { clear(); S.step = step; render(); }
@@ -109,7 +113,8 @@ window.AIFlow = (function () {
   // ───────── screens ─────────
   function render() {
     ({ select: rSelect, permission: rPermission, denied: rDenied, guide: rGuide, getready: rGetReady, camera: rCamera,
-       summary: rSummary, report: rReport, review: rReview, uploading: rUploading, uploadfail: rUploadFail, posted: rPosted }[S.step] || rSelect)();
+       congrats: () => rCongrats(S.cvar || "A"), summary: rSummary, report: rReport, review: rReview,
+       uploading: rUploading, uploadfail: rUploadFail, posted: rPosted }[S.step] || rSelect)();
     window.Icons.init(root);
   }
 
@@ -314,7 +319,7 @@ window.AIFlow = (function () {
     root.querySelector("#pause").addEventListener("click", function () { paused = !paused; this.classList.toggle("on", paused); this.innerHTML = paused ? `${I("play", 18)} Resume` : `${I("clock", 18)} Pause`; });
     // Finish now lands on the form report (which explains the set, then hands off to the composer in
     // one tap) instead of jumping straight to the composer.
-    root.querySelector("#finish").addEventListener("click", () => go("report"));
+    root.querySelector("#finish").addEventListener("click", () => go(S.reps > 0 ? "congrats" : "report"));
     root.querySelector("#quit").addEventListener("click", () => { paused = true; quitOverlay(cm, () => { paused = false; }); });
   }
   function quitOverlay(cm, onKeep) {
@@ -327,6 +332,67 @@ window.AIFlow = (function () {
   }
 
   function rSummary() { go("report"); }
+
+  /* Congratulations — the celebratory moment right after a finished set (reps > 0).
+     4 design variations, switchable via ?step=congrats:A|B|C|D. Actions: Share (→ composer),
+     See details (→ the form report), Done (→ home). All values are already known to the flow:
+     reps, duration, derived calories + form score. */
+  function rCongrats(variant) {
+    const e = EX[S.exKey], reps = S.reps, t = mmss(S.secs), kcal = kcalOf(reps), score = formScore(reps), streak = 47;
+    const V = variant || "A";
+    const conf = `<div class="cg-confetti">${Array.from({ length: 16 }, (_, i) =>
+      `<span class="c${i % 5}" style="left:${(i * 6.3 + 3) % 96}%;animation-delay:${((i * 7) % 30) / 10}s"></span>`).join("")}</div>`;
+    const pill = (ic, val, lbl) => `<div class="cg-pill"><span class="i">${I(ic, 17)}</span><b>${val}</b><span class="l">${lbl}</span></div>`;
+    const stat = (ic, val, lbl) => `<div class="cg-st"><span class="i">${I(ic, 18)}</span><div><b>${val}</b><span>${lbl}</span></div></div>`;
+
+    let inner;
+    if (V === "B") {                                   // clean analytics card
+      inner = `<div class="cg-card">
+        <div class="cg-tick soft">${I("trophy", 30)}</div>
+        <div class="cg-elabel">${I(e.i, 14)} ${e.n}</div>
+        <h1 class="cg-title">Set complete!</h1>
+        <p class="cg-sub">Every rep counted by the camera — clean and controlled.</p>
+        <div class="cg-grid">${stat("zap", reps, "reps")}${stat("clock", t, "time")}${stat("flame", kcal, "kcal")}${stat("target", score, "form score")}</div>
+      </div>`;
+    } else if (V === "C") {                             // immersive gradient
+      inner = `<div class="cg-immhead">
+        <div class="cg-tick glass">${I("check", 34)}</div>
+        <div class="cg-elabel light">${I(e.i, 14)} ${e.n}</div>
+        <h1 class="cg-title">Nice one!</h1>
+        <p class="cg-sub light">You crushed your ${e.n.toLowerCase()} set.</p>
+        <div class="cg-hero light"><b>${reps}</b><span>reps</span></div>
+        <div class="cg-chips">${pill("clock", t, "time")}${pill("flame", kcal, "kcal")}${pill("target", score, "form")}</div>
+      </div>`;
+    } else if (V === "D") {                             // streak + weekly progress
+      const days = ["M", "T", "W", "T", "F", "S", "S"], vals = [45, 70, 30, 85, 0, 0, 0], today = 4;
+      const bars = days.map((d, i) => `<div class="cg-bar${i === today ? " on" : ""}"><i style="height:${i === today ? 92 : vals[i]}%"></i><span>${d}</span></div>`).join("");
+      inner = `<div class="cg-card">
+        <div class="cg-streak"><span class="cg-flame">${I("flame", 26)}</span><div class="cg-sk-tx"><b>${streak}-day streak</b><span>You kept it alive today.</span></div><span class="plus">+1</span></div>
+        <div class="cg-elabel row">${I(e.i, 14)} ${e.n} · ${reps} reps · ${t}</div>
+        <div class="cg-week"><div class="wk-t">This week</div><div class="cg-bars">${bars}</div></div>
+        <div class="cg-mini">${stat("zap", reps, "reps today")}${stat("target", score, "form score")}</div>
+      </div>`;
+    } else {                                            // A · burst medal
+      inner = `<div class="cg-burstwrap">
+        <div class="cg-burst"><svg viewBox="0 0 200 200" class="cg-rays">${Array.from({ length: 12 }, (_, i) => `<rect x="98" y="4" width="4" height="26" rx="2" transform="rotate(${i * 30} 100 100)"/>`).join("")}</svg>
+          <div class="cg-medal">${I("trophy", 40)}</div></div>
+        <div class="cg-elabel">${I(e.i, 14)} ${e.n}</div>
+        <h1 class="cg-title">Great work!</h1>
+        <p class="cg-sub">You finished your ${e.n.toLowerCase()} set.</p>
+        <div class="cg-hero"><b>${reps}</b><span>reps</span></div>
+        <div class="cg-stats3">${pill("clock", t, "time")}${pill("flame", kcal, "kcal")}${pill("target", score, "form")}</div>
+      </div>`;
+    }
+    root.innerHTML = `<div class="cg v${V}">
+      <button class="cg-x" id="x">${I("x", 20)}</button>${conf}
+      <div class="cg-body">${inner}</div>
+      <div class="cg-actions">
+        <button class="cg-btn primary" id="share">${I("share", 18)} Share your set</button>
+        <button class="cg-btn ghost" id="done">Done</button></div></div>`;
+    root.querySelector("#share").addEventListener("click", () => { location.href = "../home/compose.html?from=workout&ex=" + S.exKey + "&reps=" + reps; });
+    root.querySelector("#done").addEventListener("click", () => location.href = "../home/home-v7.html");
+    root.querySelector("#x").addEventListener("click", () => location.href = "../home/home-v7.html");
+  }
 
   /* Form report — EXPLAIN. Every number here is already computed per rep by the validator today
      (five component scores + outcome + variant) and thrown away. The zero-rep branch is the one
@@ -421,6 +487,7 @@ window.AIFlow = (function () {
       if (m[0] === "report0") { S.reps = 0; return go("report"); }
       if (m[0] === "camera" && m[1]) return clear(), (S.step = "camera"), rCamera(m[1]), window.Icons.init(root);
       if (m[0] === "uploadfail2") return clear(), rUploading(true), void window.Icons.init(root);
+      if (m[0] === "congrats") { S.cvar = m[1] || "A"; return go("congrats"); }
       return go(m[0]);
     }
     go("select");
