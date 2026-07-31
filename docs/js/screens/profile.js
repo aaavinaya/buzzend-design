@@ -173,16 +173,28 @@ window.Profile = (function () {
 
     /* The jump-to-current control is an ICON, not the old "Today" pill: in Week mode it jumps to
        THIS WEEK and in Month mode to THIS MONTH, so the word "Today" was wrong two thirds of the
-       time. `locate` reads as "recenter on now" in all three. Share is own-profile only — you cannot
+       time. The glyph is a RESET arrow (native `ProfileIcons.Reset`), not a locate crosshair — the control
+       rewinds the pager to now, it doesn't find you on a map. Share is own-profile only — you cannot
        post someone else's numbers — and is additionally suppressed on an empty period. */
+    /* Three zones, not one run of six buttons: CALENDAR pinned left · the pager (‹ date ↺ ›) centred ·
+       SHARE pinned right. The pager used to sit hard left with calendar+share trailing it, so the date —
+       the thing you actually read — was never centred and drifted as the reset button came and went.
+       Both edge slots are always reserved (an empty 32px slot stands in when share is suppressed) so the
+       date stays put whatever the state. Reset appears immediately AFTER the date, and only once you are
+       off the current period — but it keeps its slot either way, so nothing shifts when it appears. */
     const nowTitle = P === "day" ? "Jump to today" : P === "week" ? "Jump to this week" : "Jump to this month";
+    const canShare = c.self && !emptyPeriod;
     const nav = `<div class="pf-chnav">
-      <button class="pf-chstep" onclick="Profile.statStep(-1)" title="Previous">${I("chevron", 18)}</button>
-      <div class="pf-chttl"><span>${periodTitle(P, anchor)}</span></div>
-      ${atNow ? "" : `<button class="pf-chnow" onclick="Profile.statToday()" title="${nowTitle}" aria-label="${nowTitle}">${I("locate", 17)}</button>`}
-      <button class="pf-chstep next" ${atNow ? "disabled" : ""} onclick="Profile.statStep(1)" title="Next">${I("chevron", 18)}</button>
-      <button class="pf-chcal" onclick="Profile.openCalendar()" title="Pick a date">${I("calendar", 17)}</button>
-      ${c.self && !emptyPeriod ? `<button class="pf-chshare" onclick="Profile.shareStats()" title="Share these stats" aria-label="Share these stats">${I("share", 17)}</button>` : ""}</div>`;
+      <button class="pf-chcal" onclick="Profile.openCalendar()" title="Pick a date" aria-label="Pick a date">${I("calendar", 17)}</button>
+      <div class="pf-chpager">
+        <button class="pf-chstep" onclick="Profile.statStep(-1)" title="Previous" aria-label="Previous period">${I("chevron", 18)}</button>
+        <div class="pf-chttl"><span>${periodTitle(P, anchor)}</span></div>
+        <button class="pf-chnow${atNow ? " off" : ""}" onclick="Profile.statToday()" title="${nowTitle}" aria-label="${nowTitle}" ${atNow ? "tabindex=-1 aria-hidden=true" : ""}>${I("refresh", 16)}</button>
+        <button class="pf-chstep next" ${atNow ? "disabled" : ""} onclick="Profile.statStep(1)" title="Next" aria-label="Next period">${I("chevron", 18)}</button>
+      </div>
+      ${canShare
+        ? `<button class="pf-chshare" onclick="Profile.shareStats()" title="Share these stats" aria-label="Share these stats">${I("share", 17)}</button>`
+        : `<span class="pf-chslot" aria-hidden="true"></span>`}</div>`;
 
     if (emptyPeriod)
       return `<div class="pf-pad">${toggle}<div class="pf-card">${nav}

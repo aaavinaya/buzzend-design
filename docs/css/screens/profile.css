@@ -137,14 +137,21 @@
 .pf-lrow .ln { flex:1; min-width:0; font:800 14px var(--font); color:var(--text-primary); }
 
 /* ══ Stats tab · native ProfileStatsSection fidelity ══ */
-/* period navigator: ‹ prev · title (+Today) · next › + calendar picker */
+/* period navigator: [calendar] · centred pager ‹ date ↺ › · [share] */
 .pf-chnav { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+.pf-chpager { flex:1; min-width:0; display:flex; align-items:center; justify-content:center; gap:6px; }
+/* Empty right-hand slot when share is suppressed — keeps the pager centred. */
+.pf-chslot { width:32px; height:32px; flex:none; }
 .pf-chstep { width:32px; height:32px; flex:none; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; }
 .pf-chstep:active { opacity:.6; }
-.pf-chstep[disabled] { opacity:.35; cursor:default; }
+/* Disabled fades the GLYPH only. Fading the whole control took the border down with it, so the next
+   arrow's frame visibly came and went as you paged — which reads as a rendering fault, not a state. */
+.pf-chstep[disabled] { opacity:1; cursor:default; color:color-mix(in srgb,var(--text-secondary) 32%,transparent); }
 .pf-chstep svg { transform:rotate(180deg); }
 .pf-chstep.next svg { transform:none; }
-.pf-chttl { flex:1; min-width:0; display:flex; align-items:center; justify-content:center; gap:8px; }
+/* Reset keeps its slot at the current period so the date never shifts when it appears. */
+.pf-chnow.off { visibility:hidden; pointer-events:none; }
+.pf-chttl { flex:0 1 auto; min-width:0; display:flex; align-items:center; justify-content:center; gap:8px; }
 .pf-chttl span { font:900 14px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .pf-today { flex:none; border:none; cursor:pointer; font:800 10.5px var(--font); color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); border-radius:99px; padding:4px 9px; }
 .pf-chcal { width:32px; height:32px; flex:none; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; }
