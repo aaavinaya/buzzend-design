@@ -15,10 +15,9 @@
 </head>
 <body>
   <div class="state-switch">
-    <button data-v="A" onclick="setV('A')">A · Burst</button>
-    <button data-v="B" onclick="setV('B')">B · Card</button>
-    <button data-v="C" onclick="setV('C')">C · Immersive</button>
-    <button data-v="D" onclick="setV('D')">D · Streak</button>
+    <button data-v="1" onclick="setV('1')">1 · Form word</button>
+    <button data-v="2" onclick="setV('2')">2 · Form meter</button>
+    <button data-v="3" onclick="setV('3')">3 · Clean reps</button>
   </div>
   <button class="theme-toggle" onclick="toggleTheme()" style="top:64px">🌙</button>
 
@@ -33,7 +32,7 @@
       AIFlow.start(document.getElementById("flow"), "congrats:" + v + ":" + ex);
       document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
     }
-    setV(_p.get("v") || "A");
+    setV(_p.get("v") || "1");
   </script>
 </body>
 </html>

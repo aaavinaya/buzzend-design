@@ -69,7 +69,7 @@ too_fast.mp3         | Slow it down [pause] — control the way down and the way
 ============================================================
 GENERIC — camera / setup prompts  (coach-voice/generic/)
 ============================================================
-not_in_frame.mp3            | Let's step back a little [pause] so your full body is in view.
+not_in_frame.mp3            | Move back a little... so I can track your movement accurately.
                               (Not in frame: "Step back slightly so your full body is visible.")
 partially_out_of_frame.mp3  | Adjust your position [pause] so your whole body stays in frame.
                               (Partially out of frame: "Adjust your position so your entire body stays in frame.")

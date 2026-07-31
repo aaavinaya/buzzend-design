@@ -124,7 +124,7 @@
   cursor:pointer; color:var(--primary); background:color-mix(in srgb, var(--primary) 8%, transparent); font:800 13px var(--font); }
 
 /* ════ Active challenges (V7) — compact: ring + info + chat on one row ════ */
-.chalx { flex:none; width:236px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md);
+.chalx { flex:none; width:262px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md);
   padding:12px 13px; box-shadow:var(--shadow-card); display:flex; align-items:center; gap:12px; }
 .chalx-ring { position:relative; flex:none; }
 .chalx .ring { flex:none; }
@@ -133,8 +133,9 @@
 .chalx-ex svg { width:11px; height:11px; }
 .chalx .cx-pct { font:900 13px var(--font); color:var(--text-primary); }
 .chalx-info { flex:1; min-width:0; }
-.cx-name { font:800 14px var(--font); color:var(--text-primary); line-height:1.2;
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.cx-top { display:flex; align-items:center; gap:7px; }
+.cx-name { flex:1; min-width:0; font:800 14px var(--font); color:var(--text-primary); line-height:1.2;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cx-meta { font:700 11px var(--font); color:var(--text-tertiary); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .chalx-chat { width:34px; height:34px; border-radius:10px; border:1px solid var(--border); background:var(--surface);
   display:grid; place-items:center; color:var(--primary); cursor:pointer; flex:none; }
@@ -523,3 +524,10 @@
 .fi-cap { position:absolute; left:14px; right:60px; bottom:14px; z-index:2; }
 .fi-tag { display:inline-flex; align-items:center; gap:5px; font:800 11px var(--font); background:rgba(255,255,255,.2); padding:4px 10px; border-radius:99px; }
 .fi-action { font:700 13px var(--font); margin-top:8px; line-height:1.35; }
+
+/* ownership marker — trails the challenge name (NOT on the ring). Small + flat:
+   a soft amber star for yours, the creator's avatar (a face) for joined. */
+.cx-own { flex:none; width:18px; height:18px; border-radius:50%; background-size:cover; background-position:center;
+  box-shadow:0 0 0 1px var(--divider); }
+.cx-own.mine { display:grid; place-items:center; background:color-mix(in srgb, #f59e0b 16%, var(--surface)); color:#d98a10; box-shadow:none; }
+.cx-own.mine svg { width:11px; height:11px; }
