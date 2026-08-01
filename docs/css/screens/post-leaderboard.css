@@ -123,13 +123,109 @@
 .lb-pod.ghost .pa { border: 2.5px dashed var(--border); background: var(--surface-alt) !important; }
 .lb-pod.ghost .pn { color: var(--text-tertiary); }
 .lb-pod.ghost .bar { background: color-mix(in srgb, var(--border) 35%, transparent); border: 1.5px dashed var(--border); }
-.lb-pod .attpill { font: 800 10px var(--font); color: var(--text-tertiary); margin-top: 2px; }
+/* podium attempts pill — the only way into a top-3 history (no room to expand in place) */
+.lbs .lb-pod .attpill { margin-top: 7px; border: none; cursor: pointer; font: 900 10.5px var(--font);
+  color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, transparent); border-radius: 999px; padding: 4px 9px; }
+.lbs .lb-pod .attpill:active { transform: scale(.96); }
+.lbs .lb-pod .attpill.me { background: var(--primary); color: var(--on-primary); }
 
 /* ghost "you" row in Others */
 .lb-row.ghost { border: 1px dashed var(--border); border-radius: 10px; background: color-mix(in srgb, var(--primary) 6%, transparent); }
 .lb-row.ghost .rk { color: var(--text-tertiary); }
 .lb-row.ghost .lb-av { background: var(--surface-alt); display: grid; place-items: center; color: var(--primary); font: 900 11px var(--font); }
 .lb-row.ghost .v { color: var(--primary); }
+
+/* ═══════════ ATTEMPT LOG — one person's attempt history ═══════════
+   Rendered identically wherever it opens: inline under an "Others" row, or in the
+   bottom sheet from a podium pill / the YOUR RANK banner. Reads as a training
+   history — summary rail, then newest-first rows with a score bar so improvement
+   is scannable, a PB marker, and rep-delta vs the attempt before it. */
+
+/* section label for Others */
+.lbs .lb-sec { display: flex; align-items: baseline; gap: 8px; font: 800 13px var(--font); color: var(--text-tertiary); margin: 18px 0 4px; }
+.lbs .lb-sec .hint { margin-left: auto; font: 700 10.5px var(--font); opacity: .72; }
+
+/* YOUR RANK → your own log */
+.lbs .lb-you.tap { cursor: pointer; }
+.lbs .lb-you .mylog { display: inline-block; margin-top: 6px; font: 900 10.5px var(--font); font-style: normal;
+  letter-spacing: .3px; background: rgba(255,255,255,.2); border-radius: 999px; padding: 3px 9px; }
+
+/* Others row — attempt counter + expand affordance */
+.lb-item .lb-row { cursor: pointer; }
+.lb-item.open { background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: var(--shadow-card); margin: 6px 0; overflow: hidden; }
+.lb-item.open .lb-row { border-top: none; padding: 11px 10px; }
+.lb-item.open .lb-row.me { border-radius: 0; }
+.lb-row .atc { flex: none; margin-left: 8px; display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px;
+  border-radius: 999px; background: var(--surface-alt); color: var(--text-tertiary); font: 900 11px var(--font); }
+.lb-row .atc .cv { display: inline-flex; transition: transform .2s ease; }
+.lb-row .atc .pv { display: inline-flex; opacity: .65; }
+.lb-item.open .lb-row .atc { background: color-mix(in srgb, var(--primary) 13%, transparent); color: var(--primary); }
+.lb-item.open .lb-row .atc .cv { transform: rotate(180deg); }
+
+/* panel shell */
+.atl.inline { padding: 6px 8px 10px; border-top: 1px dashed var(--border); background: color-mix(in srgb, var(--surface-alt) 55%, transparent); }
+[data-theme="dark"] .atl.inline { background: color-mix(in srgb, var(--surface-alt) 40%, transparent); }
+
+/* one attempt = one line: clip · date · duration · [Best] · score */
+.atl-row { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 10px; cursor: pointer; }
+.atl-row:hover { background: color-mix(in srgb, var(--primary) 7%, transparent); }
+.atl-row.best { background: color-mix(in srgb, var(--gold) 13%, transparent); }
+.atl-th { width: 40px; height: 28px; flex: none; border-radius: 7px; display: grid; place-items: center;
+  color: #fff; background: #22333a center/cover; }
+.atl-th.none { background: var(--surface-alt); border: 1.5px dashed var(--border); color: var(--text-tertiary); }
+.atl-dt { flex: 1; min-width: 0; font: 800 12.5px var(--font); color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.atl-dt i { font-style: normal; color: var(--text-tertiary); margin: 0 5px; }
+.atl-best { flex: none; font: 900 9.5px var(--font); letter-spacing: .4px; color: #7a4d00;
+  background: var(--gold-pale); border-radius: 999px; padding: 3px 7px; }
+.atl-sc { flex: none; font: 900 15px var(--font); color: var(--text-primary); }
+.atl-sc small { font: 800 10px var(--font); color: var(--text-tertiary); margin-left: 3px; }
+
+/* paging */
+.atl-more { width: 100%; margin-top: 6px; padding: 8px; border-radius: 10px; cursor: pointer; background: none;
+  border: 1px dashed color-mix(in srgb, var(--primary) 42%, transparent); color: var(--primary);
+  font: 900 12px var(--font); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.atl-more:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
+
+/* error — Flutter silently swallows this and shows a stale preview; say it in one line instead */
+.atl-err { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 10px; border-radius: 10px;
+  font: 800 11.5px var(--font); color: var(--coral);
+  background: color-mix(in srgb, var(--coral) 10%, transparent); }
+.atl-err button { margin-left: auto; flex: none; cursor: pointer; border: none; border-radius: 999px;
+  padding: 5px 11px; font: 900 11px var(--font); background: var(--coral); color: #fff; }
+
+/* skeletons */
+.atl-row.sk { pointer-events: none; }
+.atl .sk-l, .atl .atl-th.sk { border-radius: 6px; background: var(--surface-alt);
+  background-image: linear-gradient(90deg, transparent 20%, color-mix(in srgb, var(--border) 55%, transparent) 40%, transparent 62%);
+  background-size: 300% 100%; animation: atl-sh 1.15s ease infinite; }
+.atl .sk-l { display: block; height: 10px; }
+.atl .sk-l.w50 { flex: 1; }
+.atl .sk-l.w20 { width: 34px; flex: none; }
+@keyframes atl-sh { from { background-position: 130% 50%; } to { background-position: -30% 50%; } }
+
+/* bottom sheet (podium + YOUR RANK) */
+.lbs.sheet-open { max-height: 820px; overflow: hidden; }
+.atl-modal { position: absolute; inset: 0; z-index: 60; display: flex; align-items: flex-end;
+  background: rgba(5,10,12,.5); animation: atl-fade .18s ease; }
+.atl-sheet { width: 100%; max-height: 78%; display: flex; flex-direction: column; padding: 8px 14px 16px;
+  background: var(--surface); border-radius: 20px 20px 0 0; box-shadow: var(--shadow-sheet);
+  animation: atl-up .24s cubic-bezier(.22,.9,.3,1); }
+.atl-grip { width: 44px; height: 5px; border-radius: 999px; background: var(--divider); margin: 2px auto 12px; }
+.atl-hd { display: flex; align-items: center; gap: 11px; padding-bottom: 11px; border-bottom: 1px solid var(--divider); }
+.atl-hd .av { width: 42px; height: 42px; flex: none; border-radius: 50%; position: relative; background: var(--surface-alt) center/cover; }
+.atl-hd .av .m { position: absolute; right: -4px; bottom: -4px; font-size: 15px; }
+.atl-hd .who b { display: block; font: 900 16px var(--font); color: var(--text-primary); }
+.atl-hd .who span { font: 800 11.5px var(--font); color: var(--text-tertiary); }
+.atl-hd .x { margin-left: auto; width: 30px; height: 30px; flex: none; border: none; border-radius: 50%; cursor: pointer;
+  background: var(--surface-alt); color: var(--text-tertiary); font-size: 14px; }
+.atl-scroll { flex: 1; overflow-y: auto; margin: 0 -4px; padding: 10px 4px 2px; }
+.atl-cta { flex: none; margin-top: 12px; height: 50px; border: none; border-radius: var(--r-pill); cursor: pointer;
+  background: var(--primary); color: var(--on-primary); font: 900 15px var(--font);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-btn); }
+@keyframes atl-up { from { transform: translateY(34px); opacity: .55; } }
+@keyframes atl-fade { from { opacity: 0; } }
 
 /* bottom CTA banner */
 .lbs-cta { position: absolute; left: 16px; right: 16px; bottom: 20px; height: 56px; border: none; border-radius: var(--r-pill);

@@ -33,6 +33,7 @@ window.PostLB = (function () {
     joseph: { name: "Joseph Owl",    av: "#9bc9c1,#5e9a8c" },
     gaurav: { name: "Gaurav Rana",   av: "#b78a5a,#7a5326" },
   };
+  Object.keys(U).forEach((k) => (U[k].key = k));   // self-key so attempt logs can be cached per person
   const first = (u) => (u.me ? "You" : u.name.split(" ")[0]);
   const initials = (u) => u.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
@@ -315,7 +316,7 @@ window.PostLB = (function () {
   /* ══════════ FULL LEADERBOARD (leaderboard_screen.dart) ══════════ */
   let _lbTab = "leaderboard", _lbCase = "podium";
 
-  function podium(top3) {
+  function podium(top3, c) {
     // Classic rank-based silhouette (centre tallest). Avatars sit ON the pedestal
     // (overlapping the top) with a medal badge; score on the block, name beneath.
     const ht = (r) => (r === 1 ? 96 : r === 2 ? 74 : 60);
@@ -330,11 +331,14 @@ window.PostLB = (function () {
         <div class="pa"></div>
         <div class="bar" style="height:${ht(r)}px"><span class="psc ghostn">#${r}</span></div>
         <div class="pn">Open</div></div>`;
+      // Attempts pill — the podium's only affordance into the history (no room to expand in place).
+      const tot = totalFor(b, c);
       return `<div class="lb-pod ${first_}">
         ${first_ ? `<div class="crown">👑</div>` : ""}
         <div class="pa" style="background-image:${grad(b.user.av)}"><span class="pmedal">${medal(r)}</span></div>
         <div class="bar" style="height:${ht(r)}px;background:${bg(r)}"><span class="psc">${b.score}<small>reps</small></span></div>
-        <div class="pn">${first(b.user)}</div></div>`;
+        <div class="pn">${first(b.user)}</div>
+        <button class="attpill${b.user.me ? " me" : ""}" onclick="PostLB.openLog('${b.user.key}')">${tot} attempt${tot === 1 ? "" : "s"}</button></div>`;
     };
     return `<div class="lb-podium">${slot(2)}${slot(1)}${slot(3)}</div>`;
   }
@@ -346,12 +350,180 @@ window.PostLB = (function () {
     return d > 0 ? `<span class="rank-delta up">▲${d}</span>` : `<span class="rank-delta down">▼${-d}</span>`;
   };
 
-  const lbRow = (b) => {
+  /* ══════════ ATTEMPT LOG — one person's attempt history ══════════
+     Flutter parity (leaderboard_screen.dart): every board entry carries a PREVIEW slice of attempts inline
+     (LeaderboardEntryResponse.attempts + totalAttempts + hasMoreAttempts); the full list is a separate paged
+     call — GET /competitions/{id}/leaderboard/{participantId}/attempts?pageNumber=.
+     Flutter has two disconnected surfaces that render different rows; here both entry points render ONE
+     component, `attemptLog()`, so the history reads the same wherever you open it:
+       · podium (rank ≤ 3)  → tap the attempts pill → bottom sheet (no room inline)
+       · others (rank > 3)  → tap the row → inline accordion
+       · YOUR RANK banner   → tap → your own log in the sheet
+     The row is deliberately ONE line — clip · date · duration · score, plus a Best chip. An earlier pass had
+     an attempt number, a time of day, a score bar and a rep-delta on every row; it was a dashboard where a
+     list was wanted. What's left is what you'd actually ask of an attempt: when, how long, how many, and
+     whether it's their best. Paging, loading and error states stay because they're behaviour, not decoration. */
+  const ATT_PREVIEW = 3;   // attempts embedded in the leaderboard payload
+  const ATT_PAGE = 5;      // page size of the attempts endpoint (small here to show paging)
+
+  // totalAttempts per person — stable so the prototype never shifts under you. Lauren is deliberately a
+  // heavy repeater OUTSIDE the podium (rank 4/5 in every populated case): the inline accordion is where
+  // paging is tightest, so the two-page path — preview 3 → 5 → "Show 4 more" → 9 — has to be reachable
+  // there, not only from the roomy bottom sheet. Drake and Joseph stay at 1 for the single-attempt row.
+  const ATT_TOTAL = { lauren: 9, amy: 7, jack: 6, neha: 5, ema: 4, kriti: 4, riya: 3, sh: 2, drake: 1, joseph: 1, gaurav: 1 };
+
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const ANCHOR = new Date(2026, 5, 25, 19, 12);   // fixed "now" — keeps generated dates deterministic
+  function seeded(seed) {
+    let s = 2166136261;
+    for (const ch of String(seed)) s = Math.imul(s ^ ch.charCodeAt(0), 16777619) >>> 0;
+    return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
+  }
+
+  /* THE tie-break, and the only place it's decided (Flutter `_findBestAttempt`, same order as the
+     leaderboard's own ranking): highest score → shortest duration → EARLIEST attempt. So if two attempts
+     match on both reps and seconds, the one they did FIRST is the best — you can't take the crown off
+     someone by matching them later. Exactly one row can ever carry the chip. */
+  const bestAttempt = (list) => list.reduce((best, a) =>
+    a.score !== best.score ? (a.score > best.score ? a : best)
+      : a.dur !== best.dur ? (a.dur < best.dur ? a : best)
+        : a.t < best.t ? a : best);
+
+  // Synthesise a plausible history whose best entry == the person's leaderboard score.
+  const _logCache = {};
+  function logFor(u, best, bestDur, total) {
+    const ck = `${u.key}|${best}|${total}`;
+    if (_logCache[ck]) return _logCache[ck];
+    const rnd = seeded(ck);
+    // The PB always lands inside the PREVIEW window — the server derives bestScore from these same rows, so
+    // the header can never promise a score the visible list doesn't contain.
+    const bestIdx = Math.floor(rnd() * Math.min(total, ATT_PREVIEW));
+    let t = ANCHOR.getTime() - Math.floor(rnd() * 5) * 36e5;
+    const out = [];
+    for (let i = 0; i < total; i++) {           // i = 0 → newest
+      t -= (4 + Math.floor(rnd() * 38)) * 36e5;
+      const d = new Date(t), isBest = i === bestIdx;
+      const drop = 1 + Math.floor(rnd() * Math.max(1, Math.round(best * 0.45)));
+      out.push({
+        id: `${u.key}-a${total - i}`,
+        n: total - i,
+        t,
+        score: isBest ? best : Math.max(1, best - drop),
+        dur: isBest ? bestDur : bestDur + 1 + Math.floor(rnd() * 7),
+        video: rnd() > 0.18,                     // not every attempt was posted
+        when: `${d.getDate()} ${MON[d.getMonth()]}`,
+      });
+    }
+    return (_logCache[ck] = out);
+  }
+  // owner count is case-driven (a vs a′), everyone else comes from the table
+  const totalFor = (b, c) => (c && b.user.name === c.owner.name && c.ownerTot ? c.ownerTot : ATT_TOTAL[b.user.key] || 1);
+
+  /* ── fetch simulation ─────────────────────────────────────────────
+     `_attMode` (prototype switch) decides what the endpoint does: resolve, hang, or fail. Keys are
+     namespaced by case so switching cases starts clean. kickFetch NEVER paints on entry — the caller owns
+     that. (It used to bail out early without painting when the preview already held every attempt, so
+     expanding a 2-attempt row did nothing at all until some other event forced a repaint.) */
+  let _attMode = "ready";           // ready | slow | error
+  const _attOpen = {};              // rowKey → inline accordion open?
+  const _attFetch = {};             // rowKey → idle | loading | paging | ready | error
+  const _attCount = {};             // rowKey → attempts loaded so far
+  let _sheetKey = null;             // user key whose log is in the bottom sheet
+
+  const attKey = (userKey) => `${_lbCase}:${userKey}`;
+  const attShown = (k, total) =>
+    _attFetch[k] === "ready" || _attFetch[k] === "paging"
+      ? Math.min(total, _attCount[k] || ATT_PAGE)
+      : Math.min(total, ATT_PREVIEW);
+
+  function kickFetch(k, total, more) {
+    const st = _attFetch[k];
+    if (st === "loading" || st === "paging") return;                 // already in flight
+    if (!more && (st === "ready" || total <= ATT_PREVIEW)) return;   // nothing left to ask for
+    _attFetch[k] = more ? "paging" : "loading";
+    if (_attMode === "slow") return;                                 // hangs on purpose — inspect the skeleton
+    setTimeout(() => {
+      if (_attMode === "error" && !more) _attFetch[k] = "error";
+      else {
+        _attFetch[k] = "ready";
+        _attCount[k] = Math.min(total, (more ? _attCount[k] || ATT_PREVIEW : 0) + ATT_PAGE);
+      }
+      paint();
+    }, more ? 450 : 700);
+  }
+
+  /* ── rendering ── */
+  const skeletonRows = (n) =>
+    Array.from({ length: n }, () => `<div class="atl-row sk"><span class="atl-th sk"></span>
+      <span class="sk-l w50"></span><span class="sk-l w20"></span></div>`).join("");
+
+  function attemptRow(a, isBest) {
+    const thumb = a.video
+      ? `<span class="atl-th" style="background-image:${THUMB[a.n % THUMB.length]}">${I("play", 13)}</span>`
+      : `<span class="atl-th none" title="No clip — this attempt wasn't posted">${I("camera", 12)}</span>`;
+    return `<div class="atl-row${isBest ? " best" : ""}"${a.video ? ` onclick="PostLB.go('video')"` : ""}>
+      ${thumb}
+      <span class="atl-dt">${a.when}<i>·</i>${a.dur}s</span>
+      ${isBest ? `<span class="atl-best">Best</span>` : ""}
+      <span class="atl-sc">${a.score}<small>reps</small></span>
+    </div>`;
+  }
+
+  /* The shared panel. `mode` = "inline" (accordion) | "sheet". */
+  function attemptLog(b, c, mode) {
+    const k = attKey(b.user.key), total = totalFor(b, c);
+    const list = logFor(b.user, b.score, b.dur, total);
+    const st = _attFetch[k] || "idle";
+    const shown = attShown(k, total);
+    const bestId = bestAttempt(list).id;
+    const rows = list.slice(0, shown).map((a) => attemptRow(a, a.id === bestId)).join("");
+
+    let footer = "";
+    if (st === "loading" || st === "paging") footer = skeletonRows(Math.min(2, total - shown) || 1);
+    else if (st === "error")
+      footer = `<div class="atl-err">Couldn't load the rest
+        <button onclick="event.stopPropagation();PostLB.retryLog('${b.user.key}')">Retry</button></div>`;
+    else if (total > shown)
+      footer = `<button class="atl-more" onclick="event.stopPropagation();PostLB.moreLog('${b.user.key}')">
+        Show ${total - shown} more ${I("chevron-down", 14)}</button>`;
+
+    return `<div class="atl ${mode}">${rows}${footer}</div>`;
+  }
+
+  /* Bottom sheet — podium slots and the YOUR RANK banner open the log here. */
+  function attSheet(c, D) {
+    if (!_sheetKey) return "";
+    const b = D.B.find((x) => x.user.key === _sheetKey);
+    if (!b) return "";
+    const u = b.user, medal = medalEmoji(b.rank), total = totalFor(b, c);
+    return `<div class="atl-modal" onclick="PostLB.closeLog(event)">
+      <div class="atl-sheet" onclick="event.stopPropagation()">
+        <div class="atl-grip"></div>
+        <div class="atl-hd">
+          <div class="av" style="background-image:${grad(u.av)}">${medal ? `<span class="m">${medal}</span>` : ""}</div>
+          <div class="who"><b>${u.me ? "Your attempts" : first(u) + "'s attempts"}</b>
+            <span>#${b.rank} · ${total} attempt${total === 1 ? "" : "s"} · best ${b.score} reps</span></div>
+          <button class="x" onclick="PostLB.closeLog()">✕</button>
+        </div>
+        <div class="atl-scroll">${attemptLog(b, c, "sheet")}</div>
+        <button class="atl-cta" onclick="PostLB.go('beatit')">${I("target", 17)} ${u.me ? "Beat your best" : "Beat " + first(u)}</button>
+      </div></div>`;
+  }
+
+  const lbRow = (b, c) => {
     const m = b.rank === 1 ? "🥇" : b.rank === 2 ? "🥈" : b.rank === 3 ? "🥉" : "";
-    return `<div class="lb-row ${b.user.me ? "me" : ""}"><span class="rk">${b.rank}</span>
-      <div class="lb-av" style="background-image:${grad(b.user.av)}">${m ? `<span class="m">${m}</span>` : ""}</div>
-      <span class="nm">${b.user.me ? "You" : b.user.name}${deltaChip(b.delta)}</span>
-      <span class="v">${b.score} <small>reps</small></span></div>`;
+    const k = attKey(b.user.key), total = totalFor(b, c), open = !!_attOpen[k];
+    // 1 attempt ⇒ nothing to expand: the row opens that clip directly (Flutter dead-taps here).
+    const tail = total > 1
+      ? `<span class="atc">×${total}<i class="cv">${I("chevron-down", 14)}</i></span>`
+      : `<span class="atc one">×1<i class="pv">${I("play", 11)}</i></span>`;
+    const tap = total > 1 ? `PostLB.toggleLog('${b.user.key}')` : `PostLB.go('video')`;
+    return `<div class="lb-item${open ? " open" : ""}">
+      <div class="lb-row ${b.user.me ? "me" : ""}" onclick="${tap}"><span class="rk">${b.rank}</span>
+        <div class="lb-av" style="background-image:${grad(b.user.av)}">${m ? `<span class="m">${m}</span>` : ""}</div>
+        <span class="nm">${b.user.me ? "You" : b.user.name}${deltaChip(b.delta)}</span>
+        <span class="v">${b.score} <small>reps</small></span>${tail}</div>
+      ${open ? attemptLog(b, c, "inline") : ""}</div>`;
   };
 
   function leaderboardTab(c, D) {
@@ -365,8 +537,12 @@ window.PostLB = (function () {
     if (me) {
       const above = me.rank > 1 ? B[me.rank - 2] : null;
       const sub = me.rank === 1 ? `You lead · ${me.dur} sec` : `${above.score - me.score} reps behind #${me.rank - 1} ${first(above.user)}`;
-      banner = `<div class="lb-you"><span class="rk">#${me.rank}</span>
-        <div class="tx"><b>YOUR RANK</b><span>${sub}</span></div><div class="v">${me.score}<small>reps</small></div></div>`;
+      // Your own history is one tap from the banner — you shouldn't have to hunt for your row.
+      const myTot = totalFor(me, c);
+      banner = `<div class="lb-you tap" onclick="PostLB.openLog('${me.user.key}')"><span class="rk">#${me.rank}</span>
+        <div class="tx"><b>YOUR RANK</b><span>${sub}</span>
+          <em class="mylog">${myTot} attempt${myTot === 1 ? "" : "s"} ›</em></div>
+        <div class="v">${me.score}<small>reps</small></div></div>`;
     } else {
       const txt = c.ended ? "You didn't compete" : onlyOwner ? "Be the first to attempt" : "Not ranked yet";
       const btn = c.ended
@@ -391,16 +567,16 @@ window.PostLB = (function () {
     }
 
     // Others list — ghost "You" row appended only when notRanked AND top-3 is taken.
-    let othersHtml = others.map(lbRow).join("");
+    let othersHtml = others.map((b) => lbRow(b, c)).join("");
     if (state === "notRanked" && isTopSpotTaken) {
       othersHtml += `<div class="lb-row ghost"><span class="rk">?</span>
         <div class="lb-av">YOU</div><span class="nm">You <span style="font-weight:700;color:var(--text-tertiary)">· post to appear here</span></span><span class="v">— reps</span></div>`;
     }
-    const othersSec = `<div style="font:800 13px var(--font);color:var(--text-tertiary);margin:18px 0 4px">Others</div>${othersHtml || `<div style="font:700 13px var(--font);color:var(--text-tertiary);padding:8px 2px">No one outside the top 3 yet.</div>`}`;
+    const othersSec = `<div class="lb-sec">Others<span class="hint">tap a row for their attempts</span></div>${othersHtml || `<div style="font:700 13px var(--font);color:var(--text-tertiary);padding:8px 2px">No one outside the top 3 yet.</div>`}`;
 
     return `<div class="lbs-body">${banner}
       <div style="height:9px"></div>${ref}
-      ${podium(top3)}
+      ${podium(top3, c)}
       ${othersSec}
     </div>`;
   }
@@ -443,7 +619,7 @@ window.PostLB = (function () {
       ? `<button class="lbs-cta disabled" disabled>🏁 Challenge closed</button>`
       : `<button class="lbs-cta" onclick="PostLB.go('beatit')">${lbCtaText(c, D)} ${I("chevron", 18)}</button>`;
 
-    return `<div class="lbs">
+    return `<div class="lbs${_sheetKey ? " sheet-open" : ""}">
       <div class="lbs-bar"><span class="bk" onclick="PostLB.go('feed')">${I("back", 20)}</span><span class="ti">Leaderboard</span>
         <span class="att">${indicator}</span></div>
       <div class="lbs-owner"><div class="av" style="background-image:${grad(c.owner.av)}"></div>
@@ -452,6 +628,7 @@ window.PostLB = (function () {
       <div class="lbs-tabs">${tab("leaderboard", "Leaderboard")}${tab("posts", "Posts")}</div>
       ${_lbTab === "posts" ? postsTab(c) : leaderboardTab(c, D)}
       ${cta}
+      ${attSheet(c, D)}
     </div>`;
   }
 
@@ -482,20 +659,67 @@ window.PostLB = (function () {
     const sb = document.getElementById("sb");
     if (sb) sb.style.color = "var(--text-primary)";
   }
-  function go(v) { _view = v; syncChips(); paint(); }
+  function go(v) { _view = v; _sheetKey = null; syncChips(); paint(); }
   function lbTab(t) { _lbTab = t; paint(); }
-  function setCase(k) { _lbCase = k; _lbTab = "leaderboard"; if (_view !== "leaderboard") _view = "leaderboard"; syncChips(); paint(); }
+  function setCase(k) { _lbCase = k; _lbTab = "leaderboard"; _sheetKey = null; if (_view !== "leaderboard") _view = "leaderboard"; syncChips(); paint(); }
+
+  /* ── attempt-log controls ── */
+  function entryFor(userKey) {
+    const c = buildLbComp(_lbCase);
+    return { c, b: deriveLb(c).B.find((x) => x.user.key === userKey) };
+  }
+  // Every handler paints exactly once, at the end — the open/close is instant whether or not a request
+  // goes out behind it. kickFetch repaints again on its own when the (simulated) response lands.
+  function toggleLog(userKey) {                     // inline accordion (rank > 3)
+    const { c, b } = entryFor(userKey); if (!b) return;
+    const k = attKey(userKey);
+    _attOpen[k] = !_attOpen[k];
+    if (_attOpen[k]) kickFetch(k, totalFor(b, c));
+    paint();
+  }
+  function openLog(userKey) {                       // bottom sheet (podium / YOUR RANK)
+    const { c, b } = entryFor(userKey); if (!b) return;
+    _sheetKey = userKey;
+    kickFetch(attKey(userKey), totalFor(b, c));
+    paint();
+  }
+  function closeLog(ev) { if (ev && ev.target !== ev.currentTarget) return; _sheetKey = null; paint(); }
+  function moreLog(userKey) {
+    const { c, b } = entryFor(userKey); if (!b) return;
+    kickFetch(attKey(userKey), totalFor(b, c), true);
+    paint();
+  }
+  function retryLog(userKey) {
+    const { c, b } = entryFor(userKey); if (!b) return;
+    const k = attKey(userKey);
+    delete _attFetch[k];
+    kickFetch(k, totalFor(b, c));
+    paint();
+  }
+  // prototype switch: what the attempts endpoint does. Resets in-flight state, then
+  // re-kicks whatever the user currently has open so the new behaviour is visible at once.
+  function setAttMode(m) {
+    _attMode = m;
+    Object.keys(_attFetch).forEach((k) => delete _attFetch[k]);
+    Object.keys(_attCount).forEach((k) => delete _attCount[k]);
+    const c = buildLbComp(_lbCase), B = deriveLb(c).B;
+    const openKeys = B.filter((b) => _attOpen[attKey(b.user.key)] || b.user.key === _sheetKey);
+    openKeys.forEach((b) => kickFetch(attKey(b.user.key), totalFor(b, c)));
+    syncChips(); paint();
+  }
   function setBiMode(m) { _biMode = m; if (_view !== "beatit") _view = "beatit"; syncChips(); paint(); }
 
   function syncChips() {
     document.querySelectorAll(".state-switch button").forEach((b) => b.classList.toggle("active", b.dataset.v === _view));
     document.querySelectorAll("[data-sub]").forEach((el) => el.style.display =
-      (el.dataset.sub === "lb" && _view === "leaderboard") || (el.dataset.sub === "bi" && _view === "beatit") ? "flex" : "none");
+      ((el.dataset.sub === "lb" || el.dataset.sub === "att") && _view === "leaderboard") ||
+      (el.dataset.sub === "bi" && _view === "beatit") ? "flex" : "none");
     const sel = document.getElementById("lbCase"); if (sel) sel.value = _lbCase;
     document.querySelectorAll("[data-bi]").forEach((b) => b.classList.toggle("active", b.dataset.bi === _biMode));
+    document.querySelectorAll("[data-att]").forEach((b) => b.classList.toggle("active", b.dataset.att === _attMode));
   }
 
   function start(root, v) { _root = root; _view = v || "feed"; syncChips(); paint(); }
 
-  return { start, go, lbTab, setCase, setBiMode, like, render: paint };
+  return { start, go, lbTab, setCase, setBiMode, setAttMode, toggleLog, openLog, closeLog, moreLog, retryLog, like, render: paint };
 })();

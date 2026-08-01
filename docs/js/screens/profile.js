@@ -39,12 +39,12 @@ window.Profile = (function () {
      exactly, incl. native labels + native LEGEND_ORDER (Steps · Squats · Pushups
      · Situps · Jumping Jacks · Lunges). Also the vertical stacking order. */
   const STAT_TYPES = [
-    { key: "steps",   n: "Steps",         i: "footprints", c: "#34D094" },
-    { key: "squat",   n: "Squats",        i: "squat",      c: "#C56DE2" },
-    { key: "pushup",  n: "Pushups",       i: "pushup",     c: "#F5A623" },
-    { key: "situp",   n: "Situps",        i: "situp",      c: "#6466E3" },
-    { key: "jumping", n: "Jumping Jacks", i: "jumping",    c: "#E670B7" },
-    { key: "lunge",   n: "Lunges",        i: "lunge",      c: "#E74F5E" },
+    { key: "steps",   n: "Steps",         i: "footprints", c: "#34D094", scale: 2000 },
+    { key: "squat",   n: "Squats",        i: "squat",      c: "#C56DE2", scale: 20 },
+    { key: "pushup",  n: "Pushups",       i: "pushup",     c: "#F5A623", scale: 20 },
+    { key: "situp",   n: "Situps",        i: "situp",      c: "#6466E3", scale: 20 },
+    { key: "jumping", n: "Jumping Jacks", i: "jumping",    c: "#E670B7", scale: 40 },
+    { key: "lunge",   n: "Lunges",        i: "lunge",      c: "#E74F5E", scale: 20 },
   ];
   const REP_KEYS = ["squat", "pushup", "situp", "jumping", "lunge"];
   const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -103,18 +103,25 @@ window.Profile = (function () {
   const fmtC = (v) => (v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1).replace(/\.0$/, "") + "K" : "" + v);
   const repsOf = (d) => REP_KEYS.reduce((a, k) => a + d[k], 0);
   const calOf = (d) => Math.round(d.steps * 0.02 + repsOf(d) * 0.34);
-  const units = (d) => d.steps + repsOf(d); // raw stack — matches native (no scaling)
+  /* Normalized "effort units" — count / unitScale, matching native DayStat.units and
+     StatsChartMath.computeFlexes. VERIFIED ON DEVICE (emulator, 24 Jul 2026): a 220-situp segment
+     renders TALLER than a 14.4K-step one, which only happens with scaling. This previously stacked raw
+     and claimed parity, which made the chart AND the share card disagree with the real app. */
+  const units = (d) => STAT_TYPES.reduce((a, t) => a + (d[t.key] > 0 ? d[t.key] / t.scale : 0), 0);
 
   // deterministic per-day synthetic data (stable across navigation). Active days carry
   // ALL SIX types (steps + 5 reps) with substantial, comparable magnitudes so every
   // segment — and its value label — stays visible in one day. Steps kept moderate so it
   // doesn't dwarf the reps (keeps bars balanced across the week).
-  const REP_BASE = { squat: 170, pushup: 250, situp: 160, jumping: 230, lunge: 200 };
+  /* Ranges taken from REAL device data (emulator account, week 20-26 Jul 2026): steps 723-14.4K/day,
+     reps 8-235 per type. The previous values were inverted (~500 steps + ~250 reps of EVERY type daily),
+     which under correct unitScale rendered Steps as a 2% sliver on the share card. */
+  const REP_BASE = { squat: 90, pushup: 45, situp: 60, jumping: 40, lunge: 35 };
   function genDay(dt) {
     const seed = dt.getFullYear() * 372 + (dt.getMonth() + 1) * 31 + dt.getDate();
     if (seed % 7 === 3 || seed % 11 === 5) return { steps: 0, squat: 0, pushup: 0, situp: 0, jumping: 0, lunge: 0 }; // rest day
-    const d = { steps: Math.round(380 + 320 * Math.abs(Math.sin(seed * 0.9 + 1))) };
-    REP_KEYS.forEach((k, j) => { d[k] = Math.round(REP_BASE[k] * (0.8 + 0.35 * Math.abs(Math.sin(seed * (j + 2))))); });
+    const d = { steps: Math.round(3800 + 8200 * Math.abs(Math.sin(seed * 0.9 + 1))) };
+    REP_KEYS.forEach((k, j) => { d[k] = Math.round(REP_BASE[k] * (0.5 + 1.4 * Math.abs(Math.sin(seed * (j + 2))))); });
     return d;
   }
   function today0() { const t = new Date(); t.setHours(0, 0, 0, 0); return t; }
@@ -146,7 +153,7 @@ window.Profile = (function () {
     return STAT_TYPES.map((t) => {
       const raw = t.key === "steps" ? d.steps : d[t.key];
       if (!raw) return "";
-      const h = (raw / max) * H;
+      const h = (raw / t.scale / max) * H;   // normalized units — `max` is a units figure, not a raw sum
       const txt = mode === "count" ? fmtC(raw) : mode === "full" ? `${fmtC(raw)} ${t.n}` : "";
       const show = txt && h >= (mode === "full" ? 14 : 10);
       return `<div class="pf-seg-fill" style="height:${h.toFixed(1)}px;background:${t.c}">${show ? `<span>${txt}</span>` : ""}</div>`;
@@ -164,11 +171,30 @@ window.Profile = (function () {
     const data = dates.map(genDay);
     const emptyPeriod = off <= -4 || data.every((d) => !units(d)); // no logs this far back
 
+    /* The jump-to-current control is an ICON, not the old "Today" pill: in Week mode it jumps to
+       THIS WEEK and in Month mode to THIS MONTH, so the word "Today" was wrong two thirds of the
+       time. The glyph is a RESET arrow (native `ProfileIcons.Reset`), not a locate crosshair — the control
+       rewinds the pager to now, it doesn't find you on a map. Share is own-profile only — you cannot
+       post someone else's numbers — and is additionally suppressed on an empty period. */
+    /* Three zones, not one run of six buttons: CALENDAR pinned left · the pager (‹ date ↺ ›) centred ·
+       SHARE pinned right. The pager used to sit hard left with calendar+share trailing it, so the date —
+       the thing you actually read — was never centred and drifted as the reset button came and went.
+       Both edge slots are always reserved (an empty 32px slot stands in when share is suppressed) so the
+       date stays put whatever the state. Reset appears immediately AFTER the date, and only once you are
+       off the current period — but it keeps its slot either way, so nothing shifts when it appears. */
+    const nowTitle = P === "day" ? "Jump to today" : P === "week" ? "Jump to this week" : "Jump to this month";
+    const canShare = c.self && !emptyPeriod;
     const nav = `<div class="pf-chnav">
-      <button class="pf-chstep" onclick="Profile.statStep(-1)" title="Previous">${I("chevron", 18)}</button>
-      <div class="pf-chttl"><span>${periodTitle(P, anchor)}</span>${atNow ? "" : `<button class="pf-today" onclick="Profile.statToday()">Today</button>`}</div>
-      <button class="pf-chstep next" ${atNow ? "disabled" : ""} onclick="Profile.statStep(1)" title="Next">${I("chevron", 18)}</button>
-      <button class="pf-chcal" onclick="Profile.openCalendar()" title="Pick a date">${I("calendar", 17)}</button></div>`;
+      <button class="pf-chcal" onclick="Profile.openCalendar()" title="Pick a date" aria-label="Pick a date">${I("calendar", 17)}</button>
+      <div class="pf-chpager">
+        <button class="pf-chstep" onclick="Profile.statStep(-1)" title="Previous" aria-label="Previous period">${I("chevron", 18)}</button>
+        <div class="pf-chttl"><span>${periodTitle(P, anchor)}</span></div>
+        <button class="pf-chnow${atNow ? " off" : ""}" onclick="Profile.statToday()" title="${nowTitle}" aria-label="${nowTitle}" ${atNow ? "tabindex=-1 aria-hidden=true" : ""}>${I("refresh", 16)}</button>
+        <button class="pf-chstep next" ${atNow ? "disabled" : ""} onclick="Profile.statStep(1)" title="Next" aria-label="Next period">${I("chevron", 18)}</button>
+      </div>
+      ${canShare
+        ? `<button class="pf-chshare" onclick="Profile.shareStats()" title="Share these stats" aria-label="Share these stats">${I("share", 17)}</button>`
+        : `<span class="pf-chslot" aria-hidden="true"></span>`}</div>`;
 
     if (emptyPeriod)
       return `<div class="pf-pad">${toggle}<div class="pf-card">${nav}
@@ -280,6 +306,105 @@ window.Profile = (function () {
   }
   function statStep(dir) { const n = (st.pOff | 0) + dir; if (n <= 0) { st.pOff = n; render(); } }
   function statToday() { st.pOff = 0; render(); }
+
+
+  /* ═══ Share these stats ═══════════════════════════════════════════════════════════════════════
+     One sticker-board language for all three periods (design: screens/home/stats-share.html):
+       Day   → the I·Sticker board card — steps hero + goal seal + a sticker per exercise
+       Week  → W4 "ranked ladder"      — week calories + days-active seal + proportional exercises
+       Month → M4 "exercise scoreboard" — month calories + days-active seal + ranked exercises
+
+     Every number here is computed with THIS file's own formulas (genDay / calOf / units), so the card
+     always agrees with the chart the user tapped Share from. Distance and active time use the real
+     WorkoutMetrics constants so the prototype's numbers match what the app will render.
+
+     No streak anywhere: it is backend-owned (freezes, missed-day restore) and the strip above already
+     shows the real `currentStreak`, so a recomputed one would contradict it on the same screen. */
+  const H_M = 1.7;                                  // WorkoutMetrics.DEFAULT_HEIGHT_M
+  const kmOf = (steps) => H_M * 0.414 * steps / 1000;                       // stride × steps
+  const activeSecOf = (d) => Math.round(d.steps * H_M * 0.415 / 1.4)        // walking time implied by steps
+    + REP_KEYS.reduce((a, k) => a + Math.round(d[k] * (k === "squat" ? 1.5 : 2)), 0);
+  const hmOf = (sec) => { const m = Math.round(sec / 60); return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`; };
+
+  function typeTotals(data) {
+    const t = {}; STAT_TYPES.forEach((x) => t[x.key] = 0);
+    data.forEach((d) => STAT_TYPES.forEach((x) => t[x.key] += d[x.key] || 0));
+    return t;
+  }
+  /* Ranked by RAW count, matching the chart above it — this file stacks raw (no unitScale), and keeps
+     steps deliberately moderate so they don't dwarf the reps, so raw ranking stays comparable. */
+  const SHORT = { steps: "Steps", squat: "Squats", pushup: "Push", situp: "Sit-ups", jumping: "Jacks", lunge: "Lunges" };
+  /* Normalized "effort units" — count / unitScale, exactly as WorkoutStats.kt's DayStat.units and
+     StatsChartMath.computeFlexes do. VERIFIED ON DEVICE (emulator, 24 Jul): 220 sit-ups renders a TALLER
+     segment than 14.4K steps, which only happens with scaling. Ranking or sizing the ladder by raw count
+     reorders the tail and mis-sizes bars by >2x against the very chart the user tapped Share from. */
+  const scaleOf = (key) => (STAT_TYPES.find((t) => t.key === key) || { scale: 1 }).scale;
+  const rankedRows = (totals) => {
+    const u = (k) => totals[k] / scaleOf(k);
+    const rows = STAT_TYPES.filter((t) => totals[t.key] > 0).sort((a, b) => u(b.key) - u(a.key));
+    const top = rows.length ? u(rows[0].key) : 1;
+    return rows.map((t) => ({ icon: t.i, color: t.c, label: SHORT[t.key] || t.n,
+      value: fmtC(totals[t.key]),                    // the LABEL stays the real count
+      pct: Math.round(u(t.key) / top * 100) }));     // the BAR is the normalized share
+  };
+  const DOW_PLURAL = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
+  const strongestDow = (data, dates) => {
+    const by = [0, 0, 0, 0, 0, 0, 0];
+    data.forEach((d, i) => by[dates[i].getDay()] += units(d));
+    let b = 0; by.forEach((v, i) => { if (v > by[b]) b = i; });
+    return DOW_PLURAL[b];
+  };
+
+  function shareStats() {
+    const P = st.period, anchor = periodAnchor(P, st.pOff | 0);
+    const dates = periodDates(P, anchor), data = dates.map(genDay);
+    if (!data.some(units)) return;                                          // guarded in the UI too
+    const totals = typeTotals(data);
+    const cal = data.reduce((a, d) => a + calOf(d), 0);
+    const sec = data.reduce((a, d) => a + activeSecOf(d), 0);
+    const activeDays = data.filter(units).length;
+
+    /* ── Day · I · Sticker board ── */
+    if (P === "day") {
+      const d = data[0], hasSteps = d.steps > 0;
+      const present = STAT_TYPES.filter((t) => d[t.key] > 0 && t.key !== "steps");
+      const stickers = [];
+      if (hasSteps && present.length) stickers.push({ icon: "flame", color: "#F5455C", label: "Calories", value: fmtC(calOf(d)), unit: "cal" });
+      present.forEach((t) => stickers.push({ icon: t.i, color: t.c, label: t.n, value: fmtC(d[t.key]), unit: "reps" }));
+      if (!stickers.length) stickers.push({ icon: "flame", color: "#F5455C", label: "Calories", value: fmtC(calOf(d)), unit: "cal" });
+      return Buzzend.shareCard({
+        sheetTitle: "Share your day",
+        dateLabel: `${DOW[dates[0].getDay()]}, ${dates[0].getDate()} ${MON[dates[0].getMonth()]} ${dates[0].getFullYear()}`,
+        hero: hasSteps
+          ? { icon: "footprints", label: "Steps today", value: fmt(d.steps), unit: "steps",
+              meta: [{ icon: "pin", text: `${kmOf(d.steps).toFixed(1)} km` }, { text: `${hmOf(activeSecOf(d))} active` }] }
+          : { icon: "flame", label: "Calories burned", value: fmtC(calOf(d)), unit: "cal",
+              meta: [{ icon: "clock", text: `${hmOf(activeSecOf(d))} active` }] },
+        /* workout count, NOT a goal % — Stats never loads the step goal (Home does, so Home's card
+           can and does show "% of goal"). */
+        seal: { big: present.length, small: present.length === 1 ? "workout" : "workouts" },
+        stickers,
+      });
+    }
+
+    /* ── Week · W4 ranked ladder / Month · M4 exercise scoreboard ── */
+    const isWeek = P === "week";
+    const label = isWeek
+      ? `${anchor.getDate()} ${MON[anchor.getMonth()]} – ${dates[6].getDate()} ${MON[dates[6].getMonth()]} ${dates[6].getFullYear()}`
+      : `${MON_FULL[anchor.getMonth()]} ${anchor.getFullYear()}`;
+    return Buzzend.shareCard({
+      sheetTitle: isWeek ? "Share your week" : "Share your month",
+      dateLabel: label,
+      hero: {
+        icon: "flame", label: isWeek ? "Week total" : `${MON_FULL[anchor.getMonth()]} total`,
+        value: fmtC(cal), unit: "calories",
+        /* the seal already carries days-active, so the meta line spends itself on a DIFFERENT fact */
+        meta: [{ icon: "clock", text: `${hmOf(sec)} active` }, { icon: "zap", text: `strongest on ${strongestDow(data, dates)}` }],
+      },
+      seal: { big: `${activeDays}/${dates.length}`, small: "days active", tight: true },
+      ladder: { title: isWeek ? "What I did" : "The month, by exercise", rows: rankedRows(totals) },
+    });
+  }
 
   /* ── Posts tab: grid + "No Posts Yet" + 60-day expiry note (others) ── */
   function postsTab(c) {
@@ -412,5 +537,5 @@ window.Profile = (function () {
   function setScenario(s) { st.scenario = s; st.tab = "stats"; st.ctx = ctxFor(s); render(); }
   function setV(v) { st.v = v; render(); }
 
-  return { start, setV, setScenario, setTab, setPeriod, statStep, statToday, openDaySheet, openCalendar, calPick, calPickMonth, calApply, calNav, calYearNav, follow, message, menu, block, report, deleteAccount, list, editProfile, _close, AVATARS, overrides };
+  return { start, setV, setScenario, setTab, setPeriod, statStep, statToday, shareStats, openDaySheet, openCalendar, calPick, calPickMonth, calApply, calNav, calYearNav, follow, message, menu, block, report, deleteAccount, list, editProfile, _close, AVATARS, overrides };
 })();

@@ -38,6 +38,13 @@
       <option value="ended">🏁 Challenge ended</option>
     </select>
   </div>
+  <!-- sub-switch: leaderboard — what the per-participant attempts endpoint does -->
+  <div class="state-switch" data-sub="att" style="top:104px;display:none">
+    <span style="font:800 11px var(--font);color:var(--text-tertiary);align-self:center;padding:0 4px">Attempts</span>
+    <button data-att="ready" onclick="PostLB.setAttMode('ready')">Loads</button>
+    <button data-att="slow"  onclick="PostLB.setAttMode('slow')">Loading…</button>
+    <button data-att="error" onclick="PostLB.setAttMode('error')">Fails</button>
+  </div>
   <!-- sub-switch: beat-it — target state -->
   <div class="state-switch" data-sub="bi" style="top:60px;display:none">
     <button data-bi="beaten" onclick="PostLB.setBiMode('beaten')">Someone beat it</button>

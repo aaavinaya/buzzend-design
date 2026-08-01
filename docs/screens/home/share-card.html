@@ -58,12 +58,20 @@
   svg{ display:block; } .ic{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
   /* ── action row ── */
+  /* Three tiers, deliberately: Share = ink solid (the titular action) › Post = tonal primary › Save = neutral ghost.
+     Only Share carries a full slab of colour, so the row stops competing with the card above it. */
   .acts{ display:flex; gap:8px; margin-top:11px; }
-  .acts button{ flex:1; border:0; border-radius:12px; padding:11px 4px; font:800 12.5px var(--font); font-family:var(--font); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+  .acts button{ flex:1; border:0; border-radius:12px; padding:11px 4px; font:800 12.5px var(--font); font-family:var(--font); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    transition:transform .12s ease, filter .12s ease, background .12s ease; }
+  .acts button:hover{ filter:brightness(1.06); } .acts button:active{ transform:translateY(1px); }
   .acts .ic{ width:15px; height:15px; }
-  .acts .post{ background:var(--primary); color:var(--on-primary); }
+  .acts .post-old{ background:var(--primary); color:var(--on-primary); }                                          /* today — a second solid slab of the hero colour */
+  .acts .post-new{ background:color-mix(in srgb,var(--primary) 15%,transparent); color:var(--primary);            /* fix — tonal: brand read, no colour mass */
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--primary) 40%,transparent); }
+  .acts .post-new:hover{ background:color-mix(in srgb,var(--primary) 24%,transparent); }
   .acts .save-old{ background:var(--surface-alt); color:var(--text-primary); }                                    /* today — a primary tint, so it reads disabled */
   .acts .save-new{ background:transparent; color:var(--text-primary); box-shadow:inset 0 0 0 1.5px var(--border); } /* fix — neutral ghost */
+  .acts .save-new:hover{ background:var(--tile); }
   .acts .share{ background:#23252b; color:#fff; } html[data-theme="dark"] .acts .share{ background:#3a3a3f; }
 
   /* ── PAGE-LOCAL card tokens ─────────────────────────────────────────────────────────────────
@@ -83,9 +91,10 @@
   /* ── the exported card (fixed 4:5 = 1080×1350) ── */
   .frame{ width:100%; aspect-ratio:4/5; border-radius:var(--r-lg); overflow:hidden; padding:14px; display:flex; flex-direction:column; background:var(--surface); color:var(--text-primary); }
   .brand{ margin-top:auto; padding-top:9px; display:flex; align-items:center; gap:8px; border-top:1px solid var(--tile-line); }
-  .brand .logo{ width:25px; height:25px; border-radius:7px; background:var(--primary); display:grid; place-items:center; color:var(--on-primary); flex:none; }
-  .brand .logo .ic{ width:15px; height:15px; }
-  .brand .bn{ font:900 14px var(--font); color:var(--text-primary); } .brand .bn i{ color:var(--primary); font-style:normal; }
+  /* the real app mark, at the size ShareActivityCard.kt uses. Fixed colour, like the drawable on device. */
+  .brand .logo{ width:26px; height:26px; border-radius:7px; overflow:hidden; flex:none; }
+  .brand .logo svg{ width:100%; height:100%; }
+  .brand .bn{ font:900 14px var(--font); color:var(--primary); }
   .brand .sl{ margin-left:auto; font:700 10.5px var(--font); color:var(--text-tertiary); }
 
   /* hero shell — shared by Now / A / C */
@@ -147,7 +156,7 @@
   .d-tile{ background:#1b1d21; border-radius:13px; padding:9px 10px; display:flex; align-items:center; gap:9px; } .d-tile>div{ min-width:0; }
   .d-tl{ font:800 10px var(--font); color:#8a8f98; white-space:nowrap; }
   .d-tv{ font:900 17px var(--font); color:#fff; white-space:nowrap; } .d-tv s{ font:700 9.5px var(--font); color:#8a8f98; text-decoration:none; }
-  .frame.dark .brand{ border-top-color:#232529; } .frame.dark .brand .bn{ color:#fff; } .frame.dark .brand .sl{ color:#6e737c; }
+  .frame.dark .brand{ border-top-color:#232529; } .frame.dark .brand .sl{ color:#6e737c; }
 
   /* ════════════════════════════════════════════════════════════════════════════════════════
      EXPERIMENTAL SET · E–I. These stop pretending to be app UI and behave like something you'd
@@ -173,7 +182,7 @@
   .e-list li em{ font-style:normal; opacity:.4; font-size:9px; } .e-list li span{ flex:1; } .e-list li b{ font-weight:900; font-variant-numeric:tabular-nums; }
   .e-list li.tot{ border-top-width:3px; color:var(--primary); }
   .frame.e .brand{ border-top:0; padding:0 14px 12px 30px; }
-  .frame.e .brand .bn, .frame.e .brand .sl{ color:inherit; } .frame.e .brand .sl{ opacity:.5; }
+  .frame.e .brand .sl{ color:inherit; opacity:.5; }
 
   /* ── F · Receipt — perforated stub, monospace line items ── */
   .frame.f{ background:#e7e4dd; padding:11px; } html[data-theme="dark"] .frame.f{ background:#191a1d; }  /* darker than the paper, so the perforation reads */
@@ -230,8 +239,8 @@
   .h-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; } .h-grid.one{ grid-template-columns:1fr; }
   .h-w{ display:flex; align-items:center; gap:7px; padding:6px 9px; } .h-w .ic{ width:15px; height:15px; flex:none; }
   .h-w div{ min-width:0; } .h-wl{ font:800 8.5px var(--font); letter-spacing:.5px; text-transform:uppercase; opacity:.8; white-space:nowrap; } .h-wv{ font:900 14px var(--font); }
-  .frame.h .brand{ border-top-color:rgba(255,255,255,.2); } .frame.h .brand .bn{ color:#fff; } .frame.h .brand .bn i{ color:#fff; } .frame.h .brand .sl{ color:rgba(255,255,255,.75); }
-  .frame.h .brand .logo{ background:rgba(255,255,255,.2); color:#fff; }
+  .frame.h .brand{ border-top-color:rgba(255,255,255,.2); } .frame.h .brand .sl{ color:rgba(255,255,255,.75); }
+  .frame.h .brand .bn{ color:#fff; }  /* the mesh already contains --primary, so the wordmark goes white */
 
   /* ── I · Sticker board — playful, rotated, tactile ── */
   .frame.i{ background:var(--surface); background-image:radial-gradient(var(--tile-line) 1.4px, transparent 1.4px); background-size:13px 13px; }
@@ -240,8 +249,8 @@
   .stick{ border-radius:16px; box-shadow:0 5px 14px rgba(0,0,0,.14); border:2.5px solid #fff; }
   html[data-theme="dark"] .stick{ border-color:#0e0e11; box-shadow:0 5px 16px rgba(0,0,0,.5); }
   .i-main{ position:relative; padding:12px 13px; color:#fff; background:linear-gradient(150deg,#252830,#0e1013); transform:rotate(-2deg); }
-  .i-main .ic{ width:19px; height:19px; }
-  .i-mh{ display:flex; align-items:center; gap:7px; font:900 9.5px var(--font); letter-spacing:.8px; text-transform:uppercase; opacity:.75; }
+  .i-main .ic{ width:23px; height:23px; }
+  .i-mh{ display:flex; align-items:center; gap:8px; font:900 9.5px var(--font); letter-spacing:.8px; text-transform:uppercase; opacity:.75; }
   .i-mb{ font:900 38px var(--font); line-height:1; letter-spacing:-1.6px; margin-top:5px; } .i-mb s{ font:800 12px var(--font); text-decoration:none; letter-spacing:0; opacity:.7; margin-left:5px; }
   .i-ms{ font:800 10.5px var(--font); opacity:.8; margin-top:5px; }
   .i-seal{ position:absolute; right:-4px; top:-16px; width:62px; height:62px; border-radius:50%; background:var(--primary); color:var(--on-primary); display:flex; flex-direction:column; align-items:center; justify-content:center; transform:rotate(9deg); box-shadow:0 5px 14px rgba(0,0,0,.2); border:2.5px solid #fff; }
@@ -291,7 +300,7 @@
   <div class="diag">
     <span>Primary today: <b>hero gradient</b></span><span><b>every stat tile</b> (surface-alt = a tint)</span>
     <span><b>Post</b> button, right under the hero</span><span><b>Save</b> on surface-alt → reads disabled</span>
-    <span>calorie + push-ups <b>share one amber</b></span><span>and <b>no steps icon</b> anywhere on the card</span>
+    <span>calorie + push-ups <b>share one amber</b></span>
   </div>
 
   <div class="bar">
@@ -350,7 +359,17 @@ const tCal=d=>(d.steps?d.steps.cal:0)+d.workouts.reduce((s,w)=>s+w.cal,0);
 const pct=d=>Math.round(d.steps.count/d.steps.goal*100);
 const ring=(p,size,st,col,tr)=>{ const r=(size-st)/2,c=2*Math.PI*r;
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${tr}" stroke-width="${st}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${st}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(1,p))}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`; };
-const brand=b=> b?`<div class="brand"><span class="logo">${svg('activity',15)}</span><span class="bn">Buzz<i>end</i></span><span class="sl">Stay active. Stay ahead.</span></div>`:'';
+/* The real brand mark — orange field + two-tone bolt, paths copied verbatim from
+   app/src/main/res/drawable/app_logo.xml (what BuzzendLogo renders on the splash, login and About screens).
+   Fixed-colour asset, exactly as on device: it does NOT follow the color set. The badge geometry mirrors
+   ShareActivityCard.kt:107 — BuzzendLogo(size = 26.dp, cornerRadius = 7.dp) — and the wordmark next to it is
+   plain text in --primary, per the same Row. */
+const LOGO=`<span class="logo"><svg viewBox="0 0 512 512" role="img" aria-label="Buzzend">
+ <path fill="#ff5d00" d="M0 0h512v512H0z"/>
+ <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M355.363 470.736L174.057 313.194L221.51 298.208L130.294 218.948L260.279 177.038L158.354 39.3873L339.046 196.396L291.818 211.308L383.106 290.631L253.187 332.71L355.363 470.736ZM264.592 284.339L210.446 237.291L248.895 225.258L303.255 272.493L264.592 284.339Z"/>
+ <path fill="#008080" fill-rule="evenodd" clip-rule="evenodd" d="M355.197 470.559L173.891 313.017L221.344 298.031L303.089 272.316L248.729 225.081L291.652 211.131L382.94 290.454L253.021 332.532L355.197 470.559Z"/>
+</svg></span>`;
+const brand=b=> b?`<div class="brand">${LOGO}<span class="bn">Buzzend</span><span class="sl">Stay active. Stay ahead.</span></div>`:'';
 /* stat tiles — `tinted` reproduces today's surface-alt fill, off = the neutral fix */
 function tiles(d,calColor,tinted){ const it=[];
   if(d.steps&&d.workouts.length) it.push({i:'flame',c:calColor,n:'Calorie',v:fmt(tCal(d)),u:' cal'});
@@ -359,9 +378,9 @@ function tiles(d,calColor,tinted){ const it=[];
   return `<div class="grid${it.length===1?' one':''}">${it.map(t=>`<div class="tile${tinted?' tinted':''}"><div class="tico" style="background:${t.c}29">${svg(t.i,18,t.c)}</div>
     <div><div class="tl">${t.n}</div><div class="tv">${t.v}<s>${t.u}</s></div></div></div>`).join('')}</div>`; }
 
-/* ── Now · shipping — hero-grad + tinted tiles + amber calorie, and no steps glyph ── */
+/* ── Now · shipping — hero-grad + tinted tiles + amber calorie. The steps key now carries the footprints glyph. ── */
 function now(d,b){ const hero=d.steps
-  ?`<div class="hero" style="background:var(--hero-grad)"><div class="hero-top"><span class="hkey">Steps today</span><span class="hdate">${DAY.date}</span></div>
+  ?`<div class="hero" style="background:var(--hero-grad)"><div class="hero-top"><span class="hkey"><span class="badge">${svg('footprints',13)}</span>Steps today</span><span class="hdate">${DAY.date}</span></div>
      <div class="hbig">${fmt(d.steps.count)}</div><div class="hbar"><i style="width:${pct(d)}%;background:#fff"></i></div>
      <div class="hgoal">${pct(d)}% of ${fmt(d.steps.goal)} goal</div><div class="hmeta">${svg('pin',12)} ${d.steps.km} km · ${d.steps.min} min active</div></div>`
   :`<div class="hero" style="background:var(--hero-grad)"><div class="hero-top"><span class="hkey">Calories burned</span><span class="hdate">${DAY.date}</span></div>
@@ -493,9 +512,9 @@ function i_(d,b){ const hasS=!!d.steps;
   const st=[]; if(hasS&&d.workouts.length) st.push({i:'flame',c:CAL_NEW,n:'Calorie',v:fmt(tCal(d)),u:' cal'});
   d.workouts.forEach(w=>{ const m=META[w.ex]; st.push({i:m.i,c:m.c,n:m.n,v:w.reps,u:' reps'}); });
   const main=hasS
-    ? `<div class="i-mh">${svg('footprints',19)} Steps today</div><div class="i-mb">${fmt(d.steps.count)}<s>steps</s></div>
+    ? `<div class="i-mh">${svg('footprints',23)} Steps today</div><div class="i-mb">${fmt(d.steps.count)}<s>steps</s></div>
        <div class="i-ms">${d.steps.km} km · ${d.steps.min} min active</div>`
-    : `<div class="i-mh">${svg('flame',19)} Calories burned</div><div class="i-mb">${fmt(tCal(d))}<s>cal</s></div>
+    : `<div class="i-mh">${svg('flame',23)} Calories burned</div><div class="i-mb">${fmt(tCal(d))}<s>cal</s></div>
        <div class="i-ms">today</div>`;
   const seal=hasS?`<div class="i-seal"><b>${pct(d)}%</b><span>of goal</span></div>`
                  :`<div class="i-seal">${svg('flame',22)}</div>`;
@@ -506,8 +525,8 @@ function i_(d,b){ const hasS=!!d.steps;
     </div>${brand(b)}</div>`; }
 
 const V=[
- {k:'now',tag:'now',cap:'Now · shipping — the “before”',sub:'The defect, shown as-is: primary gradient + primary-tinted tiles + primary Post, the calorie glyph repeating the push-ups amber, and deliberately NO steps glyph. Every variation after this one fixes it.',fn:now,old:true},
- {k:'a',tag:'new',cap:'A · Ink hero',sub:'Graphite hero lit by a primary glow. Primary survives only in the progress fill, the logo and Post — so it reads as brand, not wallpaper. Holds up in every color set.',fn:a},
+ {k:'now',tag:'now',cap:'Now · shipping — the “before”',sub:'The defect, shown as-is: primary gradient + primary-tinted tiles + a solid-primary Post, and the calorie glyph repeating the push-ups amber. The steps key carries the footprints glyph, same as every variation below. Every variation after this one spends primary once or twice instead.',fn:now,old:true},
+ {k:'a',tag:'new',cap:'A · Ink hero',sub:'Graphite hero lit by a primary glow. Primary survives only in the progress fill and the tonal Post pill — so it reads as an accent, not wallpaper. Holds up in every color set.',fn:a},
  {k:'b',tag:'new',cap:'B · Editorial light',sub:'No hero band at all. Big ink numerals, footprints glyph, one thin primary bar. Lightest, and the most screenshot-friendly on a feed.',fn:b_},
  {k:'c',tag:'new',cap:'C · Deep ramp',sub:'Smallest delta: keeps the primary hero but gives it a real light→deep ramp, and neutralises the tiles + calorie so the band is the only mass of colour.',fn:c},
  {k:'d',tag:'new',cap:'D · Dark card',sub:'Whole card goes dark regardless of theme — best on a social feed. Primary becomes the goal ring only; every workout hue pops.',fn:d_},
@@ -520,13 +539,13 @@ const V=[
 const FNS={now,a,b:b_,c,d:d_,e:e_,f:f_,g:g_,h:h_,i:i_};
 let DK='mixed', DEST='share', FLOWV='a', FLOWD=null;
 const brandOn=()=>DEST!=='post';
-function acts(old,inline){ const s=old?'save-old':'save-new';
+function acts(old,inline){ const s=old?'save-old':'save-new', p=old?'post-old':'post-new';
   const btn=(t,cls,i,l)=>`<button class="${cls}" ${inline?`onclick="mSetDest('${t}')"`:`data-setdest="${t}"`}>${svg(i,15)} ${l}</button>`;
-  return `<div class="acts">${btn('post','post','send','Post')}${btn('save',s,'download','Save')}${btn('share','share','share','Share')}</div>`; }
+  return `<div class="acts">${btn('post',p,'send','Post')}${btn('save',s,'download','Save')}${btn('share','share','share','Share')}</div>`; }
 function render(){ const d=scen(DK), b=brandOn();
   document.getElementById('deck').innerHTML=V.map(v=>`<div class="col"><div class="cap">${v.cap}<span class="tag ${v.tag}">${({now:'today',new:'new',wild:'experimental'})[v.tag]}</span></div>
     <div class="sub">${v.sub}</div><div class="dlg"><div class="dlg-h"><span class="dlg-t">Share your day</span><span class="dlg-x">✕</span></div>
-    ${v.fn(d,b)}${acts(!!v.old,false)}</div>${v.old?'<div class="note"><b>Save</b> on <code>surface-alt</code> reads as disabled, <b>Post</b> repeats the hero colour sitting right above it, and there is <b>no steps glyph</b> — the hero shows a location pin for distance, never a footprint.</div>':''}</div>`).join('');
+    ${v.fn(d,b)}${acts(!!v.old,false)}</div>${v.old?'<div class="note"><b>Save</b> on <code>surface-alt</code> reads as disabled, and <b>Post</b> is a solid slab of the same colour as the hero sitting right above it. Every variation below swaps Post for the tonal treatment.</div>':''}</div>`).join('');
   document.querySelectorAll('#segDay button').forEach(x=>x.classList.toggle('on',x.dataset.d===DK));
   document.querySelectorAll('#segDest button').forEach(x=>x.classList.toggle('on',x.dataset.t===DEST)); }
 

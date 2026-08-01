@@ -1,0 +1,144 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   Share card — the exported 4:5 image (1080×1350) and its action row.
+
+   ONE sticker-board language for all three periods, so Home's "Share your day" and Profile Stats'
+   day / week / month cards read as one family:
+     · Day   → steps (or calories) hero + workout/goal seal + a rotated sticker per exercise
+     · Week  → W4 "ranked ladder": week calories hero + days-active seal + every exercise, proportional
+     · Month → M4 "exercise scoreboard": month calories hero + days-active seal + ranked exercises
+
+   ── EVERYTHING INSIDE THE FRAME SCALES WITH THE FRAME ──────────────────────────────────────────
+   The card is an IMAGE with a locked 4:5 ratio, so its contents must scale with its width, not
+   reflow. All internal sizes are therefore in `cqw` (1cqw = 1% of the frame's own width) against a
+   REFERENCE WIDTH OF 300px — so `12px → 4cqw`, `38px → 12.67cqw`, and so on.
+
+   This is not stylistic. With fixed px the ladder card's content height is CONSTANT (~396px) while
+   the frame height tracks the width (4:5), so the week/month card fit at 340px wide and clipped its
+   brand row by 58px at 270px — i.e. it broke on every narrow phone. In cqw, the preview at any width
+   is the same composition as the 1080×1350 export.
+
+   Palette: deliberately palette-INDEPENDENT tiles (--sc-tile). The shipping card tinted every tile
+   with --surface-alt, which every palette defines as a tint OF the primary, and that is what washed
+   the whole card into one hue. Only the seal and the wordmark spend --primary.
+   ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+:root { --sc-tile: #f4f4f5; --sc-line: #eaeaec; }
+html[data-theme="dark"] { --sc-tile: #232326; --sc-line: #2c2c31; }
+
+.sc-wrap { width: 100%; }
+
+/* the exported frame — the container everything inside is measured against */
+.sc-frame {
+  container-type: inline-size;                 /* makes 1cqw = 1% of THIS element's width */
+  width: 100%; aspect-ratio: 4/5; overflow: hidden; padding: 4cqw;
+  border-radius: var(--r-lg);
+  display: flex; flex-direction: column; background: var(--surface); color: var(--text-primary);
+  background-image: radial-gradient(var(--sc-line) 0.47cqw, transparent 0.47cqw); background-size: 4.33cqw 4.33cqw;
+  text-align: left;                            /* .bz-dialog centres its content; the card must not inherit that */
+}
+.sc-date { font: 900 3.33cqw var(--font); letter-spacing: .47cqw; text-transform: uppercase; color: var(--text-tertiary); text-align: center; }
+.sc-stage { flex: 1; position: relative; margin-top: 2cqw; display: flex; flex-direction: column; }
+.sc-stage.spread { justify-content: space-between; }
+
+/* every element on the board is a "sticker": white border + drop shadow + a slight rotation */
+.sc-stick { border-radius: 5.33cqw; box-shadow: 0 1.67cqw 4.67cqw rgba(0, 0, 0, .14); border: .83cqw solid #fff; }
+html[data-theme="dark"] .sc-stick { border-color: #0e0e11; box-shadow: 0 1.67cqw 5.33cqw rgba(0, 0, 0, .5); }
+
+/* hero sticker */
+.sc-main { position: relative; padding: 4cqw 4.33cqw; color: #fff; background: linear-gradient(150deg, #252830, #0e1013); transform: rotate(-2deg); }
+.sc-mh { display: flex; align-items: center; gap: 2.67cqw; font: 900 3.17cqw var(--font); letter-spacing: .27cqw; text-transform: uppercase; opacity: .75; }
+.sc-mh svg { width: 7.67cqw; height: 7.67cqw; flex: none; }
+.sc-mb { font: 900 12.67cqw var(--font); line-height: 1; letter-spacing: -.53cqw; margin-top: 1.67cqw; }
+.sc-mb.sm { font-size: 10.33cqw; letter-spacing: -.4cqw; }
+.sc-mb s { font: 800 4cqw var(--font); text-decoration: none; letter-spacing: 0; opacity: .7; margin-left: 1.67cqw; }
+.sc-ms { font: 800 3.5cqw var(--font); opacity: .8; margin-top: 1.67cqw; display: flex; align-items: center; gap: 1.67cqw; flex-wrap: wrap; }
+.sc-ms svg { width: 4cqw; height: 4cqw; flex: none; }
+
+/* the wax seal — always a CONSISTENCY figure (workouts / goal % for a day, days-active for a period) */
+.sc-seal {
+  position: absolute; right: -1.33cqw; top: -5.33cqw; width: 20.67cqw; height: 20.67cqw; border-radius: 50%;
+  background: var(--primary); color: var(--on-primary); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; transform: rotate(9deg); text-align: center;
+  box-shadow: 0 1.67cqw 4.67cqw rgba(0, 0, 0, .2); border: .83cqw solid #fff;
+}
+html[data-theme="dark"] .sc-seal { border-color: #0e0e11; }
+.sc-seal b { font: 900 5.67cqw var(--font); line-height: 1; }
+.sc-seal.tight b { font-size: 4.67cqw; }
+.sc-seal span { font: 900 2.5cqw var(--font); letter-spacing: .27cqw; text-transform: uppercase; opacity: .85; margin-top: .33cqw; line-height: 1.15; }
+
+/* stat stickers (day card) — up to six, so a day with all five rep types loses nothing */
+.sc-row { display: flex; flex-wrap: wrap; gap: 2.33cqw; margin-top: 4cqw; }
+.sc-st { flex: 1 1 42%; display: flex; align-items: center; gap: 2.33cqw; padding: 2.67cqw 3cqw; background: var(--surface); }
+.sc-st svg { width: 5.67cqw; height: 5.67cqw; flex: none; }
+.sc-st > div { min-width: 0; }
+.sc-sl { font: 800 3cqw var(--font); letter-spacing: .13cqw; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sc-sv { font: 900 5cqw var(--font); color: var(--text-primary); white-space: nowrap; }
+.sc-sv s { font: 700 3cqw var(--font); text-decoration: none; color: var(--text-tertiary); }
+.sc-row .sc-st:nth-child(1) { transform: rotate(1.6deg); }
+.sc-row .sc-st:nth-child(2) { transform: rotate(-1.8deg); }
+.sc-row .sc-st:nth-child(3) { transform: rotate(-1.2deg); }
+.sc-row .sc-st:nth-child(4) { transform: rotate(2deg); }
+.sc-row .sc-st:nth-child(5) { transform: rotate(-1.4deg); }
+.sc-row .sc-st:nth-child(6) { transform: rotate(1.2deg); }
+
+/* ranked exercise ladder (W4 / M4) */
+.sc-pad { background: var(--surface); margin-top: 3.33cqw; padding: 3cqw 4cqw 3.33cqw; transform: rotate(.8deg); }
+.sc-lad { margin-top: 1.67cqw; display: flex; flex-direction: column; gap: 1.67cqw; }
+.sc-lr { display: flex; align-items: center; gap: 2.67cqw; }
+.sc-lr svg { width: 5.33cqw; height: 5.33cqw; flex: none; }
+.sc-ln { width: 18.67cqw; flex: none; font: 800 3cqw var(--font); letter-spacing: .1cqw; text-transform: uppercase; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sc-lt { flex: 1; height: 2.67cqw; border-radius: 99px; background: var(--sc-tile); overflow: hidden; }
+.sc-lt i { display: block; height: 100%; border-radius: 99px; }
+.sc-lv { width: 17.33cqw; text-align: right; font: 900 3.83cqw var(--font); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+/* six ladder rows plus a hero, a meta line and the brand row is the tightest composition the card
+   has to hold — all six WorkoutType values are reachable in one week — so it gets a condensed hero */
+.sc-frame.ladder .sc-mb { font-size: 10cqw; letter-spacing: -.37cqw; }
+.sc-frame.ladder .sc-main { padding: 3cqw 4.33cqw 3.33cqw; }
+.sc-frame.ladder .sc-ms { margin-top: 1cqw; }
+.sc-frame.ladder .sc-pad { margin-top: 2.67cqw; }
+.sc-frame.ladder .sc-lad { gap: 1.33cqw; }
+
+/* brand row — the real app mark (Icons.brandMark) + wordmark, mirroring ShareActivityCard.kt */
+.sc-brand { margin-top: auto; padding-top: 2cqw; display: flex; align-items: center; gap: 2.67cqw; border-top: 1px solid var(--sc-line); }
+.sc-brand .bz-mark { width: 8.67cqw; height: 8.67cqw; border-radius: 2.33cqw; }
+.sc-bn { font: 900 4.67cqw var(--font); color: var(--primary); }
+.sc-sll { margin-left: auto; font: 700 3.5cqw var(--font); color: var(--text-tertiary); }
+
+/* ── action row: Share (ink solid) › Post (tonal primary) › Save (neutral ghost) ─────────────────
+   Three distinct weights on purpose, and OUTSIDE the frame so it keeps normal px sizing. The
+   shipping row made Post a solid slab of the same colour as the hero directly above it, and put
+   Save on a primary tint that read as disabled. */
+.sc-acts { display: flex; gap: 7px; margin-top: 11px; }
+.sc-acts button {
+  flex: 1; border: 0; border-radius: 12px; padding: 11px 4px; font: 800 12.5px var(--font);
+  font-family: var(--font); cursor: pointer; display: inline-flex; align-items: center;
+  justify-content: center; gap: 6px; transition: background .12s ease, filter .12s ease, transform .12s ease;
+}
+.sc-acts button:hover { filter: brightness(1.06); }
+.sc-acts button:active { transform: translateY(1px); }
+.sc-acts svg { width: 15px; height: 15px; flex: none; }
+.sc-acts .post {
+  background: color-mix(in srgb, var(--primary) 15%, transparent); color: var(--primary);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+.sc-acts .post:hover { background: color-mix(in srgb, var(--primary) 24%, transparent); }
+.sc-acts .save { background: transparent; color: var(--text-primary); box-shadow: inset 0 0 0 1.5px var(--border); }
+.sc-acts .save:hover { background: var(--sc-tile); }
+.sc-acts .share { background: #23252b; color: #fff; }
+html[data-theme="dark"] .sc-acts .share { background: #3a3a3f; }
+
+/* ── Stats header: the jump-to-current icon + the share button ───────────────────────────────────
+   Both are 32px squares matching the existing .pf-chcal, so the row is four equal targets instead of
+   three plus a floating word. The old .pf-today text pill said "Today" even in Week/Month mode,
+   where it jumps to THIS WEEK / THIS MONTH — wrong two thirds of the time. */
+.pf-chnow {
+  width: 32px; height: 32px; flex: none; border-radius: 10px; cursor: pointer; display: grid; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent);
+  background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary);
+}
+.pf-chnow:active { opacity: .6; }
+.pf-chshare {
+  width: 32px; height: 32px; flex: none; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-secondary); display: grid; place-items: center; cursor: pointer;
+}
+.pf-chshare:active { opacity: .6; }
