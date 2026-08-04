@@ -421,7 +421,7 @@ window.HomePro = (function () {
     return h + `<div class="h-scroll">` + d.challenges.map((c) => {
       const ring = H.ring({ pct: c.p, size: 50, r: 21, stroke: 5.5, track: "var(--surface-alt)", prog: "var(--primary)", center: `<div class="cx-pct">${c.p}%</div>` });
       return `<div class="chalx">
-        <div class="chalx-ring">${ring}<span class="chalx-ex" style="color:var(--primary)">${I(c.i, 11)}</span></div>
+        <div class="chalx-ring">${ring}<span class="chalx-ex" style="color:var(--primary)">${I(c.i, 16)}</span></div>
         <div class="chalx-info"><div class="cx-name">${c.n}</div><div class="cx-meta">${c.m}</div></div>
         <button class="chalx-chat" onclick="Buzzend.alert({icon:'comment',title:'${c.n} · Chat',message:'Open the challenge group chat to cheer members on and share your progress.'})">${I("comment", 16)}</button></div>`;
     }).join("") + `</div>`;
@@ -502,12 +502,18 @@ window.HomePro = (function () {
     }).join("");
   }
 
+  /* Friends' activity draws exercise marks at 13px, where the detailed illustration turns to mush —
+     so this surface (and only this surface) uses the OUTLINED family, matching the app's
+     `FriendsActivity.kt` (`style = WorkoutArtStyle.OUTLINED`). Everything else on Home keeps the
+     default `real`. */
+  const EXA = (key, size) => Icons.workout(key, size || 13, "outlined");
+
   // A · chips grid — every data point is a chip that wraps (1 → 6+ cleanly)
   function friendsChips(state, d) {
     const h = sec("Friends' activity", state === "full");
     if (state === "new") return faEmpty(h);
     return h + FRIENDS_ACT.map((f) => `<div class="fc2-card">${faHead(f)}
-      <div class="fc2-chips"><span class="fc2-chip fc2-steps">${I("footprints", 13)} ${f.steps}</span>${f.ex.map((e) => `<span class="fc2-chip">${I(e.i, 13)} ${e.r}</span>`).join("")}</div>
+      <div class="fc2-chips"><span class="fc2-chip fc2-steps">${EXA("footprints")} ${f.steps}</span>${f.ex.map((e) => `<span class="fc2-chip">${EXA(e.i)} ${e.r}</span>`).join("")}</div>
       <div class="fc2-foot"><span>${I("flame", 13)} ${f.kcal} kcal</span><span>${I("clock", 13)} ${f.active}</span><span>${I("pin", 13)} ${f.dist}</span></div></div>`).join("");
   }
 
@@ -574,7 +580,7 @@ window.HomePro = (function () {
   }
   function cardChips(p, rank) {
     return `<div class="fc2-card">${headOf(p, rank)}
-      <div class="fc2-chips"><span class="fc2-chip fc2-steps">${I("footprints", 13)} ${p.steps}</span>${p.ex.map((e) => `<span class="fc2-chip">${I(e.i, 13)} ${e.r}</span>`).join("")}</div>
+      <div class="fc2-chips"><span class="fc2-chip fc2-steps">${EXA("footprints")} ${p.steps}</span>${p.ex.map((e) => `<span class="fc2-chip">${EXA(e.i)} ${e.r}</span>`).join("")}</div>
       <div class="fc2-foot"><span>${I("flame", 13)} ${p.kcal} kcal</span><span>${I("clock", 13)} ${p.active}</span><span>${I("pin", 13)} ${p.dist}</span></div></div>`;
   }
   function cardBars(p, rank) {

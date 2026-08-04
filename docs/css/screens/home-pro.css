@@ -128,9 +128,14 @@
   padding:12px 13px; box-shadow:var(--shadow-card); display:flex; align-items:center; gap:12px; }
 .chalx-ring { position:relative; flex:none; }
 .chalx .ring { flex:none; }
-.chalx-ex { position:absolute; bottom:-3px; right:-3px; width:21px; height:21px; border-radius:50%;
+/* Badge grown 21 -> 26px (art 11 -> 16px) so the illustration is legible — the app grew this mark too.
+   NOTE this is still the PROTOTYPE's structure, which differs from the app: here the ring centre holds the
+   % and the exercise is a corner badge, whereas the app draws the exercise INSIDE the ring at 40dp and puts
+   the day count in the meta line instead. Reconciling that means dropping the % readout, which is a design
+   call, not an icon change — flagged in the index changelog rather than decided here. */
+.chalx-ex { position:absolute; bottom:-3px; right:-3px; width:26px; height:26px; border-radius:50%;
   background:var(--surface); border:1.5px solid var(--border); display:grid; place-items:center; }
-.chalx-ex svg { width:11px; height:11px; }
+.chalx-ex svg { width:16px; height:16px; }
 .chalx .cx-pct { font:900 13px var(--font); color:var(--text-primary); }
 .chalx-info { flex:1; min-width:0; }
 .cx-name { font:800 14px var(--font); color:var(--text-primary); line-height:1.2;

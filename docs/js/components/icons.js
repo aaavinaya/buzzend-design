@@ -98,8 +98,85 @@ window.Icons = (function () {
     more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
     'more-v': '<circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>',
   };
+
+  /* ── EXERCISE ARTWORK ────────────────────────────────────────────────────────────────────────────
+     The prototype's twin of the app's `core/designsystem/icon/WorkoutArtwork.kt`.
+
+     The six exercises are drawn ILLUSTRATIONS, not line glyphs — the user's artwork, converted from
+     `tools/icon-src/pose_icons/` in the app repo. The app shipped them on 2026-07-31 and the line
+     glyphs below survive there only as the unknown-type fallback, so the prototype has to match or it
+     stops being the reference. Files live in `docs/assets/workout-art/` under the SAME names as the
+     Android drawables (`walk.svg` ↔ `ic_workout_walk`, `-outlined` ↔ `_outlined`, `-plain` ↔ `_plain`)
+     so a dev can map either direction without a lookup table.
+
+     THREE FAMILIES, and the choice is per-surface (never mixed within one screen):
+       real      the detailed full-colour figure — the default, and right wherever the exercise is the
+                 subject of the block (challenge cards + detail, AI workout chooser, leaderboard)
+       outlined  navy line art — for small chips, where the detailed figure turns to mush
+                 (Home "Friends' activity")
+       plain     flat orange figure, dark-red outline — the whole create-challenge wizard
+
+     Intrinsic sizes are each file's own viewBox, and they differ wildly BY POSTURE: a push-up is
+     ~1.95:1 landscape, a squat 0.84:1 portrait. Fit those into one square and the amount of ink
+     differs by ~2.1x, so some plainly look bigger than others. `scaleOf` below is the app's
+     `workoutArtworkOpticalScale` verbatim — equal AREA, not equal width or height. */
+  const ART_AREA = 0.474;   // = OPTICAL_AREA_FRACTION; the smallest area any asset achieves in a square
+  const ART = {
+    walk:           { real: [252, 355], outlined: [255, 304], plain: [301, 364] },
+    pushup:         { real: [359, 184], outlined: [325, 155], plain: [366, 185] },
+    squat:          { real: [266, 318], outlined: [255, 272], plain: [283, 313] },
+    situp:          { real: [1120, 531], outlined: [290, 189], plain: [403, 180] },
+    'jumping-jack': { real: [286, 367], outlined: [237, 297], plain: [308, 364] },
+    lunge:          { real: [803, 800], outlined: [291, 289], plain: [349, 324] },
+    // Converted and shipped but unmapped in the app: there is no yoga WorkoutType, so wiring it would
+    // mean inventing a workout the backend cannot store. Here for the day one exists.
+    yoga:           { real: [255, 264], outlined: [220, 220], plain: [283, 270] },
+  };
+  /* The keys the screens already pass. `footprints` is the steps mark and `jumping` the shorter name
+     the data tables use, so both alias onto the real asset rather than forcing 20 files to rename. */
+  const ART_ALIAS = { footprints: 'walk', steps: 'walk', jumping: 'jumping-jack', jumpingjack: 'jumping-jack', pushUp: 'pushup', squats: 'squat', situps: 'situp', lunges: 'lunge' };
+
+  /* Resolved from THIS script's own URL, so it is correct from docs/index.html, from the screen pages
+     two levels down, and from the icon gallery alike — pages sit at three different depths. */
+  const ART_BASE = (function () {
+    const me = (document.currentScript && document.currentScript.src) || '';
+    try { return new URL('../../assets/workout-art/', me).href; } catch (e) { return '../../assets/workout-art/'; }
+  })();
+
+  function scaleOf(w, h) {
+    if (!(w > 0 && h > 0)) return 1;
+    const fitted = Math.min(w / h, h / w);      // area fraction this aspect covers in a square
+    return Math.min(1, Math.sqrt(ART_AREA / fitted));
+  }
+
+  /* Default family. A whole-screen override (the create-challenge wizard) sets `Icons.artStyle`;
+     one-off surfaces pass `style` to `workout()` directly. */
+  let artStyle = 'real';
+
+  /* Draw exercise art in a square slot of exactly `size` — the slot never changes with the family or
+     the posture, so callers' layouts are unaffected; only how much of it the figure fills changes.
+     Same contract as the app's WorkoutArtwork(). Returns "" for an unknown key so a caller can fall
+     back to `svg(key + '-line')`. */
+  function workout(key, size, style) {
+    const k = ART_ALIAS[key] || key;
+    const e = ART[k]; if (!e) return "";
+    const fam = style || artStyle;
+    const dim = e[fam] || e.real;
+    const s = size || 22;
+    const drawn = (s * scaleOf(dim[0], dim[1])).toFixed(2);
+    const file = k + (fam === 'real' ? '' : '-' + fam) + '.svg';
+    return `<span class="bz-art" style="display:inline-flex;align-items:center;justify-content:center;`
+      + `width:${s}px;height:${s}px;flex:none;vertical-align:middle">`
+      + `<img src="${ART_BASE}${file}" alt="" width="${drawn}" height="${drawn}" `
+      + `style="width:${drawn}px;height:${drawn}px;object-fit:contain" loading="lazy"></span>`;
+  }
+
   function svg(name, size, cls) {
-    const inner = P[name]; if (!inner) return "";
+    /* The six exercises resolve to ARTWORK, which is what upgrades every screen at once — they are
+       all funnelled through here. `<name>-line` still reaches the stroke glyph below, which is what
+       the app keeps for an unknown workout type and for the post-set medallion. */
+    if (!/-line$/.test(name || '') && (ART[ART_ALIAS[name] || name])) return workout(name, size);
+    const inner = P[String(name).replace(/-line$/, '')]; if (!inner) return "";
     const s = size || 22;
     return `<svg class="bz-ico ${cls||''}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
   }
@@ -125,5 +202,14 @@ window.Icons = (function () {
     });
   }
   document.addEventListener("DOMContentLoaded", () => init());
-  return { svg, init, brandMark, has: (n) => !!P[n] };
+  return {
+    svg, init, brandMark,
+    has: (n) => !!P[n] || !!ART[ART_ALIAS[n] || n],
+    /* Exercise artwork. `Icons.workout('squat', 40, 'plain')` for a one-off surface; set
+       `Icons.artStyle = 'plain'` once at the top of a screen that uses one family throughout. */
+    workout,
+    get artStyle() { return artStyle; },
+    set artStyle(v) { artStyle = v; },
+    workoutKeys: () => Object.keys(ART),
+  };
 })();

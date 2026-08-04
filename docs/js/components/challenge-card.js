@@ -24,7 +24,7 @@ window.ChallengeCard = (function () {
     opts = opts || {};
     const a = actOf(c.ex);
     return `<button class="chc${opts.selected ? " sel" : ""}"${opts.onClick ? ` onclick="${opts.onClick}"` : ""}>
-      <span class="chc-ic">${I(a.i, 24)}</span>
+      <span class="chc-ic">${I(a.i, 42)}</span>
       <span class="chc-main">
         <span class="chc-name">${c.n}</span>
         <span class="chc-sub">by ${c.by}</span>

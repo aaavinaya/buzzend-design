@@ -44,7 +44,7 @@ window.MyCh = (function () {
       : `<div class="cx-pct">${pct}%</div>`;
     const role = c.createdByMe ? "owner" : "member";
     return `<div class="mc-card${c.status === "ended" ? " done" : ""}" onclick="location.href='challenge-detail.html?role=${role}'">
-      <div class="chalx-ring">${ring({ pct, prog: color, center })}<span class="chalx-ex" style="color:${m.c}">${I(m.i, 11)}</span></div>
+      <div class="chalx-ring">${ring({ pct, prog: color, center })}<span class="chalx-ex" style="color:${m.c}">${I(m.i, 16)}</span></div>
       <div class="mc-info">
         <div class="cx-name">${c.n}${c.createdByMe ? ' <span class="taf-badge">OWNER</span>' : ""}</div>
         <div class="cx-meta">${metaOf(c)}</div>

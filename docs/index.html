@@ -83,6 +83,119 @@
       margin-bottom: 16px;
     }
 
+    /* ── Changelog ─────────────────────────────────────────────────────────── */
+    .cl-entry {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .cl-entry:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .cl-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .cl-head h3 {
+      font-size: 14.5px;
+      font-weight: 800;
+    }
+
+    .cl-date {
+      font: 800 10.5px/1 var(--font, inherit);
+      letter-spacing: .6px;
+      padding: 5px 9px;
+      border-radius: 99px;
+      background: color-mix(in srgb, var(--primary) 13%, transparent);
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .cl-warn .cl-date {
+      background: color-mix(in srgb, #e5893a 16%, transparent);
+      color: #c96a15;
+    }
+
+    .cl-body {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin: 6px 0;
+    }
+
+    .cl-mirror {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .cl-list {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .cl-list li {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    #changelog code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px;
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: var(--surface-alt, color-mix(in srgb, var(--text-primary) 7%, transparent));
+      color: var(--text-primary);
+    }
+
+    .cl-fams {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
+      margin: 12px 0 4px;
+    }
+
+    .cl-fam {
+      border: 1px solid var(--border);
+      border-radius: var(--r-md, 12px);
+      padding: 11px;
+      background: var(--bg-canvas, transparent);
+    }
+
+    .cl-fam-h {
+      font: 800 11px/1 var(--font, inherit);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 9px;
+    }
+
+    .cl-fam-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .cl-fam-use {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 9px;
+      line-height: 1.5;
+    }
+
     .swatches {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
@@ -289,6 +402,104 @@
       <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
     </div>
 
+    <!-- CHANGELOG -->
+    <div class="panel" id="changelog">
+      <h2>📋 Changelog</h2>
+      <p class="hint">What changed in this prototype and why — newest first. Read this before assuming a screen
+        still matches what you last saw. Each entry names the app-side file it mirrors, so the two can be kept
+        honest against each other.</p>
+
+      <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">2026-08-04</span>
+          <h3>Exercise marks are now the drawn ILLUSTRATIONS, not line glyphs</h3></div>
+        <p class="cl-body">Every exercise mark across the prototype was a Lucide-style stroke glyph
+          (<code>Icons.svg('squat')</code>). The app replaced those with the supplied artwork on 2026-07-31
+          and keeps the stroke glyph only as the unknown-type fallback, so the prototype had drifted from the
+          thing it is supposed to be the reference for. It now draws the same artwork.</p>
+
+        <p class="cl-body"><b>Three families, and the choice is per surface — never mixed within one
+          screen.</b> Two drawings of the same squat side by side in different families is the exact bug the
+          shared registry exists to prevent.</p>
+        <div class="cl-fams" id="cl-fams"></div>
+
+        <ul class="cl-list">
+          <li><b>Nothing to do at most call sites.</b> All six exercises funnel through
+            <code>Icons.svg(name, size)</code>, which now returns artwork for
+            <code>squat · pushup · situp · jumping · lunge · walk/footprints</code>. Existing screens picked
+            it up with no edit.</li>
+          <li><b>Need the old stroke glyph?</b> <code>Icons.svg('squat-line', 18)</code>. That is what the app
+            keeps for an unrecognised workout type and for the post-set medallion.</li>
+          <li><b>Need a specific family?</b> <code>Icons.workout('squat', 40, 'plain')</code> for one surface,
+            or set <code>Icons.artStyle = 'plain'</code> once at the top of a screen that uses one family
+            throughout.</li>
+          <li><b>Files:</b> <code>docs/assets/workout-art/</code>, named to match the Android drawables 1:1 —
+            <code>walk.svg</code> ↔ <code>ic_workout_walk</code>, <code>-outlined</code> ↔
+            <code>_outlined</code>, <code>-plain</code> ↔ <code>_plain</code>. Converted from
+            <code>tools/icon-src/pose_icons/</code> in the app repo by <code>tools/svg_to_vector.py</code>;
+            <code>yoga</code> is included but unmapped in both (no yoga workout type exists on the backend).</li>
+          <li><b>Sizes are optically normalised, and this part is not optional.</b> The postures have wildly
+            different aspect ratios (push-up ~1.95:1 landscape, squat 0.84:1 portrait), so fitting them into
+            one square makes the ink differ by ~2.1×. <code>icons.js</code> ports the app's
+            <code>workoutArtworkOpticalScale</code> verbatim: equal <em>area</em>, not equal width or height —
+            <code>k = √(0.474 / min(r, 1/r))</code>, capped at 1. The slot is always exactly the size you
+            asked for; only the fill changes. In a 40px slot the sit-up draws 40px across and the lunge 27.6px,
+            and that is correct.</li>
+        </ul>
+        <p class="cl-body cl-mirror">Mirrors <code>core/designsystem/icon/WorkoutArtwork.kt</code> ·
+          per-surface families set in <code>FriendsActivity.kt</code> (outlined) and
+          <code>CreateChallengeScreen.kt</code> (plain).</p>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">2026-08-04</span>
+          <h3>Create Challenge + challenge cards brought in line with the app</h3></div>
+        <p class="cl-body">Five changes shipped in the app this round; all five are now here too.</p>
+        <ul class="cl-list">
+          <li><b>Quick start is 9 chips in a two-row carousel</b>, not 4 in a wrapping row. Each exercise has
+            exactly one preset except squats and push-ups, which carry a starter + a full 30-day version so the
+            duration is part of the choice. <code>.cc-quick</code> uses
+            <code>grid-auto-flow:column</code> over two rows — the CSS equivalent of the app's
+            <code>chunked(2)</code> column-major fill, so pairs sit above one another and the section stays a
+            constant height however many presets get added. A wrapping row grew to five stacked rows at nine
+            chips and pushed the exercise grid below the fold.</li>
+          <li><b>Chip icons encode the KIND of preset</b> — rocket = starter, trophy = full 30-day, target =
+            daily number, zap = cardio burst, wand = build your own — <em>not</em> which exercise. They repeat
+            across chips on purpose. Drawing the exercise figure there was tried in the app and rejected: the
+            chip and the grid tile below showed the same drawing twice, and the two squat presets became
+            indistinguishable since only duration separates them.</li>
+          <li><b>Exercise-type grid: figure 26 → 48px</b>, tile pinned to a 112px min-height so a wrapping
+            2-line label (“Jumping Jack”) can’t make one box taller than its neighbours.</li>
+          <li><b>Step 3 draws the exercise figure ONCE.</b> It used to appear three times — the 72px preview
+            tile, a copy in the chip beside it, and a third in the Summary “Exercise” row. The tile keeps it;
+            the chip is text-only; the summary row uses the generic <code>dumbbell</code> mark like every other
+            row in that table.</li>
+          <li><b>Canonical exercise order everywhere:</b> Steps · Push-ups · Squats · Sit-ups · Jumping Jacks ·
+            Lunges. Both the create-challenge grid and the Discover category chips previously had their own
+            order. <code>GET /workouts</code> really does return jumping jacks before sit-ups — the app
+            normalises the catalog once at its cache rather than trusting the endpoint, so do not “fix” these
+            lists back to a server response.</li>
+          <li><b>Bigger marks on the cards:</b> Discover trending 40 → 54px (card min-height 180 → 192px, which
+            is what keeps every card in the rail the same height), challenge-card tile 40 → 54px with a 42px
+            figure, challenge-detail cover chip 13 → 24px.</li>
+        </ul>
+        <p class="cl-body cl-mirror">Mirrors <code>CreateChallengeState.kt</code> ·
+          <code>CreateChallengeScreen.kt</code> · <code>ChallengeRepositoryImpl.workouts()</code> ·
+          <code>DiscoverScreen.kt</code> · <code>MyChallengesScreen.kt</code> ·
+          <code>ChallengeDetailScreen.kt</code>. Full rationale for each:
+          <code>docs/specs/CREATE_CHALLENGE_UI_SPEC.md</code> §10 in the app repo.</p>
+      </div>
+
+      <div class="cl-entry cl-warn">
+        <div class="cl-head"><span class="cl-date">KNOWN GAP</span>
+          <h3>Active-challenge ring: still the prototype's structure, not the app's</h3></div>
+        <p class="cl-body">The app draws the exercise figure <em>inside</em> the progress ring at 40dp (ring
+          56dp) and puts the day count in the meta line. This prototype puts the <b>percentage</b> in the ring
+          centre and the exercise in a small corner badge, now grown 21 → 26px so the illustration is legible.
+          Reconciling the two means dropping the % readout — a design decision, not an icon change, so it is
+          flagged here rather than decided. Affects <code>.chalx</code> on Home and the my-challenges cards.</p>
+      </div>
+    </div>
+
     <!-- COLOR SETS -->
     <div class="panel">
       <h2>🎨 Color set</h2>
@@ -474,7 +685,26 @@
       </a>
     </div>
   </div>
+  <script src="js/components/icons.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    /* Live samples, drawn by the same registry the screens use — so if this row ever looks wrong, the
+       screens are wrong too. Order is the app's canonical WorkoutType order, deliberately. */
+    (function () {
+      const FAMS = [
+        ['real', 'The default. Wherever the exercise is the subject of the block: challenge cards + detail, AI workout chooser, leaderboard, the count burned into a shared video.'],
+        ['outlined', 'Small chips only, where the detailed figure turns to mush. Home “Friends’ activity”.'],
+        ['plain', 'The create-challenge wizard, all three steps.'],
+      ];
+      const KEYS = ['walk', 'pushup', 'squat', 'situp', 'jumping-jack', 'lunge'];
+      const host = document.getElementById('cl-fams');
+      if (!host || !window.Icons) return;
+      host.innerHTML = FAMS.map(([fam, use]) => `<div class="cl-fam">
+        <div class="cl-fam-h">${fam}</div>
+        <div class="cl-fam-row">${KEYS.map(k => Icons.workout(k, 34, fam)).join('')}</div>
+        <div class="cl-fam-use">${use}</div></div>`).join('');
+    })();
+  </script>
 </body>
 
 </html>
