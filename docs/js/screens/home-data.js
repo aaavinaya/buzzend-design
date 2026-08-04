@@ -22,8 +22,9 @@ window.HomeData = (function () {
         { i:"situp", n:"Sit-ups", reps:120, kcal:50, t:"6:05 PM" },
       ],
       challenges: [
-        { i:"squat", n:"30-Day Squats", m:"Day 12 · 240 reps", p:60 },
-        { i:"pushup", n:"Push-up Power", m:"Day 4 · 80 reps", p:30 },
+        { i:"squat", n:"Squad Squats", m:"Day 9 · 380 reps", p:90, mine:true },
+        { i:"squat", n:"30-Day Squats", m:"Day 12 · 240 reps", p:60, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" },
+        { i:"pushup", n:"Push-up Power", m:"Day 4 · 80 reps", p:30, by:"Maya Gurung", byAv:"#caa6c9,#9a5e96" },
       ],
       friends: [ {n:"Anita",s:"8.2k",r:1}, {n:"Ravi",s:"6.1k",r:2}, {n:"Sita",s:"5.5k",r:3}, {n:"Kiran",s:"4.9k"} ],
       feed: [
@@ -37,7 +38,7 @@ window.HomeData = (function () {
       workout: { today: 1, reps: 40, streak: 1, best: 3, activeMin: 18, activePct: 25 },
       steps: { value: "1,200", goal: "6,000", pct: 20, kcal: 80, active: "18m", distance: "1.2km" },
       sessions: [ { i:"squat", n:"Squats", reps:40, kcal:40, t:"8:30 AM" } ],
-      challenges: [ { i:"squat", n:"30-Day Squats", m:"Just joined · Day 1", p:5 } ],
+      challenges: [ { i:"squat", n:"30-Day Squats", m:"Just joined · Day 1", p:5, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" } ],
       friends: [], feed: [],
     },
     new: {

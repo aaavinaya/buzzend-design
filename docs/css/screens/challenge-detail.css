@@ -237,3 +237,8 @@
 .cd-chat-input { display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--border); }
 .cd-chat-input input { flex:1; border:1px solid var(--border); background:var(--bg-canvas); border-radius:99px; padding:11px 15px; font:600 14px var(--font); color:var(--text-primary); outline:none; }
 .cd-chat-input button { width:44px; height:44px; border-radius:50%; border:none; background:var(--primary); color:var(--on-primary); display:grid; place-items:center; cursor:pointer; }
+
+/* star = you own this challenge (no text label needed) — soft, flat amber chip */
+.cd-mine { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; flex:none;
+  background:color-mix(in srgb, #f59e0b 15%, transparent); color:#d98a10; }
+.cd-mine svg { width:13px; height:13px; }

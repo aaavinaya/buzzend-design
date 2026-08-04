@@ -419,7 +419,12 @@ window.HomePro = (function () {
     const h = `<div class="sec"><h2>Active challenges</h2><a href="my-challenges.html">See all</a></div>`;
     if (!d.challenges.length) return h + H.empty("trophy", "No challenges yet", "Join a challenge to compete with friends and stay motivated.", "Browse challenges");
     return h + `<div class="h-scroll">` + d.challenges.map((c) => {
-      const ring = H.ring({ pct: c.p, size: 50, r: 21, stroke: 5.5, track: "var(--surface-alt)", prog: "var(--primary)", center: `<div class="cx-pct">${c.p}%</div>` });
+      const ring = H.ring({ pct: c.p, size: 50, r: 21, stroke: 4, track: "var(--surface-alt)", prog: "var(--primary)", center: `<div class="cx-pct">${c.p}%</div>` });
+      // ownership at a glance — no text, and kept OFF the progress ring so it doesn't read
+      // as a second ring: a small star after the name for yours, the creator's face for joined.
+      const own = c.mine
+        ? `<span class="cx-own mine" title="Created by you">${I("star", 11)}</span>`
+        : `<span class="cx-own" title="Created by ${c.by || "a friend"}" style="background-image:linear-gradient(135deg,${c.byAv || "#9bb7c9,#5e7d99"})"></span>`;
       return `<div class="chalx">
         <div class="chalx-ring">${ring}<span class="chalx-ex" style="color:var(--primary)">${I(c.i, 16)}</span></div>
         <div class="chalx-info"><div class="cx-name">${c.n}</div><div class="cx-meta">${c.m}</div></div>

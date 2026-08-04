@@ -113,7 +113,7 @@ window.AIFlow = (function () {
   // ───────── screens ─────────
   function render() {
     ({ select: rSelect, permission: rPermission, denied: rDenied, guide: rGuide, getready: rGetReady, camera: rCamera,
-       congrats: () => rCongrats(S.cvar || "A"), summary: rSummary, report: rReport, review: rReview,
+       congrats: () => rCongrats(S.cvar || "1"), summary: rSummary, report: rReport, review: rReview,
        uploading: rUploading, uploadfail: rUploadFail, posted: rPosted }[S.step] || rSelect)();
     window.Icons.init(root);
   }
@@ -334,63 +334,49 @@ window.AIFlow = (function () {
   function rSummary() { go("report"); }
 
   /* Congratulations — the celebratory moment right after a finished set (reps > 0).
-     4 design variations, switchable via ?step=congrats:A|B|C|D. Actions: Share (→ composer),
-     See details (→ the form report), Done (→ home). All values are already known to the flow:
-     reps, duration, derived calories + form score. */
+     One design (Burst medal) with 3 variations of how the SET QUALITY ("form") is shown,
+     because a bare "78 form" isn't self-explanatory:
+       1 · a plain-word rating (Great / Good / Okay) + the % underneath
+       2 · a labelled "Form quality" meter with a one-line explanation of what to fix
+       3 · no abstract score — "clean reps" out of total, in the user's own terms
+     Switchable via ?step=congrats:1|2|3. Only action is Share (→ composer); ✕ dismisses. */
   function rCongrats(variant) {
-    const e = EX[S.exKey], reps = S.reps, t = mmss(S.secs), kcal = kcalOf(reps), score = formScore(reps), streak = 47;
-    const V = variant || "A";
+    const e = EX[S.exKey], reps = S.reps, t = mmss(S.secs), kcal = kcalOf(reps), score = formScore(reps);
+    const V = String(variant || "1");
+    const warned = (reps > 3 ? 1 : 0) + (reps > 10 ? 1 : 0), clean = Math.max(0, reps - warned);
+    const F = FAULT[S.exKey] || { note: "your form" };
+    const tier = score >= 85 ? "Great" : score >= 70 ? "Good" : score >= 55 ? "Okay" : "Fair";
+    const tip = warned ? `${warned} rep${warned > 1 ? "s" : ""} to tidy up — ${F.note.toLowerCase()}.` : "Every rep looked clean — great control.";
     const conf = `<div class="cg-confetti">${Array.from({ length: 16 }, (_, i) =>
       `<span class="c${i % 5}" style="left:${(i * 6.3 + 3) % 96}%;animation-delay:${((i * 7) % 30) / 10}s"></span>`).join("")}</div>`;
     const pill = (ic, val, lbl) => `<div class="cg-pill"><span class="i">${I(ic, 17)}</span><b>${val}</b><span class="l">${lbl}</span></div>`;
-    const stat = (ic, val, lbl) => `<div class="cg-st"><span class="i">${I(ic, 18)}</span><div><b>${val}</b><span>${lbl}</span></div></div>`;
 
-    let inner;
-    if (V === "B") {                                   // clean analytics card
-      inner = `<div class="cg-card">
-        <div class="cg-tick soft">${I("trophy", 30)}</div>
-        <div class="cg-elabel">${I(e.i, 14)} ${e.n}</div>
-        <h1 class="cg-title">Set complete!</h1>
-        <p class="cg-sub">Every rep counted by the camera — clean and controlled.</p>
-        <div class="cg-grid">${stat("zap", reps, "reps")}${stat("clock", t, "time")}${stat("flame", kcal, "kcal")}${stat("target", score, "form score")}</div>
-      </div>`;
-    } else if (V === "C") {                             // immersive gradient
-      inner = `<div class="cg-immhead">
-        <div class="cg-tick glass">${I("check", 34)}</div>
-        <div class="cg-elabel light">${I(e.i, 14)} ${e.n}</div>
-        <h1 class="cg-title">Nice one!</h1>
-        <p class="cg-sub light">You crushed your ${e.n.toLowerCase()} set.</p>
-        <div class="cg-hero light"><b>${reps}</b><span>reps</span></div>
-        <div class="cg-chips">${pill("clock", t, "time")}${pill("flame", kcal, "kcal")}${pill("target", score, "form")}</div>
-      </div>`;
-    } else if (V === "D") {                             // streak + weekly progress
-      const days = ["M", "T", "W", "T", "F", "S", "S"], vals = [45, 70, 30, 85, 0, 0, 0], today = 4;
-      const bars = days.map((d, i) => `<div class="cg-bar${i === today ? " on" : ""}"><i style="height:${i === today ? 92 : vals[i]}%"></i><span>${d}</span></div>`).join("");
-      inner = `<div class="cg-card">
-        <div class="cg-streak"><span class="cg-flame">${I("flame", 26)}</span><div class="cg-sk-tx"><b>${streak}-day streak</b><span>You kept it alive today.</span></div><span class="plus">+1</span></div>
-        <div class="cg-elabel row">${I(e.i, 14)} ${e.n} · ${reps} reps · ${t}</div>
-        <div class="cg-week"><div class="wk-t">This week</div><div class="cg-bars">${bars}</div></div>
-        <div class="cg-mini">${stat("zap", reps, "reps today")}${stat("target", score, "form score")}</div>
-      </div>`;
-    } else {                                            // A · burst medal
-      inner = `<div class="cg-burstwrap">
+    let stats;
+    if (V === "2") {                                    // labelled meter + plain-English explanation
+      stats = `<div class="cg-formcard">
+          <div class="cg-formtop"><span class="lbl">Form quality</span><span class="val">${tier} · ${score}%</span></div>
+          <div class="cg-meter"><i style="width:${score}%"></i></div>
+          <div class="cg-formtip">${I("info", 14)}<span>${tip}</span></div></div>
+        <div class="cg-stats2">${pill("clock", t, "time")}${pill("flame", kcal, "calories")}</div>`;
+    } else if (V === "3") {                             // concrete: clean reps, no abstract score
+      stats = `<div class="cg-stats3">${pill("clock", t, "time")}${pill("flame", kcal, "calories")}<div class="cg-pill"><span class="i">${I("check", 17)}</span><b>${clean}/${reps}</b><span class="l">clean reps</span></div></div>
+        <div class="cg-note">${I("target", 14)} ${warned ? "Work on: " + F.note.toLowerCase() : "Perfect form — every rep clean!"}</div>`;
+    } else {                                            // 1 · plain-word form rating
+      stats = `<div class="cg-stats3">${pill("clock", t, "time")}${pill("flame", kcal, "calories")}<div class="cg-pill form"><span class="i">${I("target", 17)}</span><b>${tier}</b><span class="l">form · ${score}%</span></div></div>`;
+    }
+    root.innerHTML = `<div class="cg">
+      <button class="cg-x" id="x">${I("x", 20)}</button>${conf}
+      <div class="cg-body">
         <div class="cg-burst"><svg viewBox="0 0 200 200" class="cg-rays">${Array.from({ length: 12 }, (_, i) => `<rect x="98" y="4" width="4" height="26" rx="2" transform="rotate(${i * 30} 100 100)"/>`).join("")}</svg>
-          <div class="cg-medal">${I("trophy", 40)}</div></div>
-        <div class="cg-elabel">${I(e.i, 14)} ${e.n}</div>
+          <div class="cg-medal">${I(e.i, 48)}</div></div>
+        <div class="cg-elabel">${I(e.i, 17)} ${e.n}</div>
         <h1 class="cg-title">Great work!</h1>
         <p class="cg-sub">You finished your ${e.n.toLowerCase()} set.</p>
         <div class="cg-hero"><b>${reps}</b><span>reps</span></div>
-        <div class="cg-stats3">${pill("clock", t, "time")}${pill("flame", kcal, "kcal")}${pill("target", score, "form")}</div>
-      </div>`;
-    }
-    root.innerHTML = `<div class="cg v${V}">
-      <button class="cg-x" id="x">${I("x", 20)}</button>${conf}
-      <div class="cg-body">${inner}</div>
-      <div class="cg-actions">
-        <button class="cg-btn primary" id="share">${I("share", 18)} Share your set</button>
-        <button class="cg-btn ghost" id="done">Done</button></div></div>`;
+        ${stats}
+      </div>
+      <div class="cg-actions"><button class="cg-btn primary" id="share">${I("share", 18)} Share</button></div></div>`;
     root.querySelector("#share").addEventListener("click", () => { location.href = "../home/compose.html?from=workout&ex=" + S.exKey + "&reps=" + reps; });
-    root.querySelector("#done").addEventListener("click", () => location.href = "../home/home-v7.html");
     root.querySelector("#x").addEventListener("click", () => location.href = "../home/home-v7.html");
   }
 
@@ -487,7 +473,7 @@ window.AIFlow = (function () {
       if (m[0] === "report0") { S.reps = 0; return go("report"); }
       if (m[0] === "camera" && m[1]) return clear(), (S.step = "camera"), rCamera(m[1]), window.Icons.init(root);
       if (m[0] === "uploadfail2") return clear(), rUploading(true), void window.Icons.init(root);
-      if (m[0] === "congrats") { S.cvar = m[1] || "A"; return go("congrats"); }
+      if (m[0] === "congrats") { S.cvar = m[1] || "1"; return go("congrats"); }
       return go(m[0]);
     }
     go("select");
