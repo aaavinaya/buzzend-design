@@ -80,6 +80,20 @@ window.CC = (function () {
     document.getElementById("app").innerHTML = header() + body() + footer();
     window.Icons.init(document.getElementById("app"));
   }
+
+  /* Vertical wheel -> horizontal scroll over the quick-start carousel. Registered ONCE on document (the step
+     re-renders on every state change, so a listener on the element itself would be lost), and it only claims
+     the event when that row actually has somewhere to go — otherwise the page must keep scrolling normally. */
+  document.addEventListener("wheel", (ev) => {
+    const row = ev.target.closest && ev.target.closest(".cc-quick");
+    if (!row) return;
+    const max = row.scrollWidth - row.clientWidth;
+    if (max <= 0) return;
+    const d = Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : ev.deltaY;
+    if ((d < 0 && row.scrollLeft <= 0) || (d > 0 && row.scrollLeft >= max)) return;  // let the page take over
+    row.scrollLeft += d;
+    ev.preventDefault();
+  }, { passive: false });
   function header() {
     return `<div class="cc-head"><div class="cc-htop"><button class="cc-back" onclick="CC.tryExit()">${I("back", 22)}</button>
       <div class="t">Create Challenge</div><div class="cc-step">Step ${S.step + 1} of 3</div></div>

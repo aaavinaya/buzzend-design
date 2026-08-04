@@ -27,10 +27,22 @@
    column-major fill, so the list order reads top->bottom then across, and the section stays a constant
    height however many templates are added later. The horizontal cut edge is what signals there are more. */
 .cc-quick { display:grid; grid-auto-flow:column; grid-template-rows:auto auto; gap:10px;
-  overflow-x:auto; overflow-y:hidden; padding-bottom:2px; scrollbar-width:none;
-  justify-content:start; grid-auto-columns:max-content; }
-.cc-quick::-webkit-scrollbar { display:none; }
+  overflow-x:auto; overflow-y:hidden; padding-bottom:8px;
+  justify-content:start; grid-auto-columns:max-content;
+  scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--text-tertiary) 55%,transparent) transparent;
+  overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+/* The scrollbar is DELIBERATELY visible. It was hidden at first, which is fine on the phone (you just swipe)
+   but left desktop with no affordance and no way to drag — the prototype is mostly read in a desktop browser,
+   and a vertical mouse wheel does nothing to a horizontal container. Slim, but there. `create-challenge.js`
+   also maps a vertical wheel onto horizontal scroll for trackpads. */
+.cc-quick::-webkit-scrollbar { height:6px; }
+.cc-quick::-webkit-scrollbar-track { background:transparent; }
+.cc-quick::-webkit-scrollbar-thumb { background:color-mix(in srgb,var(--text-tertiary) 45%,transparent); border-radius:99px; }
+.cc-quick::-webkit-scrollbar-thumb:hover { background:color-mix(in srgb,var(--text-tertiary) 70%,transparent); }
 .cc-quick .cc-chip { white-space:nowrap; }
+/* Only .cc-quick scrolls sideways. `.cc-body` sets overflow-y:auto, which per spec makes its overflow-x
+   compute to auto as well — so without this the whole step could pan horizontally alongside the carousel. */
+.cc-body { overflow-x:hidden; }
 .cc-chip { display:inline-flex; align-items:center; gap:7px; padding:10px 15px; border-radius:99px; border:1.5px solid var(--border); background:var(--surface); font:800 13.5px var(--font); color:var(--text-primary); cursor:pointer; transition:.12s; }
 .cc-chip.on { border-color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); }
 .cc-chip:active { transform:scale(.97); }

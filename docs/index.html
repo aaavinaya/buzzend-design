@@ -406,8 +406,10 @@
     <div class="panel" id="changelog">
       <h2>📋 Changelog</h2>
       <p class="hint">What changed in this prototype and why — newest first. Read this before assuming a screen
-        still matches what you last saw. Each entry names the app-side file it mirrors, so the two can be kept
-        honest against each other.</p>
+        still matches what you last saw. <b>Written for any client — Android, iOS or web.</b> Each entry states
+        the behaviour and the numbers platform-neutrally; where a platform's file or API is named it is an
+        <em>example</em> of where the rule already lives, not the rule itself. Points are in CSS px here and map
+        1:1 to dp on Android and pt on iOS.</p>
 
       <div class="cl-entry">
         <div class="cl-head"><span class="cl-date">2026-08-04</span>
@@ -432,11 +434,14 @@
           <li><b>Need a specific family?</b> <code>Icons.workout('squat', 40, 'plain')</code> for one surface,
             or set <code>Icons.artStyle = 'plain'</code> once at the top of a screen that uses one family
             throughout.</li>
-          <li><b>Files:</b> <code>docs/assets/workout-art/</code>, named to match the Android drawables 1:1 —
-            <code>walk.svg</code> ↔ <code>ic_workout_walk</code>, <code>-outlined</code> ↔
-            <code>_outlined</code>, <code>-plain</code> ↔ <code>_plain</code>. Converted from
-            <code>tools/icon-src/pose_icons/</code> in the app repo by <code>tools/svg_to_vector.py</code>;
-            <code>yoga</code> is included but unmapped in both (no yoga workout type exists on the backend).</li>
+          <li><b>Files:</b> <code>docs/assets/workout-art/</code> — plain SVG, one per exercise per family, so
+            any platform can consume them directly (vector drawable, PDF/SF Symbol-style asset, or
+            <code>&lt;img&gt;</code>). Naming is
+            <code>&lt;exercise&gt;[-outlined|-plain].svg</code>, keyed on the six <b>backend workout codes</b>
+            — <code>WLS</code> steps, <code>PUSHP</code>, <code>SQUAT</code>, <code>SITUP</code>,
+            <code>JJACK</code>, <code>LUNGE</code> — which is the one identifier every client already shares.
+            <code>yoga</code> ships but is unmapped: no yoga workout type exists on the backend, so wiring it
+            would mean inventing a workout the API cannot store.</li>
           <li><b>Sizes are optically normalised, and this part is not optional.</b> The postures have wildly
             different aspect ratios (push-up ~1.95:1 landscape, squat 0.84:1 portrait), so fitting them into
             one square makes the ink differ by ~2.1×. <code>icons.js</code> ports the app's
@@ -445,9 +450,12 @@
             asked for; only the fill changes. In a 40px slot the sit-up draws 40px across and the lunge 27.6px,
             and that is correct.</li>
         </ul>
-        <p class="cl-body cl-mirror">Mirrors <code>core/designsystem/icon/WorkoutArtwork.kt</code> ·
-          per-surface families set in <code>FriendsActivity.kt</code> (outlined) and
-          <code>CreateChallengeScreen.kt</code> (plain).</p>
+        <p class="cl-body cl-mirror"><b>To implement on a new client:</b> one shared resolver that answers
+          “what picture goes with this workout code, in which family, at what size”, and pin the family per
+          screen in a single constant rather than at each call. The area-equalising scale must live in that
+          resolver too, so no call site can forget it. <em>Reference implementation (Android):</em>
+          <code>core/designsystem/icon/WorkoutArtwork.kt</code>, with the per-surface families set in
+          <code>FriendsActivity.kt</code> (outlined) and <code>CreateChallengeScreen.kt</code> (plain).</p>
       </div>
 
       <div class="cl-entry">
@@ -458,9 +466,8 @@
           <li><b>Quick start is 9 chips in a two-row carousel</b>, not 4 in a wrapping row. Each exercise has
             exactly one preset except squats and push-ups, which carry a starter + a full 30-day version so the
             duration is part of the choice. <code>.cc-quick</code> uses
-            <code>grid-auto-flow:column</code> over two rows — the CSS equivalent of the app's
-            <code>chunked(2)</code> column-major fill, so pairs sit above one another and the section stays a
-            constant height however many presets get added. A wrapping row grew to five stacked rows at nine
+            <code>grid-auto-flow:column</code> over two rows, i.e. fill top→bottom then across, so pairs sit
+            above one another and the section stays a constant height however many presets get added. A wrapping row grew to five stacked rows at nine
             chips and pushed the exercise grid below the fold.</li>
           <li><b>Chip icons encode the KIND of preset</b> — rocket = starter, trophy = full 30-day, target =
             daily number, zap = cardio burst, wand = build your own — <em>not</em> which exercise. They repeat
@@ -482,18 +489,19 @@
             is what keeps every card in the rail the same height), challenge-card tile 40 → 54px with a 42px
             figure, challenge-detail cover chip 13 → 24px.</li>
         </ul>
-        <p class="cl-body cl-mirror">Mirrors <code>CreateChallengeState.kt</code> ·
-          <code>CreateChallengeScreen.kt</code> · <code>ChallengeRepositoryImpl.workouts()</code> ·
-          <code>DiscoverScreen.kt</code> · <code>MyChallengesScreen.kt</code> ·
-          <code>ChallengeDetailScreen.kt</code>. Full rationale for each:
-          <code>docs/specs/CREATE_CHALLENGE_UI_SPEC.md</code> §10 in the app repo.</p>
+        <p class="cl-body cl-mirror"><b>Client-agnostic notes:</b> the preset list, the canonical order and the
+          catalog sort are <em>data</em> decisions — put the sort where the workout catalog is cached, not in a
+          screen, or every list that reads it drifts again. <em>Reference implementation (Android):</em>
+          <code>CreateChallengeState.kt</code> (presets), <code>CreateChallengeScreen.kt</code> (layout + step
+          3), <code>ChallengeRepositoryImpl.workouts()</code> (the catalog sort), <code>DiscoverScreen.kt</code>,
+          <code>MyChallengesScreen.kt</code>, <code>ChallengeDetailScreen.kt</code>. Full per-item rationale:
+          <code>docs/specs/CREATE_CHALLENGE_UI_SPEC.md</code> §10 in the Android repo.</p>
       </div>
 
       <div class="cl-entry cl-warn">
         <div class="cl-head"><span class="cl-date">KNOWN GAP</span>
           <h3>Active-challenge ring: still the prototype's structure, not the app's</h3></div>
-        <p class="cl-body">The app draws the exercise figure <em>inside</em> the progress ring at 40dp (ring
-          56dp) and puts the day count in the meta line. This prototype puts the <b>percentage</b> in the ring
+        <p class="cl-body">The shipped clients draw the exercise figure <em>inside</em> the progress ring at 40pt (ring 56pt) and puts the day count in the meta line. This prototype puts the <b>percentage</b> in the ring
           centre and the exercise in a small corner badge, now grown 21 → 26px so the illustration is legible.
           Reconciling the two means dropping the % readout — a design decision, not an icon change, so it is
           flagged here rather than decided. Affects <code>.chalx</code> on Home and the my-challenges cards.</p>
