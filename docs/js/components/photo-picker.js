@@ -71,7 +71,7 @@ window.SystemPhotoPicker = (function () {
       return `<button class="spp-tile${vid ? " vid" : ""}${at >= 0 ? " on" : ""}${off ? " off" : ""}" style="background-image:${tileBg(a)}"
         onclick="SystemPhotoPicker.tap(${i})"
         aria-label="${vid ? `Video, ${mmss(a.dur)}` : "Photo"}${at >= 0 ? ", selected" : ""}">
-        ${vid ? `<span class="spp-scrim"></span><span class="spp-playdisc">${I("play", 16)}</span>
+        ${vid ? `<span class="spp-vscrim"></span><span class="spp-playdisc">${I("play", 16)}</span>
                  <span class="spp-vb">${mmss(a.dur)}</span>` : ""}
         <span class="spp-check${at >= 0 ? " on" : ""}">${at >= 0 && !single ? at + 1 : ""}</span></button>`;
     }).join("");
@@ -99,7 +99,9 @@ window.SystemPhotoPicker = (function () {
     el = document.createElement("div");
     el.className = "spp-scrim";
     el.addEventListener("click", (e) => { if (e.target === el) dismiss(); });
-    document.body.appendChild(el);
+    // The device frame, not the page body — same host the dialogs use. Appended to body the
+    // sheet renders outside the phone and spans the viewport.
+    (document.querySelector(".screen-box") || document.body).appendChild(el);
     render();
   }
 

@@ -12,6 +12,9 @@
   background: rgba(0, 0, 0, .45);
   display: flex;
   align-items: flex-end;
+  /* Mounted INTO the device frame (.screen-box), never the page body — a sheet appended to the
+     body escapes the phone and spans the whole viewport. */
+  overflow: hidden;
 }
 
 .spp-sheet {
@@ -79,13 +82,10 @@
   margin: 0 12px 8px;
   padding: 9px 11px;
   border-radius: 8px;
-  background: currentColor;
-  font: 400 11.5px Roboto, system-ui, sans-serif;
-}
-
-/* The note is a tinted band, so keep the text readable over its own colour-mixed fill. */
-.spp-note {
+  /* A tinted band, mixed from the text colour so it reads in either theme. Was split across
+     two `.spp-note` rules — the same duplicate-selector trap as the scrim, merged here. */
   background: color-mix(in srgb, currentColor 10%, transparent);
+  font: 400 11.5px Roboto, system-ui, sans-serif;
 }
 
 .spp-grid {
@@ -140,8 +140,13 @@
    these stand-in tiles are flat gradients with no poster frame to read as motion. Three cues,
    all of which a real client gets nearly free on top of the actual thumbnail. */
 
-/* 1 · A bottom scrim, so the duration always has contrast whatever the frame is. */
-.spp-scrim {
+/* 1 · A bottom scrim, so the duration always has contrast whatever the frame is.
+       NOTE the `v` — this is the VIDEO TILE's gradient. It must never share a name with the
+       overlay backdrop at the top of this file: when both were `.spp-scrim` the later rule won
+       and handed the OVERLAY `inset:auto`, `height:46%` and `pointer-events:none`, which
+       collapsed the sheet to a strip, stretched it past the device frame, and made the whole
+       picker unclickable. One name collision, all three symptoms. */
+.spp-vscrim {
   position: absolute;
   inset: auto 0 0 0;
   height: 46%;
