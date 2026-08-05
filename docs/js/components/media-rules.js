@@ -32,9 +32,20 @@ window.MediaRules = (function () {
     LIMIT_REACHED: `Up to ${MAX_IMAGES} photos per post`,
   };
 
-  /* Identity is the item's own reference/URI, never a library row index: picker results carry
-     no stable row id on any platform, and camera captures have no library row at all. */
-  const key = (a) => (a && (a.id != null ? a.id : a._li));
+  /* Identity is the item's own CONTENT reference — the URI on a real client. Never a library
+     row index: picker results carry no stable row id on any platform, and camera captures have
+     no library row at all.
+
+     The fallback chain matters. With only `id ?? _li`, two items that happen to carry neither
+     both key to `undefined`, compare equal, and get silently deduped as though they were the
+     same photo. `g` (the gradient standing in for the content URI here) is the last resort so
+     that cannot happen. */
+  const key = (a) => {
+    if (!a) return undefined;
+    if (a.id != null) return "id:" + a.id;
+    if (a._li != null) return "li:" + a._li;
+    return "src:" + (a.g || a.ex || JSON.stringify(a));
+  };
 
   /** Whether `candidate` may join `current`. Returns null when allowed, else the message. */
   function reject(current, candidate) {

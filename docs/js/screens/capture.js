@@ -56,10 +56,17 @@ window.Capture = (function () {
   }
   // A toast, not a dialog: this explains why something did not land, which the user can see.
   const warn = (m) => Buzzend.toast(m);
+  /* A capture goes STRAIGHT to the preview — the camera holds no selection of its own.
+     It used to accumulate into a tray with a "Next · N" button, which is the old Flutter
+     shape: two places to review a selection, one of them a strip of thumbnails floating over
+     a live viewfinder. The preview already owns reviewing, removing and adding more, so the
+     camera's job ends the moment the shutter fires. Shooting a second photo is preview → "+"
+     → Camera, which comes back here in `adding` shape. */
   function addAsset(a) {
     if (!st.multiple) { st.sel = [a]; return finish(); }
     if (!canAdd(a)) return;
-    st.sel.push(a); render();
+    st.sel.push(a);
+    finish();
   }
 
   /* ── camera ── */
@@ -73,8 +80,6 @@ window.Capture = (function () {
     const toggle = st.camMode === "photo"
       ? `<button class="cap-tg" onclick="Capture.flash()">${I(st.flash === "on" ? "zap" : "zap", 20)}<i class="cap-tglbl">${st.flash}</i></button>`
       : `<button class="cap-tg ${st.mic ? "" : "off"}" onclick="Capture.mic()">${I(st.mic ? "volume" : "mute", 20)}</button>`;
-    const galThumb = st.sel.length ? `style="background-image:${st.sel[st.sel.length - 1].g};background-size:cover"` : "";
-    const tray = (st.multiple && st.sel.length) ? trayHtml() : "";
     return `<div class="cap cap-camera facing-${st.facing}">
       <div class="cap-view"><div class="cap-vf"></div><div class="cap-reticle"></div>
         ${st.recording ? `<div class="cap-rec"><span class="dot"></span><span id="cap-timer">${fmt(st.recSecs)}</span></div>` : ""}</div>
@@ -83,8 +88,11 @@ window.Capture = (function () {
         <div class="cap-title">${st.adding ? "Add photo" : st.purpose === "avatar" ? "Profile photo" : st.purpose === "chat" ? "Camera" : "New post"}</div>
         <div class="cap-tgs">${toggle}</div></div>
       <div class="cap-bottom">
-        ${tray}
-        ${both ? `<div class="cap-modes">${mode("photo", "Photo")}${mode("video", "Video")}</div>` : ""}
+        ${both
+          ? `<div class="cap-modes">${mode("photo", "Photo")}${mode("video", "Video")}</div>`
+          /* A spacer of the row's own height, so hiding the toggle does not lift the shutter to
+             a different place on the screen than the one the user just tapped it in. */
+          : `<div class="cap-modes-spacer"></div>`}
         <div class="cap-controls">
           ${st.adding
             ? /* The sheet that sent the user here just offered Gallery as the other half of the
@@ -92,14 +100,10 @@ window.Capture = (function () {
                  declined. Replaced by a spacer of equal size, not removed — the row is
                  space-between, so dropping a child would drift the shutter off-centre. */
               `<span class="cap-gal-spacer"></span>`
-            : `<button class="cap-gal" ${galThumb} onclick="Capture.goGallery()">${st.sel.length ? "" : I("images", 22)}</button>`}
+            : `<button class="cap-gal" onclick="Capture.goGallery()">${I("images", 22)}</button>`}
           <button class="cap-shutter ${st.camMode}${st.recording ? " rec" : ""}" onclick="Capture.shutter()"></button>
           <button class="cap-flip" onclick="Capture.flip()">${I("refresh", 22)}</button></div>
       </div></div>`;
-  }
-  function trayHtml() {
-    const thumbs = st.sel.map((a, i) => `<div class="cap-tt" style="background:${a.g}">${a.type === "video" ? `<span class="cap-ttv">${I("play", 9)}</span>` : ""}<button class="cap-ttx" onclick="Capture.unsel(${i})">${I("x", 10)}</button></div>`).join("");
-    return `<div class="cap-tray"><div class="cap-tt-row">${thumbs}</div><button class="cap-next" onclick="Capture.finish()">Next · ${st.sel.length}</button></div>`;
   }
 
   function setMode(m) { if (st.recording) return; st.camMode = m; render(); }
@@ -111,7 +115,6 @@ window.Capture = (function () {
     if (!st.recording) { st.recording = true; st.recSecs = 0; render(); st.timer = setInterval(() => { st.recSecs++; const t = document.getElementById("cap-timer"); if (t) t.textContent = fmt(st.recSecs); }, 1000); }
     else { clearInterval(st.timer); st.recording = false; const dur = Math.max(1, st.recSecs); const s = SHOTS[st.shot % SHOTS.length]; st.shot++; addAsset({ type: "video", g: s.g, pair: s.pair, dur }); }
   }
-  function unsel(i) { st.sel.splice(i, 1); render(); }
 
   /* ── gallery: the SYSTEM picker, opened over the camera ── */
   function goGallery() {
@@ -129,7 +132,8 @@ window.Capture = (function () {
         const { selection, message } = MR.merge(st.sel, picked);
         st.sel = selection;
         if (message) Buzzend.toast(message);
-        render();
+        // Straight to the preview, same as a shot — never back to the viewfinder holding a tray.
+        if (st.sel.length) finish(); else render();
       },
     });
   }
@@ -156,10 +160,11 @@ window.Capture = (function () {
       Buzzend.alert({ icon: "success", title: "Sent", message: "Your photo has been sent to the chat.", onConfirm() { location.href = "../chat/chat-detail.html"; } }); return;
     }
     if (st.adding) {
-      // Merge the new shot into the draft we were handed, under the same shared rules.
-      let draft = []; try { draft = JSON.parse(sessionStorage.getItem("bz-compose-draft") || "[]"); } catch (e) {}
-      const { selection } = MR.merge(draft, sel.map((a, n) => Object.assign({ id: "s" + n }, a)));
-      sessionStorage.setItem("bz-compose-draft", JSON.stringify(selection.map((a) => ({ type: a.type, g: a.g, ex: a.ex, dur: a.dur || 0 }))));
+      // `st.sel` was SEEDED with the draft on entry (see start), so it already holds the whole
+      // post — draft plus whatever was just added — and every addition was checked against it by
+      // canAdd. Re-merging it into the stored draft double-counted: two held plus one shot came
+      // back as five. Just persist what we have.
+      sessionStorage.setItem("bz-compose-draft", JSON.stringify(sel.map((a) => ({ type: a.type, g: a.g, ex: a.ex, dur: a.dur || 0 }))));
       location.href = "compose.html?from=adding"; return;
     }
     // post → hand off to the composer for editing
@@ -167,5 +172,5 @@ window.Capture = (function () {
     location.href = "compose.html?from=capture";
   }
 
-  return { start, setMode, flash, mic, flip, shutter, unsel, goGallery, finish, close };
+  return { start, setMode, flash, mic, flip, shutter, goGallery, finish, close };
 })();
