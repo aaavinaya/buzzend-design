@@ -412,6 +412,92 @@
         1:1 to dp on Android and pt on iOS.</p>
 
       <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">2026-08-05</span>
+          <h3>Media picking is the SYSTEM picker — our own gallery grid is gone</h3></div>
+        <p class="cl-body"><b>This one is not a preference, it is a store requirement.</b> Google Play
+          <b>rejected</b> the Android build (version code 101) under the Photo and Video Permissions policy. An
+          app targeting Android 13+ may request the broad media-read permissions
+          (<code>READ_MEDIA_IMAGES</code> / <code>READ_MEDIA_VIDEO</code>) that a bespoke media grid needs
+          <em>only</em> when a system picker is technically insufficient for core functionality. “Pick a few
+          items to post” is exactly the case the policy says must use the picker, and the reviewer's finding
+          said so: <em>“your app only requires one-time or infrequent access to media files.”</em></p>
+        <p class="cl-body">The prototype drew its own grid in <b>two</b> places — the camera's gallery tab and
+          the composer's PICK step — so it was the reference for the very thing that got rejected. Both are
+          replaced by a stand-in for the platform's picker, drawn in <b>neutral system chrome on purpose</b>:
+          the most important thing that surface communicates is <b>do not style this</b>. Anything a client
+          could restyle there is something it would have to build itself, which is what caused the violation.
+          <em>iOS has no equivalent mandate, but ships the same component</em>
+          (<code>PHPickerViewController</code>), so one picker suits every client — and it is why the iOS build
+          was approved with the identical design.</p>
+        <ul class="cl-list">
+          <li><b>Picking is no longer a place in the flow.</b> The picker opens <em>over</em> whatever launched
+            it, so it never enters the back stack: dismissing it returns you to the camera or the preview you
+            came from with the selection untouched. There is no “gallery screen” to design, route to, or go
+            back to. Dismissing without choosing is <b>not</b> a failure and must stay silent.</li>
+          <li><b>Hand the picker the REMAINING allowance, never a constant 10.</b> With 8 photos held it is
+            told 2, so the cap is enforced <em>inside</em> the picker — greyed-out tiles — rather than as a
+            complaint afterwards. At <b>1</b> remaining, use the platform's <b>single-item</b> contract: its
+            multi-select variant requires a cap of 2 or more, and a second tap must <em>replace</em> rather
+            than add. At 0, do not open it at all — say why.</li>
+          <li><b>Restrict to images once anything is selected.</b> A post is up to 10 photos <em>or</em> one
+            video, so after the first item a video could only be refused on return. Don't offer it.</li>
+          <li><b>The rule now runs on the way OUT, not per tap.</b> The picker can cap a count but cannot
+            express “photos XOR video”, so the selection is folded in afterwards: keep what fits, drop the
+            rest, show <b>one</b> message. Folding accumulates, so 4 picked onto 8 held accepts exactly 2.</li>
+          <li><b>Nothing is dropped silently.</b> A pick can fail to land three ways — it breaks the rule, it
+            is <em>already in the post</em>, or it isn't a photo/video — and each says so. The duplicate case is
+            the one that is easy to miss and the worst to omit: the picker has no idea what you already hold, so
+            re-picking is easy to do by accident and would otherwise look like a dead tap.</li>
+          <li><b>These are toasts, not dialogs.</b> A dialog demands a tap to acknowledge a fact the user can
+            already see. Copy is one short clause, no trailing full stop — a toast is read in about a second and
+            cannot be re-read — but still worded like a person: <code>Choose photos or 1 video</code>,
+            <code>One video per post</code>, <code>Up to 10 photos per post</code>,
+            <code>Already in your post</code>, <code>That file isn't supported</code>. Both halves matter; the
+            first drafts were full sentences, and the correction overshot into telegraphese
+            (<code>Already added</code>).</li>
+          <li><b>“Add more” is a Camera / Gallery sheet, not a jump to the picker.</b> The picker has
+            <em>no camera entry point</em> on any platform, so a “+” wired straight to it silently removes
+            “shoot one more” from the add-more path. Two labelled options, one tap deeper. Its header is
+            <b>centred</b> — the option tiles are centred, so left-aligned text hung off to one side of its own
+            content — and it carries the remaining budget, <code>You can add 7 more photos</code>. <b>Singular
+            at one</b> (“1 more photo”): the sheet shows this every time it opens, so the last slot is the
+            most-read case. That budget and the picker's cap come from <em>one</em> function, so the copy can
+            never promise what the picker then refuses.</li>
+          <li><b>The “+” tile stays a plain plus.</b> A “+7” counter was tried and dropped — the number is
+            stated in words on the sheet it opens, and the tile reads better as a clean affordance.</li>
+          <li><b>Reaching the camera from “Add more” is a DIFFERENT screen state.</b> It showed the full
+            new-post camera, which offered three wrong things. Video mode: a clip recorded there could only be
+            thrown away on return, so the whole Photo/Video row goes (a lone “Photo” pill is pointless chrome)
+            and photo mode is forced. The gallery entry: the sheet just offered Gallery, so a second door to it
+            loops back to the option you declined — replace it with an equal-size <em>spacer</em>, since the
+            controls row is space-between and dropping a child drifts the shutter off-centre. The title reads
+            <b>“Add photo”</b>, not “New post”.</li>
+          <li><b>And the real defect: that screen's ✕ discarded the draft.</b> It was wired to close the
+            composer, so one tap threw away up to 10 photos with no confirmation — and the platform back
+            gesture did the same, because entering from “Add more” leaves the camera as the only entry for a
+            plain back to fall through. Both now return to the draft, and the control is a <b>back</b>
+            affordance rather than an ✕ that means “throw this away”. Only a genuinely empty camera step closes
+            the composer.</li>
+          <li><b>A video post has no “+” at all</b> — the whole thumbnail strip is hidden — so neither option
+            can be reached in a state where every pick would be refused.</li>
+        </ul>
+        <p class="cl-body cl-mirror"><b>To implement on a new client:</b> delete any bespoke media grid and
+          call the platform picker, passing the remaining allowance as its item cap and an images-only filter
+          once anything is held. Put the “photos XOR video” rule, the messages, the remaining count and its
+          singular/plural in <b>one</b> module that both the picker call and the UI copy read from — the copy
+          promising a budget the picker contradicts is its own bug. Then check the two things that are easy to
+          miss: a re-picked item must be <em>reported</em>, not silently dropped, and leaving the camera while
+          holding a draft must go <em>back</em> to it, never close the composer.
+          <em>Reference implementation (Android):</em>
+          <code>feature/contentcreation/ui/domain/MediaSelection.kt</code> (rules, messages, remaining +
+          plural), <code>ui/navigation/GeneralComposeFlow.kt</code> (picker contract, fold-in, back policy),
+          <code>ui/capture/GeneralCaptureScreen.kt</code> (<code>addingMore</code> state),
+          <code>ui/preview/ComposePreviewScreen.kt</code> (the sheet). The permission removal is pinned by a
+          test — <code>MediaPermissionPolicyTest</code> — because re-adding it breaks no feature locally and
+          only fails at review.</p>
+      </div>
+
+      <div class="cl-entry">
         <div class="cl-head"><span class="cl-date">2026-08-04</span>
           <h3>Exercise marks are now the drawn ILLUSTRATIONS, not line glyphs</h3></div>
         <p class="cl-body">Every exercise mark across the prototype was a Lucide-style stroke glyph

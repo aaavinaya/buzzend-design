@@ -59,3 +59,7 @@
 .cap-selb { position: absolute; top: 5px; right: 5px; width: 21px; height: 21px; border-radius: 50%; border: 2px solid #fff; display: grid; place-items: center; font: 900 11px var(--font); color: #fff; }
 .cap-tile.on .cap-selb { background: var(--primary); }
 .cap-ghint { flex: none; padding: 12px 18px; border-top: 1px solid var(--border); font: 700 12.5px var(--font); color: var(--text-secondary); }
+
+/* Add-more: the gallery entry is absent (the sheet just offered it), but the controls row is
+   space-between — so it keeps a same-size spacer or the shutter drifts off-centre. */
+.cap-gal-spacer { width: 52px; height: 52px; flex: none; }

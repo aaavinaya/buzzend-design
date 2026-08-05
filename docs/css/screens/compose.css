@@ -153,3 +153,18 @@
 .cp-h.l { left: 0; } .cp-h.r { right: 0; }
 .cp-h i { width: 4px; height: 20px; border-radius: 2px; background: rgba(0,0,0,.55); }
 .cp-trimhint { display: flex; align-items: center; justify-content: center; gap: 6px; font: 700 11.5px var(--font); color: rgba(255,255,255,.55); margin-top: 12px; }
+
+/* ── "+" → Add-to-post sheet ──────────────────────────────────────────────────────────
+   The system picker has no camera entry point on any platform, so "+" cannot go straight to
+   it without dropping "shoot one more" out of the add-more path. Two labelled options instead.
+   CENTRED, unlike our other sheet headers: the two option tiles are centred, so left-aligning
+   only the text left it hanging off to one side of its own content. */
+.cp-addsheet { padding: 2px 0 6px; }
+.cp-addttl { font: 900 15px var(--font); color: var(--text-primary); text-align: center; }
+/* The remaining budget. This is the ONLY place it can be stated — the picker is not ours to
+   write in — and it must be singular at one ("1 more photo"), which is the most-read case. */
+.cp-addsub { margin-top: 2px; font: 600 12px var(--font); color: var(--text-tertiary); text-align: center; }
+.cp-addopts { display: flex; justify-content: space-evenly; margin-top: 14px; }
+.cp-addopt { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cp-addopt b { font: 700 12px var(--font); color: var(--text-secondary); }
+.cp-addico { width: 60px; height: 60px; border-radius: 20px; background: var(--surface-alt); color: var(--text-secondary); display: grid; place-items: center; }

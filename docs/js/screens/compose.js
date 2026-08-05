@@ -12,7 +12,8 @@
 window.Composer = (function () {
   const I = (n, s) => window.Icons.svg(n, s);
   const S = window.Social, ACT = S.ACT, fmt = S.fmt, grad = S.grad;
-  const MAX = 10;
+  // ONE definition of the rules and the limit, shared with capture and any future surface.
+  const MR = window.MediaRules, MAX = MR.MAX_IMAGES;
   const IMGG = ["linear-gradient(135deg,#e6a4c4,#b65a86)", "linear-gradient(135deg,#9ec5e0,#4c7fb0)", "linear-gradient(135deg,#a6d6b8,#4f9e73)",
     "linear-gradient(135deg,#e6c9a0,#b58a4e)", "linear-gradient(135deg,#c3b3e6,#6f5ac0)", "linear-gradient(135deg,#f0b49a,#d1683e)",
     "linear-gradient(135deg,#9bd6cf,#3f9a8c)", "linear-gradient(135deg,#c9c19b,#8a7d4e)"];
@@ -20,14 +21,8 @@ window.Composer = (function () {
   const TRACKS = ["Rise Up — Aylo", "Focus Flow — Kbeats", "Momentum — Trilo", "Golden Hour — Nova", "Push It — Rythm"];
   const EMO = ["💪", "🔥", "🏆", "⚡", "😤", "🎯", "👏", "🥵", "✅", "🚀"];
 
-  // device gallery (newest first) — images + videos
-  const GALLERY = [
-    { type: "video", ex: "squat", dur: 42 }, { type: "image", g: IMGG[0] }, { type: "image", g: IMGG[1] },
-    { type: "video", ex: "pushup", dur: 28 }, { type: "image", g: IMGG[2] }, { type: "image", g: IMGG[3] },
-    { type: "video", ex: "jumping", dur: 15 }, { type: "image", g: IMGG[4] }, { type: "image", g: IMGG[5] },
-    { type: "video", ex: "lunge", dur: 51 }, { type: "image", g: IMGG[6] }, { type: "image", g: IMGG[7] },
-    { type: "image", g: IMGG[1] }, { type: "image", g: IMGG[3] }, { type: "video", ex: "situp", dur: 33 },
-  ];
+  // NO local media library here any more: the device's photos live behind the system picker
+  // (components/photo-picker.js), which owns the only stand-in library in the prototype.
   const assetG = (a) => a.type === "video" ? (a.ex ? exG(a.ex) : a.g) : a.g;
   const mmss = (s) => Math.floor(s / 60) + ":" + String(Math.round(s % 60)).padStart(2, "0");
   const COLORS = ["#ffffff", "#111111", "#ef4444", "#f59e0b", "#fde047", "#22c55e", "#3b82f6", "#a855f7", "#ec4899"];
@@ -35,55 +30,50 @@ window.Composer = (function () {
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   let host, st;
-  function fresh() { return { step: "pick", filter: "all", sel: [], assets: [], idx: 0, pose: null, editorOpen: false, tool: null, selOv: -1, drawing: false, brush: { color: "#ffffff", size: 6 }, targets: { profile: true, challenges: [] } }; }
+  function fresh() { return { step: "edit", assets: [], idx: 0, pose: null, editorOpen: false, tool: null, selOv: -1, drawing: false, brush: { color: "#ffffff", size: 6 }, targets: { profile: true, challenges: [] } }; }
 
-  /* ═══════════ 1 · PICK ═══════════ */
-  function renderPick() {
-    const sel = st.sel, selItems = sel.map((k) => GALLERY[k]);
-    const hasVideo = selItems.some((x) => x.type === "video"), hasImage = selItems.some((x) => x.type === "image");
-    const items = GALLERY.map((g, i) => {
-      if (st.filter === "photos" && g.type !== "image") return "";
-      if (st.filter === "videos" && g.type !== "video") return "";
-      const order = sel.indexOf(i);
-      const disabled = order < 0 && ((g.type === "video" && sel.length > 0) || (g.type === "image" && hasVideo) || (g.type === "image" && sel.length >= MAX));
-      return `<button class="cp-tile${order >= 0 ? " on" : ""}${disabled ? " off" : ""}" style="background-image:${assetG(g)}" onclick="Composer.pick(${i})">
-        ${g.type === "video" ? `<span class="cp-vbadge">${I("play", 11)} ${mmss(g.dur)}</span>` : ""}
-        <span class="cp-selbadge">${order >= 0 ? order + 1 : ""}</span></button>`;
-    }).join("");
-    const tab = (k, l) => `<button class="cp-ftab ${st.filter === k ? "on" : ""}" onclick="Composer.filter('${k}')">${l}</button>`;
-    const rule = hasVideo ? "1 video selected · videos can't be mixed with photos" : hasImage ? `${sel.length} / ${MAX} photos` : "Select up to 10 photos, or 1 video";
-    host.innerHTML = `<div class="cp-pick">
-      <div class="cp-top">
-        <button class="cp-x" onclick="Composer.cancel()">${I("x", 20)}</button>
-        <div class="cp-ttl">New post</div>
-        <button class="cp-next ${sel.length ? "" : "dis"}" onclick="Composer.toEdit()">Next</button>
-      </div>
-      <div class="cp-ftabs">${tab("all", "Recent")}${tab("photos", "Photos")}${tab("videos", "Videos")}</div>
-      <div class="cp-grid">
-        <button class="cp-tile cam" onclick="Composer.capture()"><span>${I("camera", 24)}<b>Camera</b></span></button>
-        ${items}</div>
-      <div class="cp-pickbar"><span class="cp-rule">${I("images", 14)} ${rule}</span></div>
-    </div>`;
-    window.Icons.init(host);
+  /* ═══════════ 1 · PICK — the SYSTEM picker, not a screen of ours ═══════════
+     There is deliberately no PICK step in the composer any more. Picking is the platform's
+     photo picker, opened OVER whatever launched it, so it never becomes a place in the flow:
+     dismissing it returns you to the camera or the preview you came from with the selection
+     untouched. See components/photo-picker.js for why (Play policy) and the contract. */
+  function openPicker(after) {
+    const left = MR.remaining(st.assets);
+    if (st.assets.some((a) => a.type === "video")) return warn(MR.MSG.NO_MIXING);
+    if (left <= 0) return warn(MR.MSG.LIMIT_REACHED);
+    window.SystemPhotoPicker.open({
+      // The REMAINING allowance, so the cap is enforced inside the picker. 1 → single-select.
+      maxItems: left,
+      // Once anything is held, a video could only be refused on return — so don't offer one.
+      imagesOnly: st.assets.length > 0,
+      onPick: (picked) => { absorb(picked); if (after) after(); },
+    });
   }
-  function pick(i) {
-    const g = GALLERY[i], sel = st.sel, at = sel.indexOf(i);
-    if (at >= 0) { sel.splice(at, 1); return renderPick(); }
-    const selItems = sel.map((k) => GALLERY[k]), hasVideo = selItems.some((x) => x.type === "video");
-    if (g.type === "video") { if (sel.length) return warn("Upload either multiple images or a single video only."); sel.push(i); }
-    else { if (hasVideo) return warn("Only one video allowed — you can't mix photos and video."); if (sel.length >= MAX) return warn("Maximum 10 images allowed."); sel.push(i); }
-    renderPick();
+
+  /* Fold a picker result into the draft. The picker enforced the COUNT; the photos-XOR-video
+     rule cannot be expressed to it, so it is applied here — and every dropped item is
+     reported, never silently discarded. */
+  function absorb(picked) {
+    const incoming = picked.map((g, n) => asset(g, st.assets.length + n));
+    const { selection, message } = MR.merge(st.assets, incoming);
+    st.assets = selection;
+    if (message) warn(message);
+    // Nothing landed and nothing was already held → there is no preview to show. Go back to the
+    // camera rather than leave a blank stage (the composer has no gallery step to fall back on).
+    if (!st.assets.length) { location.href = "capture.html?purpose=post"; return; }
+    if (st.idx >= st.assets.length) st.idx = st.assets.length - 1;
+    st.step = "edit";
+    renderEdit();
   }
-  const warn = (m) => Buzzend.alert({ icon: "alert", title: "Can't add that", message: m });
-  function filter(k) { st.filter = k; renderPick(); }
+  function asset(g, n) {
+    return { id: "a" + (g._li != null ? g._li : "c") + "_" + n, type: g.type, ex: g.ex, g: g.g, dur: g.dur || 0,
+      muted: false, speed: 1, bg: null, overlays: [], edited: false };
+  }
+  // Selection-rule feedback is a TOAST, not a dialog: it explains why something did not land,
+  // which the user can already see — a dialog would demand a tap to acknowledge a fact.
+  const warn = (m) => Buzzend.toast(m);
   function capture() { location.href = "capture.html?purpose=post"; }
   function cancel() { location.href = "home-v7.html"; }
-
-  function toEdit() {
-    if (!st.sel.length) return;
-    st.assets = st.sel.map((k, n) => { const g = GALLERY[k]; return { id: "a" + k + "_" + n, type: g.type, ex: g.ex, g: g.g, dur: g.dur || 0, muted: false, speed: 1, bg: null, overlays: [], edited: false }; });
-    st.idx = 0; st.step = "edit"; renderEdit();
-  }
 
   /* ═══════════ 2 · EDIT (PreviewScreen) ═══════════ */
   function overlayHtml(o, k) {
@@ -144,14 +134,43 @@ window.Composer = (function () {
     if (a.edited || a.overlays.length) Buzzend.confirm({ icon: "trash", danger: true, title: "Discard changes?", message: "Selected media will be removed.", confirmLabel: "Remove", onConfirm: doIt });
     else doIt();
   }
+  /* "+" raises a Camera / Gallery sheet rather than going straight to the picker.
+     The system picker has NO camera entry point on any platform, so a "+" wired directly to
+     it would remove "shoot one more" from the add-more path entirely — reachable only by
+     backing out of the preview. Two labelled options, one tap deeper. The sheet is also the
+     only place the remaining budget can be stated, since the picker is not ours to write in. */
   function addMore() {
-    if (st.assets.length && st.assets[0].type === "video") return warn("You can't add more to a video post.");
-    st.step = "pick"; st.sel = st.assets.map((a) => GALLERY.findIndex((g) => (g.type === a.type && (g.g === a.g || g.ex === a.ex)))).filter((x) => x >= 0); renderPick();
+    const left = MR.remaining(st.assets);
+    // Unreachable via the "+" (it is hidden for a video post and at the cap) — but answered
+    // rather than ignored, because a control that does nothing is worse than one that explains.
+    if (left <= 0) return warn(st.assets.some((a) => a.type === "video") ? MR.MSG.NO_MIXING : MR.MSG.LIMIT_REACHED);
+    Buzzend.sheet({
+      html: `<div class="cp-addsheet">
+        <div class="cp-addttl">Add to post</div>
+        <div class="cp-addsub">${MR.remainingLabel(left)}</div>
+        <div class="cp-addopts">
+          <button class="cp-addopt" onclick="Buzzend.closeTop();Composer.addFromCamera()">
+            <span class="cp-addico">${I("camera", 26)}</span><b>Camera</b></button>
+          <button class="cp-addopt" onclick="Buzzend.closeTop();Composer.addFromGallery()">
+            <span class="cp-addico">${I("images", 26)}</span><b>Gallery</b></button>
+        </div></div>`,
+    });
+    window.Icons.init(document.body);
   }
+  // Camera: hand off to the capture screen in ADD-MORE shape (see capture.js `adding`) — only
+  // a photo is valid there, and leaving it must return to this draft rather than close the flow.
+  function addFromCamera() {
+    sessionStorage.setItem("bz-compose-draft", JSON.stringify(st.assets.map((a) => ({ type: a.type, g: a.g, ex: a.ex, dur: a.dur }))));
+    location.href = "capture.html?purpose=post&adding=1";
+  }
+  function addFromGallery() { openPicker(); }
+
   function back() {
     const edited = st.assets.some((a) => a.edited || a.overlays.length);
-    const doIt = () => { st.step = "pick"; renderPick(); };
-    if (edited) Buzzend.confirm({ icon: "alert", danger: true, title: "Discard changes?", message: "Your edits to this post will be lost.", confirmLabel: "Discard", onConfirm: doIt });
+    // Leaving the preview abandons the draft, so it confirms — and there is no PICK step to
+    // fall back to any more, which is why this exits the composer rather than stepping back.
+    const doIt = () => { location.href = "home-v7.html"; };
+    if (edited) Buzzend.confirm({ icon: "alert", danger: true, title: "Discard post?", message: "This draft won't be posted.", confirmLabel: "Discard", onConfirm: doIt });
     else doIt();
   }
 
@@ -371,13 +390,24 @@ window.Composer = (function () {
     } else if (opts.from === "capture") {   // assets handed over from the Capture screen
       let arr = []; try { arr = JSON.parse(sessionStorage.getItem("bz-compose-assets") || "[]"); } catch (e) {}
       sessionStorage.removeItem("bz-compose-assets");
-      if (!arr.length) { renderPick(); return; }
+      if (!arr.length) { openPicker(); return; }
       st.assets = arr.map((a, n) => ({ id: "c" + n, type: a.type, g: a.g, dur: a.dur || 0, muted: false, speed: 1, bg: null, overlays: [], edited: false }));
       st.idx = 0; st.step = "edit"; renderEdit();
-    } else { renderPick(); }
+    } else if (opts.from === "adding") {  // returning from the add-more camera, draft intact
+      let arr = []; try { arr = JSON.parse(sessionStorage.getItem("bz-compose-draft") || "[]"); } catch (e) {}
+      sessionStorage.removeItem("bz-compose-draft");
+      st.assets = arr.map((a, n) => ({ id: "d" + n, type: a.type, g: a.g, ex: a.ex, dur: a.dur || 0, muted: false, speed: 1, bg: null, overlays: [], edited: false }));
+      st.idx = 0; st.step = "edit";
+      if (st.assets.length) renderEdit(); else openPicker();
+    } else {
+      // Entering the composer with NOTHING now redirects to the camera, because that is the
+      // flow's real entry point: capture → (picker over it) → preview. Opening a picker over an
+      // empty composer would leave a blank stage behind it, and a dismissal with nowhere to go.
+      location.href = "capture.html?purpose=post";
+    }
   }
 
-  return { start, pick, filter, capture, cancel, toEdit, go, remove, addMore, back, openEditor, closeEditor,
+  return { start, capture, cancel, go, remove, addMore, addFromCamera, addFromGallery, back, openEditor, closeEditor,
     trim, speed, music, stickers, bg, mute, setSpeed, setMusic, setBg, draw, addText, putEmo, reset,
     setColor, sizeStep, deleteSel, brushColor, brushSize, undoStroke, clearDraw,
     toPost, back2, tgProfile, tgChallenge, publish };
