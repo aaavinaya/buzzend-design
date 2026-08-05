@@ -54,7 +54,7 @@
 .sk-pills { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:8px 10px; margin-top:12px; box-shadow:var(--shadow-card); }
 .sk-pill { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:40px; cursor:pointer; }
 .sk-pill:active { background:var(--surface-alt); }
-.sk-pill .pic { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); flex:none; }
+.sk-pill .pic { width:52px; height:52px; border-radius:15px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); flex:none; }
 .sk-pill .nm { font:800 15px var(--font); color:var(--primary); }
 .sk-pill .sub { font:600 12.5px var(--font); color:var(--text-secondary); margin-top:1px; }
 .sk-pill .go { margin-left:auto; color:var(--text-tertiary); }

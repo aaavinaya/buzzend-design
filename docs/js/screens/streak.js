@@ -43,7 +43,11 @@ window.Streak = (function () {
     return `<div class="sk-sec"><div class="sk-card"><div class="sk-wkhd"><span class="h">This week</span><span class="r">${WEEK_RANGE}</span></div>
       <div class="sk-week">${DATA[state].week.map((st, i) => dayCell(st, LB[i])).join("")}</div></div></div>`;
   }
-  const pill = (w) => `<div class="sk-pill" onclick="Streak.record('${w.i}')"><div class="pic">${I(w.i, 22)}</div><div style="flex:1"><div class="nm">${w.n}</div><div class="sub">${w.sub}</div></div><span class="go">${I("chevron", 18)}</span></div>`;
+  // 22 → 44px in a 40 → 52px tile (app 2026-08-05: "not clearly visible"). This is the REAL family —
+  // the detailed full-colour figure — which is precisely the one that needs the size: at 22px its
+  // 27-to-61 paths had nothing to read. The pill is a full-width row with two lines of text beside it,
+  // so it has the room; the row grows and the card holds two or three of them.
+  const pill = (w) => `<div class="sk-pill" onclick="Streak.record('${w.i}')"><div class="pic">${I(w.i, 44)}</div><div style="flex:1"><div class="nm">${w.n}</div><div class="sub">${w.sub}</div></div><span class="go">${I("chevron", 18)}</span></div>`;
   const pillsCard = () => `<div class="sk-pills">${WORKOUTS.map((w, i) => pill(w) + (i < WORKOUTS.length - 1 ? '<div class="sk-or">OR</div>' : "")).join("")}</div>`;
 
   function inviteCard() {

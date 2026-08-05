@@ -394,7 +394,12 @@ window.HomePro = (function () {
     }
 
     if (layout === "rail") {
-      const cards = d.sessions.map((s) => `<div class="cw-card"><div class="cw-ic">${I(s.i, 22)}</div>
+      // PLAIN (the flat orange figure) at 30px, not the detailed illustration at 22 (app 2026-08-05).
+      // REAL is a 27-to-61-path full-colour drawing and this tile is 34px: at that size its detail
+      // collapses into a coloured smudge, and its per-exercise palette fought the accent tint behind it.
+      // Home therefore shows three families at once — this rail plain, the challenge rail real, friends'
+      // activity outlined — which is deliberate per-section: "never mixed" is about one BLOCK of icons.
+      const cards = d.sessions.map((s) => `<div class="cw-card"><div class="cw-ic">${window.Icons.workout(s.i, 30, "plain")}</div>
         <div class="cw-n">${s.n}</div><div class="cw-reps">${s.reps}<span> reps</span></div>
         <div class="cw-meta">${s.kcal} kcal</div></div>`).join("");
       const add = `<div class="cw-card cw-add" onclick="HomeData.startWorkout('another')">${I("plus", 22)}<div>Start<br>another</div></div>`;

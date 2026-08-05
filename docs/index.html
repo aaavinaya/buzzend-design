@@ -413,6 +413,41 @@
 
       <div class="cl-entry">
         <div class="cl-head"><span class="cl-date">2026-08-05</span>
+          <h3>The exercise figures are bigger, and Today&rsquo;s workouts wears the flat orange set</h3></div>
+        <p class="cl-body">Reported from a device three rounds running: the exercise artwork reads as too small
+          for the box around it. This entry is the prototype catching up with the numbers the app landed, so the
+          reference stops being the smaller one. Sizes are the <b>slot</b>; how much of it a figure fills still
+          comes from the equal-<em>area</em> rule in <code>icons.js</code>, so a landscape sit-up fills its slot
+          and a near-square lunge draws at ~69% of it &mdash; that difference is deliberate.</p>
+        <p class="cl-body"><b>Create challenge.</b> Picker grid figure <code>48 &rarr; 58</code>, review-step
+          preview <code>44 &rarr; 56</code> in its 72 tile. The grid&rsquo;s box is <em>unchanged</em> at 112
+          tall: the room came out of the tile padding (<code>12 &rarr; 6</code>, label margin
+          <code>8 &rarr; 6</code>), because &ldquo;the box looks too large for the icon&rdquo; is not answered by
+          growing the box.</p>
+        <p class="cl-body"><b>Challenge rows.</b> Profile&rsquo;s row tile <code>44 &rarr; 58</code> with the
+          figure <code>18 &rarr; 46</code>, and vertical padding <code>12 &rarr; 9</code> &mdash; the row&rsquo;s
+          height is set by the tile, not the text, so trimming the padding while the figure grows buys a bigger
+          drawing <em>and</em> a shorter row. These are now pinned to the same numbers as the app&rsquo;s
+          my-challenges see-all, which is the same card in another place; the two had drifted 12 apart.</p>
+        <p class="cl-body"><b>Streak.</b> The &ldquo;pick one workout&rdquo; pills go
+          <code>40 &rarr; 52</code> tile / <code>22 &rarr; 44</code> figure. This surface keeps the
+          <b>real</b> family and it is the one that most needed the size: at 22 a 27-to-61-path full-colour
+          drawing has nothing to read.</p>
+        <p class="cl-body"><b>Today&rsquo;s workouts &mdash; a family change, not a size change.</b> That rail
+          and its see-all (the workout log) switch from <b>real</b> to <b>plain</b>, the flat orange figure, at
+          <code>30</code> in a 34 tile. At tile size the detailed drawing collapses into a coloured smudge, and
+          its per-exercise palette fought the accent tint behind it. Home therefore shows three families at
+          once &mdash; this rail plain, the challenge rail real, friends&rsquo; activity outlined. That is
+          deliberate: &ldquo;never mix families&rdquo; governs one <em>block</em> of icons, not one scroll view.</p>
+        <p class="cl-body"><b>Not changed, and now worth a decision.</b> The challenge cards on Home and in
+          my-challenges still draw the exercise as a 16 corner <em>badge</em> on the progress ring, while the app
+          draws it centred <em>inside</em> the ring at 44-in-68. At that gap it is not one mark at two sizes, it
+          is two designs. Reconciling means dropping the % readout from the ring centre, which is a design call
+          rather than an icon change &mdash; see the note in <code>home-pro.css</code>.</p>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">2026-08-05</span>
           <h3>Media picking is the SYSTEM picker — our own gallery grid is gone</h3></div>
         <p class="cl-body"><b>This one is not a preference, it is a store requirement.</b> Google Play
           <b>rejected</b> the Android build (version code 101) under the Photo and Video Permissions policy. An
@@ -587,10 +622,17 @@
       <div class="cl-entry cl-warn">
         <div class="cl-head"><span class="cl-date">KNOWN GAP</span>
           <h3>Active-challenge ring: still the prototype's structure, not the app's</h3></div>
-        <p class="cl-body">The shipped clients draw the exercise figure <em>inside</em> the progress ring at 40pt (ring 56pt) and puts the day count in the meta line. This prototype puts the <b>percentage</b> in the ring
-          centre and the exercise in a small corner badge, now grown 21 → 26px so the illustration is legible.
-          Reconciling the two means dropping the % readout — a design decision, not an icon change, so it is
-          flagged here rather than decided. Affects <code>.chalx</code> on Home and the my-challenges cards.</p>
+        <p class="cl-body">The shipped clients draw the exercise figure <em>inside</em> the progress ring &mdash;
+          as of 2026-08-05 at <b>44pt in a 68pt ring</b>, up from 40-in-56 &mdash; and put the day count in the
+          meta line. This prototype puts the <b>percentage</b> in the ring centre and the exercise in a small
+          corner badge, grown 21 → 26px so the illustration is legible. Reconciling the two means dropping the %
+          readout &mdash; a design decision, not an icon change, so it is flagged here rather than decided.
+          Affects <code>.chalx</code> on Home and the my-challenges cards.</p>
+        <p class="cl-body"><b>This gap widened on 2026-08-05 and is no longer cosmetic.</b> A 16px corner badge
+          against a 44pt centred figure is not one mark at two sizes, it is two designs, and the same round
+          pinned the app's my-challenges see-all to a flat 58pt tile (figure 46) rather than a ring at all. So
+          the two challenge-card surfaces now diverge from this prototype in <em>structure</em>, not just in
+          scale. Worth resolving deliberately, in either direction.</p>
       </div>
     </div>
 

@@ -84,8 +84,15 @@
 /* ── challenges list ── */
 .pf-sublbl { font:800 12px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); margin:4px 2px 11px; }
 .pf-sublbl:not(:first-child) { margin-top:20px; }
-.pf-chl { display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--border); border-radius:15px; padding:12px 13px; box-shadow:var(--shadow-card); margin-bottom:10px; cursor:pointer; }
-.pf-chl .ci { width:44px; height:44px; border-radius:13px; display:grid; place-items:center; flex:none; }
+/* Vertical padding 12 → 9px with the tile below going 44 → 58px (app 2026-08-05). The row's height is
+   set by that tile, not by the text, so the padding was pure air above and below a square: trimming it
+   while the figure grows buys a bigger drawing AND a shorter row. */
+.pf-chl { display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--border); border-radius:15px; padding:9px 13px; box-shadow:var(--shadow-card); margin-bottom:10px; cursor:pointer; }
+/* Tile 44 → 58px, figure 18 → 46px (app 2026-08-05). Pinned to the same numbers the app's
+   MyChallengesScreen card uses — this row and that one are the same card in two places, and they had
+   drifted 12px apart. 46-in-58 leaves 6px of tint around even the widest asset (the sit-up draws its
+   full slot width), which is as tight as the rounded corners take. */
+.pf-chl .ci { width:58px; height:58px; border-radius:16px; display:grid; place-items:center; flex:none; }
 .pf-chl .cm { flex:1; min-width:0; }
 .pf-chl .cn { font:900 14.5px var(--font); color:var(--text-primary); }
 .pf-chl .cd { font:700 12px var(--font); color:var(--text-secondary); margin-top:2px; }

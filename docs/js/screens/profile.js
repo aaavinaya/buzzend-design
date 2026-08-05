@@ -442,7 +442,7 @@ window.Profile = (function () {
         : `Day ${x.day} / ${x.days} · ${fmt(x.myReps)} reps`;
       const bar = (up || done) ? "var(--text-tertiary)" : m.c;
       return `<div class="pf-chl" onclick="location.href='challenge-detail.html?role=${c.self ? "member" : "viewer"}'">
-        <div class="ci" style="color:${m.c};background:color-mix(in srgb,${m.c} 14%,transparent)">${I(m.i, 18)}</div>
+        <div class="ci" style="color:${m.c};background:color-mix(in srgb,${m.c} 14%,transparent)">${I(m.i, 46)}</div>
         <div class="cm"><div class="cn">${x.n}</div><div class="cd">${meta}</div>
           <div class="cbar"><i style="width:${up ? 0 : Math.max(pct, 2)}%;background:${bar}"></i></div></div></div>`;
     };
