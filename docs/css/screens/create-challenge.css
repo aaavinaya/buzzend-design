@@ -20,13 +20,38 @@
 
 /* quick-start chips */
 .cc-chips { display:flex; flex-wrap:wrap; gap:10px; }
+
+/* Quick start: a TWO-ROW carousel that scrolls sideways, not a wrapping row. With nine presets a wrapping
+   `.cc-chips` grew to five stacked rows and pushed the exercise grid — the actual subject of step 1 — below
+   the fold. `grid-auto-flow:column` over two fixed rows is the CSS equivalent of the app's `chunked(2)`
+   column-major fill, so the list order reads top->bottom then across, and the section stays a constant
+   height however many templates are added later. The horizontal cut edge is what signals there are more. */
+.cc-quick { display:grid; grid-auto-flow:column; grid-template-rows:auto auto; gap:10px;
+  overflow-x:auto; overflow-y:hidden; padding-bottom:8px;
+  justify-content:start; grid-auto-columns:max-content;
+  scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--text-tertiary) 55%,transparent) transparent;
+  overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+/* The scrollbar is DELIBERATELY visible. It was hidden at first, which is fine on the phone (you just swipe)
+   but left desktop with no affordance and no way to drag — the prototype is mostly read in a desktop browser,
+   and a vertical mouse wheel does nothing to a horizontal container. Slim, but there. `create-challenge.js`
+   also maps a vertical wheel onto horizontal scroll for trackpads. */
+.cc-quick::-webkit-scrollbar { height:6px; }
+.cc-quick::-webkit-scrollbar-track { background:transparent; }
+.cc-quick::-webkit-scrollbar-thumb { background:color-mix(in srgb,var(--text-tertiary) 45%,transparent); border-radius:99px; }
+.cc-quick::-webkit-scrollbar-thumb:hover { background:color-mix(in srgb,var(--text-tertiary) 70%,transparent); }
+.cc-quick .cc-chip { white-space:nowrap; }
+/* Only .cc-quick scrolls sideways. `.cc-body` sets overflow-y:auto, which per spec makes its overflow-x
+   compute to auto as well — so without this the whole step could pan horizontally alongside the carousel. */
+.cc-body { overflow-x:hidden; }
 .cc-chip { display:inline-flex; align-items:center; gap:7px; padding:10px 15px; border-radius:99px; border:1.5px solid var(--border); background:var(--surface); font:800 13.5px var(--font); color:var(--text-primary); cursor:pointer; transition:.12s; }
 .cc-chip.on { border-color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); }
 .cc-chip:active { transform:scale(.97); }
 
 /* exercise grid */
 .cc-ex { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-.cc-ex-c { border:1.5px solid var(--border); background:var(--surface); border-radius:var(--r-md); padding:14px 6px 11px; text-align:center; cursor:pointer; transition:.12s; }
+/* min-height tracks the app's pinned 112dp tile: the figure is 48px and a wrapping 2-line label
+   ("Jumping Jack") must still fit without making one box taller than its neighbours. */
+.cc-ex-c { border:1.5px solid var(--border); background:var(--surface); border-radius:var(--r-md); padding:12px 6px; min-height:112px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; cursor:pointer; transition:.12s; }
 .cc-ex-c:active { transform:scale(.98); }
 .cc-ex-c.on { border-color:var(--primary); background:color-mix(in srgb,var(--primary) 10%,transparent); }
 .cc-ex-c .ic { color:var(--text-secondary); display:flex; justify-content:center; }

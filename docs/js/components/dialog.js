@@ -96,6 +96,13 @@
     return build(Object.assign({ sheet: true }, opts));
   };
 
+  /* Dismiss the topmost dialog/sheet. Lets a sheet's own buttons close it before acting —
+     a chooser sheet must be gone before whatever it chose appears over the same spot. */
+  window.Buzzend.closeTop = function () {
+    const all = document.querySelectorAll(".bz-overlay");
+    if (all.length) close(all[all.length - 1]);
+  };
+
   // non-dismissible loading dialog → returns a handle with .close()
   window.Buzzend.loading = function (message) {
     const { overlay, dialog } = build({ closeBtn: false, message });
@@ -103,5 +110,28 @@
     sp.className = "bz-spinner";
     dialog.insertBefore(sp, dialog.firstChild);
     return { close: () => close(overlay) };
+  };
+
+  /* Toast — a one-line, self-dismissing nudge.
+     Use this, NOT alert(), when the app is only telling the user why something did not
+     happen. A dialog demands a tap to acknowledge a fact they can already see (the photo
+     they picked is not in the post), which is friction for nothing. Media-selection rules
+     are the canonical case. Keep the message to one short clause; anything needing more
+     words than a second of reading affords wants a different surface. */
+  let toastEl = null, toastTimer = null;
+  window.Buzzend.toast = function (message, ms) {
+    if (toastTimer) clearTimeout(toastTimer);
+    if (toastEl) toastEl.remove();
+    const h = host();
+    toastEl = document.createElement("div");
+    toastEl.className = "bz-toast";
+    toastEl.setAttribute("role", "status");
+    toastEl.textContent = message;
+    h.appendChild(toastEl);
+    const node = toastEl;
+    toastTimer = setTimeout(() => {
+      node.classList.add("out");
+      setTimeout(() => { if (node === toastEl) { node.remove(); toastEl = null; } }, 200);
+    }, ms || 2000);
   };
 })();

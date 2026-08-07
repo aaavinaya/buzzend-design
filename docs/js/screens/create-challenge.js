@@ -3,19 +3,48 @@
    · Step 3 review + launch. Full validation, templates, discard-confirm. */
 window.CC = (function () {
   const I = (n, s) => window.Icons.svg(n, s);
+  /* The wizard uses ONE exercise family throughout — PLAIN, the flat orange figure — matching the app's
+     `CreateChallengeScreen.CREATE_ART_STYLE = WorkoutArtStyle.PLAIN`. Two drawings of the same squat in
+     different families on one screen is exactly what the shared art registry exists to prevent, so the
+     choice is pinned here rather than repeated at each call. */
+  const EXA = (n, s) => window.Icons.workout(n, s, "plain");
 
+  /* CANONICAL ORDER — the app's `WorkoutType` declaration order, which every list in the app now uses:
+     Steps · Push-ups · Squats · Sit-ups · Jumping Jacks · Lunges. `GET /workouts` actually returns jumping
+     jacks BEFORE sit-ups; the app normalises that once at the catalog cache rather than trusting the
+     endpoint, so this grid, the Discover category chips and the pose/streak lists all agree. Do not reorder
+     to match a server response. */
   const EX = [
-    { key: "squat", n: "Squats", i: "squat" }, { key: "pushup", n: "Push-ups", i: "pushup" },
-    { key: "situp", n: "Sit-ups", i: "situp" }, { key: "lunge", n: "Lunges", i: "lunge" },
-    { key: "jumping", n: "Jumping Jacks", i: "jumping" }, { key: "steps", n: "Walking", i: "walk" },
+    { key: "steps", n: "Walking", i: "walk" }, { key: "pushup", n: "Push-ups", i: "pushup" },
+    { key: "squat", n: "Squats", i: "squat" }, { key: "situp", n: "Sit-ups", i: "situp" },
+    { key: "jumping", n: "Jumping Jacks", i: "jumping" }, { key: "lunge", n: "Lunges", i: "lunge" },
   ];
   const exMeta = (k) => EX.find((e) => e.key === k) || EX[0];
   // quick-start templates (Flutter ChallengeTemplates)
+  /* Quick-start chip icons encode the KIND of preset — rocket = short starter, trophy = full 30-day,
+     target = hit a daily number, zap = cardio burst, wand = build your own — NOT which exercise it trains.
+     They therefore repeat across chips, and that is the point: it groups the presets into the choice the
+     user is actually making, and the exercise is already in the label and drawn in the grid right below.
+     Using the exercise figure here was tried in the app and rejected (2026-08-03): the chip and the grid
+     tile showed the same drawing twice, and the two squat presets became indistinguishable from each other
+     since only duration separates them. Keep these as line marks. */
+  /* NINE presets, matching the app's `QUICK_TEMPLATES`. Each of the six exercises has exactly one, EXCEPT
+     squats and push-ups, which carry a starter + a full 30-day version so the duration is part of the choice.
+     (The app went 4 -> 10 -> 9: ten read as too many because the doubling looked arbitrary.)
+
+     ORDER IS THE LAYOUT. `.cc-quick` is a two-row carousel that fills COLUMN-MAJOR, so consecutive pairs sit
+     above one another — which is why each exercise's two variants are adjacent here. `custom` is last so it
+     lands alone in the final column. */
   const QUICK = [
-    { id: "squat_30day", ic: "squat", label: "30-day squat", ex: "squat", name: "30-Day Squat Challenge", desc: "Do squats every day for 30 days. Camera verification required.", dur: 30, winner: "NORMAL_WINNER" },
-    { id: "pushup_30day", ic: "pushup", label: "Push-up challenge", ex: "pushup", name: "30-Day Push-up Challenge", desc: "Build upper body strength with daily push-ups.", dur: 30, winner: "NORMAL_WINNER" },
-    { id: "walk_10k", ic: "walk", label: "10k steps daily", ex: "steps", name: "10,000 Steps Daily Challenge", desc: "Walk 10,000 steps every day for 30 days.", dur: 30, winner: "NORMAL_WINNER" },
-    { id: "custom", ic: "flame", label: "Custom", ex: null, name: "", desc: "", dur: 30, winner: "NO_WINNER" },
+    { id: "squat_7day", ic: "rocket", label: "7-day squats", ex: "squat", name: "7-Day Squat Kickstart", desc: "A week of daily squats to get started.", dur: 7, winner: "NORMAL_WINNER" },
+    { id: "squat_30day", ic: "trophy", label: "30-day squats", ex: "squat", name: "30-Day Squat Challenge", desc: "Do squats every day for 30 days. Camera verification required.", dur: 30, winner: "NORMAL_WINNER" },
+    { id: "pushup_beginner", ic: "rocket", label: "Beginner push-ups", ex: "pushup", name: "14-Day Push-up Starter", desc: "Ease into daily push-ups over two weeks.", dur: 14, winner: "NORMAL_WINNER" },
+    { id: "pushup_30day", ic: "trophy", label: "30-day push-ups", ex: "pushup", name: "30-Day Push-up Challenge", desc: "Build upper body strength with daily push-ups.", dur: 30, winner: "NORMAL_WINNER" },
+    { id: "walk_10k", ic: "target", label: "10k steps daily", ex: "steps", name: "10,000 Steps Daily Challenge", desc: "Walk 10,000 steps every day for 30 days.", dur: 30, winner: "NORMAL_WINNER" },
+    { id: "situp_30day", ic: "trophy", label: "30-day sit-ups", ex: "situp", name: "30-Day Sit-up Challenge", desc: "Build core strength with daily sit-ups.", dur: 30, winner: "NORMAL_WINNER" },
+    { id: "jjack_14day", ic: "zap", label: "Jumping jacks", ex: "jumping", name: "14-Day Jumping Jack Blast", desc: "Two weeks of daily jumping jacks to get the heart going.", dur: 14, winner: "NORMAL_WINNER" },
+    { id: "lunge_30day", ic: "trophy", label: "30-day lunges", ex: "lunge", name: "30-Day Lunge Challenge", desc: "Daily lunges for stronger legs over 30 days.", dur: 30, winner: "NORMAL_WINNER" },
+    { id: "custom", ic: "wand", label: "Custom", ex: null, name: "", desc: "", dur: 30, winner: "NO_WINNER" },
   ];
   const FREQ = [{ v: "DAILY", n: "Daily" }, { v: "WEEKLY", n: "Weekly" }, { v: "ONE_TIME", n: "One-time" }];
   const DURS = [7, 14, 30, 60];
@@ -51,6 +80,20 @@ window.CC = (function () {
     document.getElementById("app").innerHTML = header() + body() + footer();
     window.Icons.init(document.getElementById("app"));
   }
+
+  /* Vertical wheel -> horizontal scroll over the quick-start carousel. Registered ONCE on document (the step
+     re-renders on every state change, so a listener on the element itself would be lost), and it only claims
+     the event when that row actually has somewhere to go — otherwise the page must keep scrolling normally. */
+  document.addEventListener("wheel", (ev) => {
+    const row = ev.target.closest && ev.target.closest(".cc-quick");
+    if (!row) return;
+    const max = row.scrollWidth - row.clientWidth;
+    if (max <= 0) return;
+    const d = Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : ev.deltaY;
+    if ((d < 0 && row.scrollLeft <= 0) || (d > 0 && row.scrollLeft >= max)) return;  // let the page take over
+    row.scrollLeft += d;
+    ev.preventDefault();
+  }, { passive: false });
   function header() {
     return `<div class="cc-head"><div class="cc-htop"><button class="cc-back" onclick="CC.tryExit()">${I("back", 22)}</button>
       <div class="t">Create Challenge</div><div class="cc-step">Step ${S.step + 1} of 3</div></div>
@@ -60,10 +103,10 @@ window.CC = (function () {
 
   function step1() {
     const chip = (q) => `<button class="cc-chip ${S.template === q.id ? "on" : ""}" onclick="CC.applyTemplate('${q.id}')">${I(q.ic, 15)} ${q.label}</button>`;
-    const exc = (e) => `<button class="cc-ex-c ${S.exercise === e.key ? "on" : ""}" onclick="CC.pickEx('${e.key}')"><span class="ic">${I(e.i, 26)}</span><span class="n">${e.n}</span></button>`;
+    const exc = (e) => `<button class="cc-ex-c ${S.exercise === e.key ? "on" : ""}" onclick="CC.pickEx('${e.key}')"><span class="ic">${EXA(e.i, 48)}</span><span class="n">${e.n}</span></button>`;
     return `<div class="cc-body">
       <div class="cc-h1">What's the challenge?</div><div class="cc-sub">Pick an exercise and give it a name</div>
-      <div class="cc-lbl">Quick start</div><div class="cc-chips">${QUICK.map(chip).join("")}</div>
+      <div class="cc-lbl">Quick start</div><div class="cc-quick">${QUICK.map(chip).join("")}</div>
       <div class="cc-lbl">Exercise type</div><div class="cc-ex">${EX.map(exc).join("")}</div>
       ${S.err.exercise ? `<div class="cc-err" style="margin-top:9px">${S.err.exercise}</div>` : ""}
       <div class="cc-lbl">Challenge name</div>
@@ -106,6 +149,12 @@ window.CC = (function () {
       <div class="cc-prize-hint">${S.prizes.length}/3 · rewards for the top finishers</div>`;
   }
 
+  /* STEP 3 DRAWS THE EXERCISE FIGURE ONCE. It used to appear three times — the 72px preview tile, a 13px
+     copy in the chip right beside it, and a third in the Summary "Exercise" row. The tile is the one that
+     earns it (it is the preview's subject and big enough to read); the chip is now text-only, and the summary
+     row uses the generic `dumbbell` line mark like every other row in that table. Zap was tried there first
+     and rejected — dumbbell is the only mark that literally means "exercise" and collides with nothing
+     (flame = streaks, target = the 10k quick-start chip, medal = the Winner row's trophy). */
   function step3() {
     const e = exMeta(S.exercise), days = S.dur, name = S.name.trim() || "Your challenge";
     const row = (ic, k, v) => `<div class="cc-sum-row"><span class="sic">${I(ic, 16)}</span><span class="sk">${k}</span><span class="sv">${v}</span></div>`;
@@ -114,12 +163,12 @@ window.CC = (function () {
     return `<div class="cc-body">
       <div class="cc-h1">Review your challenge</div><div class="cc-sub">Looks good? Launch it!</div>
       <div class="cc-lbl">Preview</div>
-      <div class="cc-preview"><div class="art">${I(e.i, 40)}</div><div style="min-width:0">
-        <div class="pt">${esc(name)}</div><div class="tag">${I(e.i, 13)} ${e.n}</div>
+      <div class="cc-preview"><div class="art">${EXA(e.i, 44)}</div><div style="min-width:0">
+        <div class="pt">${esc(name)}</div><div class="tag">${e.n}</div>
         <div class="meta">${freqLabel(S.frequency)} · ${S.isPublic ? "Public" : "Private"} · ${days} days</div></div></div>
       <div class="cc-lbl">Summary</div>
       <div class="cc-sum">
-        ${row(e.i, "Exercise", e.n)}${row("calendar", "Schedule", freqLabel(S.frequency))}
+        ${row("dumbbell", "Exercise", e.n)}${row("calendar", "Schedule", freqLabel(S.frequency))}
         ${row("users", "Visibility", S.isPublic ? "Public" : "Private")}${row("flag", "Duration", days + " days")}
         ${row("trophy", "Winner", winLabel(S.winner))}${row("star", "Prizes", S.prizes.length ? S.prizes.length + " prize(s)" : "None")}</div>
       <div class="cc-note"><span class="nic">${I(noteIc, 18)}</span><span class="nt">${noteTx}</span></div></div>`;

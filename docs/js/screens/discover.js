@@ -7,10 +7,14 @@ window.Discover = (function () {
   const S = window.Social, fmt = S.fmt, grad = S.grad;
 
   // workout-type categories (drives chips + trending filter)
+  /* CANONICAL ORDER — Steps · Push-ups · Squats · Sit-ups · Jumping Jacks · Lunges, the app's `WorkoutType`
+     declaration order. Both this chip row and the create-challenge grid are fed by `GET /workouts`, which
+     returns jumping jacks BEFORE sit-ups; the app sorts the catalog once at the cache fill so these two
+     lists agree with the pose picker and the profile/streak rows. Do not reorder to match the endpoint. */
   const CATS = [
-    { code: "squat", n: "Squats", i: "squat" }, { code: "pushup", n: "Push-ups", i: "pushup" },
-    { code: "situp", n: "Sit-ups", i: "situp" }, { code: "jumping", n: "Jumping Jacks", i: "jumping" },
-    { code: "lunge", n: "Lunges", i: "lunge" }, { code: "steps", n: "Walking", i: "walk" },
+    { code: "steps", n: "Walking", i: "walk" }, { code: "pushup", n: "Push-ups", i: "pushup" },
+    { code: "squat", n: "Squats", i: "squat" }, { code: "situp", n: "Sit-ups", i: "situp" },
+    { code: "jumping", n: "Jumping Jacks", i: "jumping" }, { code: "lunge", n: "Lunges", i: "lunge" },
   ];
   const labelFor = (code) => (CATS.find((c) => c.code === code) || {}).n || code;
   const iconFor = (code) => (CATS.find((c) => c.code === code) || {}).i || "trophy";
@@ -55,7 +59,7 @@ window.Discover = (function () {
   function trendingCard(t, i) {
     const a = ACC[i % ACC.length];
     return `<div class="dc-tcard" style="border:1.5px solid color-mix(in srgb,${a.c} 25%,transparent);background:linear-gradient(135deg,color-mix(in srgb,${a.c} 12%,transparent),color-mix(in srgb,${a.c} 4%,transparent))">
-      <div class="ic" style="color:${a.c}">${I(iconFor(t.code), 40)}</div>
+      <div class="ic" style="color:${a.c}">${I(iconFor(t.code), 54)}</div>
       <div class="nm">${t.title}</div>
       <div class="cnt" style="color:${a.c}"><span class="dot" style="background:${a.c}"></span>${fmt(t.members)} joining</div>
       <button class="join" style="background:${a.c};color:${a.t}" onclick="event.stopPropagation();Discover.join(this,'${t.title.replace(/'/g, "")}')">Join</button></div>`;
@@ -66,7 +70,7 @@ window.Discover = (function () {
     let inner;
     if (!list.length) {
       const single = cur.selected.length === 1 ? cur.selected[0] : null;
-      inner = `<div class="dc-empty"><div class="ei">${I(single ? iconFor(single) : "trophy", 40)}</div>
+      inner = `<div class="dc-empty"><div class="ei">${I(single ? iconFor(single) : "trophy", 54)}</div>
         <div class="et">${single ? "No " + labelFor(single) + " challenges yet" : "No challenges yet"}</div>
         <div class="ed">Use the ‘Create challenge’ button<br/>to get started.</div></div>`;
     } else {

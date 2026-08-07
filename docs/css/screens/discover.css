@@ -37,8 +37,11 @@
 .dc-chip-skel { flex:none; width:90px; height:34px; border-radius:100px; background:var(--surface-alt); }
 
 /* ── trending cards ── */
-.dc-tcard { flex:none; width:148px; min-height:180px; padding:12px; border-radius:14px; display:flex; flex-direction:column; }
-.dc-tcard .ic { height:45px; display:flex; align-items:center; }
+/* min-height 180 -> 192 with the 54px figure (was 40). That min is what keeps every card in the rail the
+   SAME height — a 1-line title would otherwise make a shorter card than a 2-line one — so it has to
+   cover the tallest content: 12 + 55 + 8 + ~35 (2-line title) + 5 + ~15 + 10 + 32 (Join) + 12 = 184. */
+.dc-tcard { flex:none; width:148px; min-height:192px; padding:12px; border-radius:14px; display:flex; flex-direction:column; }
+.dc-tcard .ic { height:55px; display:flex; align-items:center; }
 .dc-tcard .nm { font:800 14px var(--font); color:var(--text-primary); margin-top:8px; line-height:1.25;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .dc-tcard .cnt { display:flex; align-items:center; gap:5px; margin-top:5px; font:700 12px var(--font); }

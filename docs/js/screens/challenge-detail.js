@@ -105,9 +105,11 @@ window.CDetail = (function () {
   function v1() {
     return `<div class="cd1-cover"><div class="img" style="background:${C.cover}"></div>
         <button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button>
-        <span class="extag">${I(exIcon(), 13)} ${exName()}</span></div>
-      <div class="cd1-body"><div class="cd1-crow"><div class="cd1-av" style="background-image:${byGrad()}"></div>
-        <div class="who"><div class="nm">${byName()}</div><div class="role">${roleLbl()}</div></div>${mineBadge()}${badge()}</div>
+        <!-- Cover chip: 13 -> 24px, matching the app (ChallengeDetailScreen `.extag`). The illustrations are
+             equalised by AREA, so a landscape asset drew its full slot width but only ~6px tall at 13. -->
+        <span class="extag">${I(exIcon(), 24)} ${exName()}</span></div>
+      <div class="cd1-body"><div class="cd1-crow"><div class="cd1-av" style="background-image:${grad(C.byAv)}"></div>
+        <div class="who"><div class="nm">${C.by}</div><div class="role">Creator</div></div>${badge()}</div>
         <div class="cd1-meta"><span>${I("calendar", 13)} ${C.range}</span><span>${I("activity", 13)} ${C.freq}</span><span>${I(C.vis === "Public" ? "users" : "lock", 13)} ${C.vis}</span></div>
         <div class="cd1-title">${C.title}</div><div class="cd1-desc">${C.desc}</div>
         <div class="cd1-cta">${cta()}</div></div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
@@ -125,7 +127,7 @@ window.CDetail = (function () {
     const me = meEntry();
     return `<div class="cd3-hero"><div class="img" style="background:${C.cover}"></div><div class="scrim"></div>
         <div class="cd3-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
-        <span class="extag">${I(exIcon(), 13)} ${exName()}</span>
+        <span class="extag">${I(exIcon(), 24)} ${exName()}</span>
         <div class="h1">${C.title}</div>
         <div class="cd3-crow"><div class="av" style="background-image:${byGrad()}"></div><div class="nm">${byName()}</div>${mineBadge()}${badge()}</div></div>
       <div class="cd3-glass"><div class="st"><b>${fmt(C.members)}</b><span>MEMBERS</span></div><div class="st"><b>${daysLeft()}</b><span>DAYS LEFT</span></div><div class="st"><b>#${me.rank}</b><span>YOUR RANK</span></div></div>
@@ -154,7 +156,7 @@ window.CDetail = (function () {
   function v5() {
     return `<div class="cd5-cover"><div class="img" style="background:${C.cover}"></div>
         <button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button>
-        <span class="extag">${I(exIcon(), 13)} ${exName()}</span></div>
+        <span class="extag">${I(exIcon(), 24)} ${exName()}</span></div>
       <div class="cd5-card"><div class="cd5-titrow"><div class="cd5-title">${C.title}</div>${badge()}</div>
         <div class="cd5-crow"><div class="cd5-av" style="background-image:${byGrad()}"></div><div><div class="nm">${byName()}</div><div class="role">${roleLbl()}</div></div>${mineBadge()}</div>
         <div class="cd5-meta"><span>${I("calendar", 13)} ${C.range}</span><span>${I("activity", 13)} ${C.freq}</span><span>${I(C.vis === "Public" ? "users" : "lock", 13)} ${C.vis}</span><span>${I("users", 13)} ${fmt(C.members)}</span></div>
@@ -173,8 +175,8 @@ window.CDetail = (function () {
     const cell = (ic, k, v) => `<div class="cd7-cell"><div class="ic">${I(ic, 17)}</div><div style="min-width:0"><div class="k">${k}</div><div class="val">${v}</div></div></div>`;
     return `<div class="cd7-hero"><div class="img" style="background:${C.cover}"></div><div class="scrim"></div>
         <div class="cd3-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
-        <span class="extag">${I(exIcon(), 13)} ${exName()}</span><div class="h1">${C.title}</div>
-        <div class="cr"><div class="av" style="background-image:${byGrad()}"></div>${byLine()} ${badge()}</div></div>
+        <span class="extag">${I(exIcon(), 24)} ${exName()}</span><div class="h1">${C.title}</div>
+        <div class="cr"><div class="av" style="background-image:${grad(C.byAv)}"></div>by ${C.by} ${badge()}</div></div>
       <div class="cd7-grid">${cell(exIcon(), "Exercise", exName())}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", fmt(C.members))}${cell("clock", "Days left", daysLeft())}</div>
       ${about(mchip("calendar", C.range) + mchip(C.vis === "Public" ? "users" : "lock", C.vis))}
       <div class="cd7-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
