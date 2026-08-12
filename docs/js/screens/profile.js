@@ -433,6 +433,11 @@ window.Profile = (function () {
       .filter((x) => x.status === "active" || x.status === "upcoming")
       .sort((a, b) => (a.status === b.status ? 0 : a.status === "active" ? -1 : 1));
     const completed = mine.filter((x) => x.status === "ended");
+    /* One row = the shared ChallengeListCard (js/components/challenge-list-card.js) — the same card
+       the "Your challenges" see-all uses, because on device it IS the same card (`ChallengeTabCard`
+       and `MyChallengeCard` are pinned to the same numbers). This tab's own decisions are the meta
+       line (progress through the run, not settings) and the schedule bar; the chat button is
+       see-all-only, and an UPCOMING pill marks a challenge you cannot log into yet. */
     const row = (x) => {
       const m = ACT.find((a) => a.key === x.ex) || ACT[1];
       const up = x.status === "upcoming", done = x.status === "ended";
@@ -440,11 +445,14 @@ window.Profile = (function () {
       const meta = up ? `Starts in ${x.startsIn} day${x.startsIn > 1 ? "s" : ""}`
         : done ? `Ended · ${fmt(x.myReps)} of ${fmt(x.goal)} reps`
         : `Day ${x.day} / ${x.days} · ${fmt(x.myReps)} reps`;
-      const bar = (up || done) ? "var(--text-tertiary)" : m.c;
-      return `<div class="pf-chl" onclick="location.href='challenge-detail.html?role=${c.self ? "member" : "viewer"}'">
-        <div class="ci" style="color:${m.c};background:color-mix(in srgb,${m.c} 14%,transparent)">${I(m.i, 46)}</div>
-        <div class="cm"><div class="cn">${x.n}</div><div class="cd">${meta}</div>
-          <div class="cbar"><i style="width:${up ? 0 : Math.max(pct, 2)}%;background:${bar}"></i></div></div></div>`;
+      return window.ChallengeListCard.card(x, {
+        meta,
+        chip: up ? "UPCOMING" : null,
+        owner: false,
+        bar: pct,
+        barColor: (up || done) ? "var(--text-tertiary)" : m.c,
+        onClick: `location.href='challenge-detail.html?role=${c.self ? "member" : "viewer"}'`,
+      });
     };
     // Cap each section to a small preview; "See all" holds the rest (and paginates).
     const sec = (label, arr) => arr.length ? `<div class="pf-sublbl">${label}</div>${arr.slice(0, CH_PREVIEW).map(row).join("")}` : "";

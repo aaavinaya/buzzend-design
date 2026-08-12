@@ -183,8 +183,11 @@
 .cd7-hero { height:252px; position:relative; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; color:#fff; }
 .cd7-hero .img { position:absolute; inset:0; }
 .cd7-hero .scrim { position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.2),transparent 34%,rgba(0,0,0,.82)); }
-.cd7-hero .extag, .cd7-hero .h1, .cd7-hero .cr { position:relative; z-index:2; }
-.cd7-hero .extag { align-self:flex-start; background:rgba(255,255,255,.2); backdrop-filter:blur(8px); border-radius:99px; padding:6px 13px; font:800 12px var(--font); display:inline-flex; align-items:center; gap:6px; margin-bottom:10px; }
+/* No `.extag` here: the Poster's exercise chip was removed 2026-08-12 (the app first, then this). It was
+   the third statement of the exercise on one screen — the hero's own 120px illustration, then this pill,
+   then the meta grid's "EXERCISE" cell immediately below. v1/v3/v5 keep their chip; it is the only
+   exercise mark those layouts have. */
+.cd7-hero .h1, .cd7-hero .cr { position:relative; z-index:2; }
 .cd7-hero .h1 { font:900 26px var(--font); line-height:1.15; }
 .cd7-hero .cr { display:flex; align-items:center; gap:8px; margin-top:11px; font:700 12.5px var(--font); }
 .cd7-hero .cr .av { width:26px; height:26px; border-radius:50%; border:1.5px solid rgba(255,255,255,.6); flex:none; }

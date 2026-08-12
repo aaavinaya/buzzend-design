@@ -412,6 +412,63 @@
         1:1 to dp on Android and pt on iOS.</p>
 
       <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">2026-08-12</span>
+          <h3>One challenge row for every vertical list, and a bigger exercise mark on the detail screen</h3></div>
+        <p class="cl-body">Two changes, both taken from the shipped app.</p>
+        <p class="cl-body"><b>The challenge row is now ONE component.</b> Every vertical challenge list draws
+          <code>.clc</code> (<code>components/challenge-list-card.css</code> +
+          <code>components/challenge-list-card.js</code>): the exercise illustration in its accent tile, the
+          name, one meta line, and &mdash; on the see-all only &mdash; the group-chat button. Numbers are the
+          app&rsquo;s: tile <b>58</b> / figure <b>46</b> / radius <b>16</b> / padding <b>9&times;13</b> / gap
+          <b>13</b> / chat <b>38</b> rounded-11. It replaces two separate copies: <code>.mc-card</code> in
+          my-challenges (which was a second copy of Home&rsquo;s ring card) and <code>.pf-chl</code> in the
+          profile Challenges tab (already on these numbers, just declared twice).</p>
+        <p class="cl-body"><b>The see-all row therefore loses its ring, its progress bar and its
+          &ldquo;Day 12 of 30 &middot; 240 reps&rdquo; line</b>, and reads &ldquo;245 members &middot;
+          Daily&rdquo; instead. That is not a simplification for its own sake: the challenge contract carries
+          no per-user count and no goal, so the ring and the reps were both invented numbers. The profile tab
+          keeps its schedule meta and bar by passing them in &mdash; same shell, per-surface content, which is
+          the point of the component.</p>
+        <p class="cl-body"><b>Home&rsquo;s Active-challenges rail took the app&rsquo;s card too</b>
+          (<code>ActiveChallenges.kt</code>), which closes the ring gap this changelog has carried a warning
+          about since 2026-08-05. The figure moves from a 26 corner badge to <b>centred inside the ring at
+          44-in-68</b>; the ring fills to the <b>schedule fraction</b> and takes the per-exercise accent,
+          muting to grey once a challenge has ended; the card is 258&times;88 <em>fixed</em> (padding 8&times;13,
+          gap 12) so every card in the rail lines up; and the name clamps to <b>2 lines</b>, not 1. The
+          <code>%</code> in the ring centre is gone &mdash; it was <code>reps / goal</code>, and the contract
+          has neither, so the day count in the meta line replaces it. Fixture metas move to the app&rsquo;s
+          shape (&ldquo;Day 9/21 &middot; 23 members&rdquo;) and <code>p</code> now means elapsed-days, not
+          completion, so the classic card&rsquo;s label reads &ldquo;43% elapsed&rdquo; rather than
+          &ldquo;complete&rdquo;.</p>
+        <p class="cl-body"><b>Challenge detail: the poster&rsquo;s exercise CHIP is gone.</b> It read
+          &ldquo;🏃 Lunge&rdquo; over the hero, and on that layout it was the third statement of the same
+          fact: the hero already draws the exercise illustration at 120 right above it, and the meta grid&rsquo;s
+          first cell &mdash; the next thing on the screen &mdash; is literally &ldquo;EXERCISE / Lunge&rdquo;
+          with the same artwork. Nothing replaces it; the title moves up. Removed in the app first
+          (<code>ChallengeDetailScreen.kt</code>), then here.</p>
+        <p class="cl-body">Its glyph had been grown twice before that (<code>18 &rarr; 24 &rarr; 28</code>,
+          and to 34 in this prototype) chasing legibility, which in hindsight was the tell: the illustrations
+          are equalised by <em>area</em>, so a landscape asset draws its full slot WIDTH but only ~16 of
+          height even at a 34 slot. The mark wanted a slot with room, not another 4px. <b>The chip survives on
+          v1 / v3 / v5 at 34</b> &mdash; it is the only exercise mark those layouts have, since none of them
+          carries an exercise row in its meta (v1/v5 show date/frequency/visibility, v3 members/days/rank).</p>
+        <p class="cl-body"><b>The <em>Exercise</em> meta cell goes <code>17 &rarr; 28</code></b>, matching the
+          app, and is now the poster&rsquo;s only small exercise mark. The other three cells stay on 17: those
+          are stroke glyphs that fill their own box. 28 is the ceiling there &mdash; the widest asset (sit-up)
+          draws its full 28 across, leaving 3 of tint each side in the 34 tile.</p>
+        <p class="cl-body cl-mirror"><b>One consequence to keep in mind:</b> with a real cover PHOTO the
+          poster hero now has no exercise mark at all, because the 120 figure only draws on the gradient
+          fallback. That is deliberate &mdash; the EXERCISE cell one scroll-tick below answers it &mdash; but
+          it is the case to look at first if anyone reopens this.</p>
+        <p class="cl-body cl-mirror"><b>Client-agnostic note:</b> the win here is the <em>one component</em>, not
+          the pixels &mdash; two copies of a row is how they drift 12 apart, which is exactly what happened to
+          these two before. <em>Reference implementation (Android):</em> <code>MyChallengesScreen.kt</code>
+          (<code>MyChallengeCard</code>) and <code>ProfileScreen.kt</code> (<code>ChallengeTabCard</code>) are
+          still two composables pinned to the same numbers &mdash; a shared one would close the drift the way
+          this prototype now has. <code>ChallengeDetailScreen.kt</code> for the detail sizes.</p>
+      </div>
+
+      <div class="cl-entry">
         <div class="cl-head"><span class="cl-date">2026-08-05</span>
           <h3>The exercise figures are bigger, and Today&rsquo;s workouts wears the flat orange set</h3></div>
         <p class="cl-body">Reported from a device three rounds running: the exercise artwork reads as too small
@@ -443,7 +500,9 @@
           my-challenges still draw the exercise as a 16 corner <em>badge</em> on the progress ring, while the app
           draws it centred <em>inside</em> the ring at 44-in-68. At that gap it is not one mark at two sizes, it
           is two designs. Reconciling means dropping the % readout from the ring centre, which is a design call
-          rather than an icon change &mdash; see the note in <code>home-pro.css</code>.</p>
+          rather than an icon change &mdash; see the note in <code>home-pro.css</code>.
+          <em>Half-settled 2026-08-12:</em> my-challenges left the ring entirely for the app&rsquo;s flat tile
+          card, so this is now a Home-rail-only question.</p>
       </div>
 
       <div class="cl-entry">
@@ -619,8 +678,24 @@
           <code>docs/specs/CREATE_CHALLENGE_UI_SPEC.md</code> §10 in the Android repo.</p>
       </div>
 
+      <div class="cl-entry">
+        <div class="cl-head"><span class="cl-date">CLOSED 2026-08-12</span>
+          <h3>Active-challenge ring: was the prototype's structure, now the app's</h3></div>
+        <p class="cl-body"><b>Settled &mdash; the prototype took the app's card.</b> Home's rail now draws the
+          exercise figure <b>centred inside the ring at 44-in-68</b> with the ring filling to the
+          <b>schedule fraction</b> (elapsed day / total days), and the day count in the meta line
+          (&ldquo;Day 9/21 &middot; 23 members&rdquo;). The <code>%</code> readout and the 26px corner badge
+          are gone. The <code>%</code> was the reason to hesitate and it turned out to be the reason to go:
+          it was <code>reps / goal</code>, and the challenge contract has neither, so the number was
+          invented. The my-challenges half of this gap closed the same day by leaving the ring entirely for
+          the flat <code>.clc</code> tile card. Both surfaces now match what ships.</p>
+        <p class="cl-body">The original note is kept below, unedited, because it is a good record of a
+          divergence that was flagged rather than guessed at &mdash; and of the fact that the deciding
+          argument was about <em>which number is real</em>, not about icon sizes.</p>
+      </div>
+
       <div class="cl-entry cl-warn">
-        <div class="cl-head"><span class="cl-date">KNOWN GAP</span>
+        <div class="cl-head"><span class="cl-date">SUPERSEDED &middot; was KNOWN GAP</span>
           <h3>Active-challenge ring: still the prototype's structure, not the app's</h3></div>
         <p class="cl-body">The shipped clients draw the exercise figure <em>inside</em> the progress ring &mdash;
           as of 2026-08-05 at <b>44pt in a 68pt ring</b>, up from 40-in-56 &mdash; and put the day count in the
@@ -633,6 +708,11 @@
           pinned the app's my-challenges see-all to a flat 58pt tile (figure 46) rather than a ring at all. So
           the two challenge-card surfaces now diverge from this prototype in <em>structure</em>, not just in
           scale. Worth resolving deliberately, in either direction.</p>
+        <p class="cl-body"><b>Both halves resolved on 2026-08-12 &mdash; see the CLOSED entry above.</b>
+          my-challenges dropped the ring for the app's flat tile card (now the shared <code>.clc</code>
+          component); Home kept its ring but took the app's structure, centring a 44 figure in a 68 ring and
+          moving the day count to the meta line. The % readout went, and that was the right trade: it was
+          <code>reps / goal</code> and the contract has neither.</p>
       </div>
     </div>
 

@@ -84,20 +84,10 @@
 /* ── challenges list ── */
 .pf-sublbl { font:800 12px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); margin:4px 2px 11px; }
 .pf-sublbl:not(:first-child) { margin-top:20px; }
-/* Vertical padding 12 → 9px with the tile below going 44 → 58px (app 2026-08-05). The row's height is
-   set by that tile, not by the text, so the padding was pure air above and below a square: trimming it
-   while the figure grows buys a bigger drawing AND a shorter row. */
-.pf-chl { display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--border); border-radius:15px; padding:9px 13px; box-shadow:var(--shadow-card); margin-bottom:10px; cursor:pointer; }
-/* Tile 44 → 58px, figure 18 → 46px (app 2026-08-05). Pinned to the same numbers the app's
-   MyChallengesScreen card uses — this row and that one are the same card in two places, and they had
-   drifted 12px apart. 46-in-58 leaves 6px of tint around even the widest asset (the sit-up draws its
-   full slot width), which is as tight as the rounded corners take. */
-.pf-chl .ci { width:58px; height:58px; border-radius:16px; display:grid; place-items:center; flex:none; }
-.pf-chl .cm { flex:1; min-width:0; }
-.pf-chl .cn { font:900 14.5px var(--font); color:var(--text-primary); }
-.pf-chl .cd { font:700 12px var(--font); color:var(--text-secondary); margin-top:2px; }
-.pf-chl .cbar { height:5px; border-radius:99px; background:var(--surface-alt); margin-top:8px; overflow:hidden; }
-.pf-chl .cbar i { display:block; height:100%; border-radius:99px; }
+/* The challenge ROWS are the shared component `.clc` (css/components/challenge-list-card.css) — this
+   tab and the "Your challenges" see-all are the SAME card on device (`ChallengeTabCard` and
+   `MyChallengeCard` are pinned to the same numbers), so the geometry lives there, once. The old
+   `.pf-chl` block that used to sit here was the second copy of it. */
 
 /* ── empty / blocked ── */
 .pf-empty { text-align:center; padding:46px 30px; }

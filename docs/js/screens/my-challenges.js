@@ -1,5 +1,9 @@
-/* Your challenges · See all. Reuses the home ring-card design (chalx) in a full
-   vertical list of TWO paginated sections, each with its OWN "Show more" button —
+/* Your challenges · See all. Rows are the shared ChallengeListCard component
+   (js/components/challenge-list-card.js) — the same card the profile Challenges
+   tab uses, and the app's `MyChallengeCard` verbatim. It used to re-declare the
+   home RING card (chalx) here; the app moved this list to the accent-tile card on
+   2026-08-05 and the ring now lives only on the Home rail, where the app keeps it.
+   The list is TWO paginated sections, each with its OWN "Show more" button —
    the fix for the two-stacked-infinite-lists problem: paging is button-driven per
    section, so the two never fight over one scroll trigger (a scroll-triggered infinite
    load can only ever feed the bottom list). SOURCE-AWARE (this screen is reused):
@@ -10,48 +14,23 @@
    pages via the API). */
 window.MyCh = (function () {
   const I = (n, s) => window.Icons.svg(n, s);
-  const S = window.Social, fmt = S.fmt;
-  const exMeta = (k) => S.ACT.find((a) => a.key === k) || S.ACT[1];
+  const S = window.Social;
   const PAGE = 3;
   const freshPages = () => ({ active: PAGE, upcoming: PAGE, current: PAGE, completed: PAGE });
   let root, from = "home", q = "", shown = freshPages();
   const matches = (c) => !q || c.n.toLowerCase().includes(q.toLowerCase());
 
-  // same ring markup as Home (HomeData.ring)
-  function ring(o) {
-    const r = o.r || 21, c = 2 * Math.PI * r, off = c * (1 - o.pct / 100), s = o.size || 50, sw = o.stroke || 5.5;
-    return `<div class="ring" style="width:${s}px;height:${s}px"><svg width="${s}" height="${s}">
-      <circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="var(--surface-alt)" stroke-width="${sw}"/>
-      <circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="${o.prog||'var(--primary)'}" stroke-width="${sw}"
-        stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 ${s/2} ${s/2})"/></svg>
-      ${o.center ? `<div class="ring-center">${o.center}</div>` : ""}</div>`;
-  }
-
-  function pctOf(c) {
-    if (c.status === "upcoming") return 0;
-    return Math.min(100, Math.round((c.myReps / c.goal) * 100));
-  }
-  function metaOf(c) {
-    if (c.status === "upcoming") return `<span class="soon">Starts in ${c.startsIn} ${c.startsIn === 1 ? "day" : "days"}</span> · ${c.days}-day plan`;
-    if (c.status === "ended") return `<span class="ended">Ended</span> · ${fmt(c.myReps)} of ${fmt(c.goal)} reps`;
-    return `Day ${c.day} of ${c.days} · ${fmt(c.myReps)} reps`;
-  }
-
+  /* One row = the shared ChallengeListCard. Its DEFAULT meta ("N members · Freq") is what the app
+     shows here, so nothing is passed but the two per-row decisions this screen owns:
+       · the group-chat button, hidden once a challenge has ended (its chat is closed)
+       · which detail role the card opens (creator vs member) */
   function card(c) {
-    const m = exMeta(c.ex), pct = pctOf(c), color = c.status === "ended" ? "var(--text-tertiary)" : "var(--primary)";
-    const center = c.status === "upcoming"
-      ? `<div class="cx-pct" style="font-size:11px">${c.startsIn}d</div>`
-      : `<div class="cx-pct">${pct}%</div>`;
     const role = c.createdByMe ? "owner" : "member";
-    return `<div class="mc-card${c.status === "ended" ? " done" : ""}" onclick="location.href='challenge-detail.html?role=${role}'">
-      <div class="chalx-ring">${ring({ pct, prog: color, center })}<span class="chalx-ex" style="color:${m.c}">${I(m.i, 16)}</span></div>
-      <div class="mc-info">
-        <div class="cx-name">${c.n}${c.createdByMe ? ' <span class="taf-badge">OWNER</span>' : ""}</div>
-        <div class="cx-meta">${metaOf(c)}</div>
-        <div class="mc-bar"><i style="width:${Math.max(pct, 2)}%;background:${c.status === "ended" ? "var(--text-tertiary)" : m.c}"></i></div>
-      </div>
-      <button class="mc-chat" onclick="event.stopPropagation();Buzzend.alert({icon:'comment',title:'${c.n} · Group chat',message:'Open the challenge group chat to cheer members on and share your progress.'})">${I("comment", 17)}</button>
-    </div>`;
+    return window.ChallengeListCard.card(c, {
+      chat: c.status !== "ended",
+      onClick: `location.href='challenge-detail.html?role=${role}'`,
+      onChat: `event.stopPropagation();Buzzend.alert({icon:'comment',title:'${c.n} · Group chat',message:'Open the challenge group chat to cheer members on and share your progress.'})`,
+    });
   }
 
   /* One paginated section: shows the first `shown[key]` items + a "Show more" button that
