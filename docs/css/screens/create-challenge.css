@@ -49,14 +49,17 @@
 
 /* exercise grid */
 .cc-ex { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-/* min-height tracks the app's pinned 112dp tile: the figure is 48px and a wrapping 2-line label
-   ("Jumping Jack") must still fit without making one box taller than its neighbours. */
-.cc-ex-c { border:1.5px solid var(--border); background:var(--surface); border-radius:var(--r-md); padding:12px 6px; min-height:112px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; cursor:pointer; transition:.12s; }
+/* min-height tracks the app's pinned 112dp tile: the figure is 58px and a wrapping 2-line label
+   ("Jumping Jack") must still fit without making one box taller than its neighbours. The vertical
+   padding is 6px, not 12: the figure went 48 → 58px (2026-08-05) and the box height is FIXED, so the
+   room came out of the padding — growing the box to fit a bigger figure would chase its own tail,
+   since "the box looks too large for the icon" was the report. 6 + 58 + 6 + ~34 = 104 ≤ 112. */
+.cc-ex-c { border:1.5px solid var(--border); background:var(--surface); border-radius:var(--r-md); padding:6px; min-height:112px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; cursor:pointer; transition:.12s; }
 .cc-ex-c:active { transform:scale(.98); }
 .cc-ex-c.on { border-color:var(--primary); background:color-mix(in srgb,var(--primary) 10%,transparent); }
 .cc-ex-c .ic { color:var(--text-secondary); display:flex; justify-content:center; }
 .cc-ex-c.on .ic { color:var(--primary); }
-.cc-ex-c .n { font:800 13px var(--font); color:var(--text-primary); margin-top:8px; }
+.cc-ex-c .n { font:800 13px var(--font); color:var(--text-primary); margin-top:6px; }
 .cc-ex-c.on .n { color:var(--primary); }
 
 /* inputs */

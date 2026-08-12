@@ -54,8 +54,10 @@ window.MyWk = (function () {
 
   function card(s) {
     const m = ex(s.k);
+    // PLAIN at 30px, following the "Today's workouts" rail this screen is the see-all for: the same
+    // logged sessions must not change drawing on the way to their own list (app 2026-08-05).
     return `<div class="wl-card" onclick="Buzzend.alert({icon:'${m.i}',title:'${m.n} · ${s.reps} reps',message:'Counted automatically by the AI camera · ${s.kcal} kcal · ${s.dur} min · ${s.time}.'})">
-      <div class="wl-ic" style="color:${m.c};background:color-mix(in srgb,${m.c} 15%,transparent)">${I(m.i, 22)}</div>
+      <div class="wl-ic" style="color:${m.c};background:color-mix(in srgb,${m.c} 15%,transparent)">${window.Icons.workout(m.i, 30, "plain")}</div>
       <div class="wl-mid">
         <div class="wl-n">${m.n} <span class="wl-ai">AI</span></div>
         <div class="wl-meta"><span class="wl-mi">${I("clock", 12)} ${s.time}</span><span class="wl-sep">·</span><span class="wl-mi">${I("play", 11)} ${s.dur} min</span></div>

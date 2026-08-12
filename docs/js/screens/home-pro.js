@@ -394,7 +394,12 @@ window.HomePro = (function () {
     }
 
     if (layout === "rail") {
-      const cards = d.sessions.map((s) => `<div class="cw-card"><div class="cw-ic">${I(s.i, 22)}</div>
+      // PLAIN (the flat orange figure) at 30px, not the detailed illustration at 22 (app 2026-08-05).
+      // REAL is a 27-to-61-path full-colour drawing and this tile is 34px: at that size its detail
+      // collapses into a coloured smudge, and its per-exercise palette fought the accent tint behind it.
+      // Home therefore shows three families at once — this rail plain, the challenge rail real, friends'
+      // activity outlined — which is deliberate per-section: "never mixed" is about one BLOCK of icons.
+      const cards = d.sessions.map((s) => `<div class="cw-card"><div class="cw-ic">${window.Icons.workout(s.i, 30, "plain")}</div>
         <div class="cw-n">${s.n}</div><div class="cw-reps">${s.reps}<span> reps</span></div>
         <div class="cw-meta">${s.kcal} kcal</div></div>`).join("");
       const add = `<div class="cw-card cw-add" onclick="HomeData.startWorkout('another')">${I("plus", 22)}<div>Start<br>another</div></div>`;
@@ -414,19 +419,38 @@ window.HomePro = (function () {
       <div class="combo-body">${comboWorkouts(state, d, kind, opts)}</div></div>`;
   }
 
-  /* ── Active challenges (V7) — circular progress ring + group-chat button ── */
+  /* ── Active challenges (V7) — schedule ring around the exercise figure + group-chat button ──
+     The app's card (`ActiveChallenges.kt`), ported 2026-08-12. Three things follow from that:
+       · the figure is CENTRED IN the ring at 44-in-68, not a corner badge beside a `%` readout;
+       · the ring fills to the SCHEDULE fraction (elapsed day / total days) — empty for a challenge that
+         hasn't started, full once ended — because the contract has no goal, so there is no honest
+         completion %. `c.p` is therefore day/days, and the day count lives in the meta line;
+       · the ring and the figure take the per-exercise accent, and both mute to a grey once ended, so a
+         finished challenge reads as done at a glance. */
   function challengesPro(state, d) {
     const h = `<div class="sec"><h2>Active challenges</h2><a href="my-challenges.html">See all</a></div>`;
     if (!d.challenges.length) return h + H.empty("trophy", "No challenges yet", "Join a challenge to compete with friends and stay motivated.", "Browse challenges");
+    // The accent lives in Social.ACT, the one palette the whole prototype reads. Guarded because the
+    // layout playground (builder.html) mounts this rail too and may not have that module loaded.
+    const accentOf = (k) => {
+      const A = (window.Social && window.Social.ACT) || [];
+      const hit = A.find((a) => a.key === k || a.i === k);
+      return (hit && hit.c) || "var(--primary)";
+    };
     return h + `<div class="h-scroll">` + d.challenges.map((c) => {
-      const ring = H.ring({ pct: c.p, size: 50, r: 21, stroke: 4, track: "var(--surface-alt)", prog: "var(--primary)", center: `<div class="cx-pct">${c.p}%</div>` });
-      // ownership at a glance — no text, and kept OFF the progress ring so it doesn't read
-      // as a second ring: a small star after the name for yours, the creator's face for joined.
-      const own = c.mine
-        ? `<span class="cx-own mine" title="Created by you">${I("star", 11)}</span>`
-        : `<span class="cx-own" title="Created by ${c.by || "a friend"}" style="background-image:linear-gradient(135deg,${c.byAv || "#9bb7c9,#5e7d99"})"></span>`;
+      const ended = c.status === "ended";
+      const accent = ended ? "var(--text-tertiary)" : accentOf(c.i);
+      const ring = H.ring({
+        pct: ended ? 100 : c.p, size: 68, r: 31.5, stroke: 5, track: "var(--surface-alt)", prog: accent,
+        // The exercise ILLUSTRATION inside the ring, at the app's 44-in-68. The RATIO had to come down as
+        // the sizes went up (40-in-56 = 0.71 ran the art into the stroke): the ink is not centred in these
+        // assets — the sit-up's widest point sits ~8px BELOW centre, where the circle has already narrowed
+        // — so a chord measured through the centre flatters it. 0.65 puts that point at r≈23 against a 29
+        // inner radius. An unknown exercise falls back to the trophy, as the app's WorkoutGlyph does.
+        center: window.Icons.workout(c.i, 44) || `<span style="color:${accent}">${I("trophy", 26)}</span>`,
+      });
       return `<div class="chalx">
-        <div class="chalx-ring">${ring}<span class="chalx-ex" style="color:var(--primary)">${I(c.i, 16)}</span></div>
+        <div class="chalx-ring">${ring}</div>
         <div class="chalx-info"><div class="cx-name">${c.n}</div><div class="cx-meta">${c.m}</div></div>
         <button class="chalx-chat" onclick="Buzzend.alert({icon:'comment',title:'${c.n} · Chat',message:'Open the challenge group chat to cheer members on and share your progress.'})">${I("comment", 16)}</button></div>`;
     }).join("") + `</div>`;

@@ -21,10 +21,15 @@ window.HomeData = (function () {
         { i:"pushup", n:"Push-ups", reps:80, kcal:45, t:"12:30 PM" },
         { i:"situp", n:"Sit-ups", reps:120, kcal:50, t:"6:05 PM" },
       ],
+      /* `m` and `p` follow the app (HomeMappers.toHomeChallengeCard): the meta is
+         "Day X/N · N members" — a lead label plus the member count — and `p` is the SCHEDULE
+         fraction (day/days) the ring fills to, NOT reps/goal. The contract carries no per-user
+         count and no goal, so the reps this used to show were invented. Day/days/members match
+         the same challenges in social-data.js. */
       challenges: [
-        { i:"squat", n:"Squad Squats", m:"Day 9 · 380 reps", p:90, mine:true },
-        { i:"squat", n:"30-Day Squats", m:"Day 12 · 240 reps", p:60, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" },
-        { i:"pushup", n:"Push-up Power", m:"Day 4 · 80 reps", p:30, by:"Maya Gurung", byAv:"#caa6c9,#9a5e96" },
+        { i:"squat", n:"Squad Squats", m:"Day 9/21 · 23 members", p:43, mine:true },
+        { i:"squat", n:"30-Day Squats", m:"Day 12/30 · 245 members", p:40, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" },
+        { i:"pushup", n:"Push-up Power", m:"Day 13/14 · 132 members", p:93, by:"Maya Gurung", byAv:"#caa6c9,#9a5e96" },
       ],
       friends: [ {n:"Anita",s:"8.2k",r:1}, {n:"Ravi",s:"6.1k",r:2}, {n:"Sita",s:"5.5k",r:3}, {n:"Kiran",s:"4.9k"} ],
       feed: [
@@ -38,7 +43,7 @@ window.HomeData = (function () {
       workout: { today: 1, reps: 40, streak: 1, best: 3, activeMin: 18, activePct: 25 },
       steps: { value: "1,200", goal: "6,000", pct: 20, kcal: 80, active: "18m", distance: "1.2km" },
       sessions: [ { i:"squat", n:"Squats", reps:40, kcal:40, t:"8:30 AM" } ],
-      challenges: [ { i:"squat", n:"30-Day Squats", m:"Just joined · Day 1", p:5, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" } ],
+      challenges: [ { i:"squat", n:"30-Day Squats", m:"Day 1/30 · 245 members", p:3, by:"Adesh Pokhrel", byAv:"#9bb7c9,#5e7d99" } ],
       friends: [], feed: [],
     },
     new: {
@@ -131,12 +136,15 @@ window.HomeData = (function () {
       ${chk(false,"Set your daily step goal")}${chk(false,"Join your first challenge")}</div>`;
   }
 
+  /* The pre-V7 "Classic" challenge card (still selectable in builder.html). Its bar reads "N% elapsed",
+     not "complete": c.p is the SCHEDULE fraction (day/days), which is what a client can actually compute —
+     the challenge contract has no goal to be a % complete OF. */
   function challenges(state, d) {
     let h = sec("Active challenges", state === "full");
     if (!d.challenges.length) return h + empty("trophy","No challenges yet","Join a challenge to compete with friends and stay motivated.","Browse challenges");
     return h + `<div class="h-scroll">` + d.challenges.map(c => `<div class="chal">
       <div class="ct"><div class="badge" style="color:var(--primary)">${I(c.i,19)}</div><div><div class="cname">${c.n}</div><div class="cmeta">${c.m}</div></div></div>
-      <div class="pbar"><i style="width:${c.p}%"></i></div><div class="pct">${c.p}% complete</div></div>`).join("") + `</div>`;
+      <div class="pbar"><i style="width:${c.p}%"></i></div><div class="pct">${c.p}% elapsed</div></div>`).join("") + `</div>`;
   }
 
   function friends(state, d) {

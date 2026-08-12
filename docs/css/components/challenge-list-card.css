@@ -1,0 +1,67 @@
+/* ── ChallengeListCard — the ONE challenge row used in every VERTICAL challenge list ───────────────
+   The app's card, ported back verbatim. On device this is a single design in two places:
+     · `MyChallengeCard`  — feature/home/ui/seeall/MyChallengesScreen.kt   ("Your challenges" see-all)
+     · `ChallengeTabCard` — feature/profile/ui/ProfileScreen.kt            (profile → Challenges tab)
+   Those two are pinned to the same numbers on device (they had drifted 12dp apart once, which is what
+   the shared-artwork consolidation exists to stop), so the prototype carries it ONCE, here, instead of
+   re-declaring it per screen. Rendered by `js/components/challenge-list-card.js`.
+
+   NOT the other two challenge rows — three different jobs, deliberately three designs:
+     · `.chc`   (components/challenge-card.css) — minimal "clean list" PICKER row: sheets, tag-a-challenge
+     · `.chalx` (screens/home-pro.css)          — the Home rail's compact RING card (the app keeps the
+                                                  ring there; only the vertical lists use this card)
+
+   Geometry is the app's, dp → px 1:1 (its 2026-08-05 numbers): tile 58 / figure 46 / radius 16 /
+   padding 9×13 / gap 13 / chat 38 rounded-11. 46-in-58 is deliberate: the illustrations are equalised
+   by AREA, so the widest asset (sit-up) draws its FULL 46px across and leaves 6px of tint each side —
+   as tight as the rounded corners take.
+
+   One deliberate difference from device: the prototype's whole-app card shadow (`--shadow-card`) stays
+   on, where the app's card is border-only. Every other card in this prototype carries it.
+   Theme- and palette-token driven (light/dark). */
+
+.clc {
+  display: flex; align-items: center; gap: 13px; width: 100%;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 9px 13px; margin-bottom: 10px; cursor: pointer; text-align: left;
+  box-shadow: var(--shadow-card);
+}
+.clc:active { transform: scale(.995); }
+
+/* exercise tile — the per-workout accent at 14%, carrying the illustration (the accent also tints the
+   line-glyph fallback an unknown workout falls back to). Both are set inline, per card. */
+.clc-ic { width: 58px; height: 58px; border-radius: 16px; flex: none; display: grid; place-items: center; }
+
+.clc-main { flex: 1; min-width: 0; }
+
+/* Title row: name + an optional OWNER / UPCOMING pill. The pill is `flex:none` and sits on the title's
+   own line box so a one-line name never grows the row (the app hit exactly this — an unboxed pill
+   measured taller than the line and pushed the meta line down). */
+.clc-top { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.clc-name {
+  font: 800 14.5px/1.17 var(--font); color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.clc-tag {
+  flex: none; font: 900 9px var(--font); letter-spacing: .5px; color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border-radius: 99px; padding: 3px 7px; white-space: nowrap;
+}
+
+.clc-meta {
+  display: block; margin-top: 2px; font: 700 12px var(--font); color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Schedule bar — the profile variant only. The see-all card has no bar, matching the app. */
+.clc-bar { display: block; height: 5px; border-radius: 99px; background: var(--surface-alt); margin-top: 8px; overflow: hidden; }
+.clc-bar i { display: block; height: 100%; border-radius: 99px; }
+
+/* Group-chat button — the see-all variant only, and only while the challenge is still running (an
+   ended challenge's chat is closed, so the app hides the control rather than showing a dead one). */
+.clc-chat {
+  flex: none; width: 38px; height: 38px; border-radius: 11px; border: none; cursor: pointer;
+  background: color-mix(in srgb, var(--primary) 10%, transparent); color: var(--primary);
+  display: grid; place-items: center;
+}
+.clc-chat:active { transform: scale(.94); }

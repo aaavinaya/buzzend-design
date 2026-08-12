@@ -103,7 +103,10 @@ window.CC = (function () {
 
   function step1() {
     const chip = (q) => `<button class="cc-chip ${S.template === q.id ? "on" : ""}" onclick="CC.applyTemplate('${q.id}')">${I(q.ic, 15)} ${q.label}</button>`;
-    const exc = (e) => `<button class="cc-ex-c ${S.exercise === e.key ? "on" : ""}" onclick="CC.pickEx('${e.key}')"><span class="ic">${EXA(e.i, 48)}</span><span class="n">${e.n}</span></button>`;
+    // 48 → 58px (app 2026-08-05, third round on this glyph): the box reads as large because the figure
+    // inside it is smaller than its slot. Bought from the tile's PADDING, not by growing the box — see
+    // `.cc-ex-c` in create-challenge.css.
+    const exc = (e) => `<button class="cc-ex-c ${S.exercise === e.key ? "on" : ""}" onclick="CC.pickEx('${e.key}')"><span class="ic">${EXA(e.i, 58)}</span><span class="n">${e.n}</span></button>`;
     return `<div class="cc-body">
       <div class="cc-h1">What's the challenge?</div><div class="cc-sub">Pick an exercise and give it a name</div>
       <div class="cc-lbl">Quick start</div><div class="cc-quick">${QUICK.map(chip).join("")}</div>
@@ -163,7 +166,7 @@ window.CC = (function () {
     return `<div class="cc-body">
       <div class="cc-h1">Review your challenge</div><div class="cc-sub">Looks good? Launch it!</div>
       <div class="cc-lbl">Preview</div>
-      <div class="cc-preview"><div class="art">${EXA(e.i, 44)}</div><div style="min-width:0">
+      <div class="cc-preview"><div class="art">${EXA(e.i, 56)}</div><div style="min-width:0">
         <div class="pt">${esc(name)}</div><div class="tag">${e.n}</div>
         <div class="meta">${freqLabel(S.frequency)} · ${S.isPublic ? "Public" : "Private"} · ${days} days</div></div></div>
       <div class="cc-lbl">Summary</div>
