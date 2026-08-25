@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="energyorange" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buzzend · Home Streak — variations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/home.css" />
+  <link rel="stylesheet" href="../../css/screens/home-pro.css" />
+  <style>
+    body { background:var(--bg-canvas); padding:28px 18px 60px; }
+    .wrap { max-width:400px; margin:0 auto; }
+    h1 { font:900 22px var(--font); color:var(--text-primary); }
+    .sub { font:600 13px var(--font); color:var(--text-secondary); margin:4px 0 22px; }
+    .lab { font:900 12px var(--font); color:var(--primary); letter-spacing:.5px; text-transform:uppercase; margin:22px 0 9px; }
+    .lab small { color:var(--text-tertiary); font-weight:700; text-transform:none; letter-spacing:0; margin-left:6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Home streak — 3 compact variations</h1>
+    <div class="sub">Week detail removed from Home (it stays on the Streak page). Electric Orange · minimal.</div>
+    <div class="lab">1 · Momentum strip <small>hero number + best</small></div><div id="v1"></div>
+    <div class="lab">2 · Flame ring <small>fills toward your best</small></div><div id="v2"></div>
+    <div class="lab">3 · Bold banner <small>orange-tinted, premium</small></div><div id="v3"></div>
+    <div class="lab">New user <small>(strip · ring · banner)</small></div>
+    <div id="n1"></div><div id="n2"></div><div id="n3"></div>
+  </div>
+  <script src="../../js/components/dialog.js"></script>
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/social-data.js"></script>
+  <script src="../../js/screens/home-data.js"></script>
+  <script src="../../js/screens/home-pro.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    const H = HomeData, P = HomePro;
+    const put = (id, html) => { const el = document.getElementById(id); el.innerHTML = html; window.Icons.init(el); };
+    ["1","2","3"].forEach(v => put("v"+v, P.streakCompact("full", H.DATA.full, v)));
+    ["1","2","3"].forEach(v => put("n"+v, P.streakCompact("new", H.DATA.new, v)));
+  </script>
+</body>
+</html>

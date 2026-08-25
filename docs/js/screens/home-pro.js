@@ -117,21 +117,54 @@ window.HomePro = (function () {
       ${streakWeek(state, w)}</div>`;
   }
 
-  /* ── V5 · Pulse top — modular & light: slim gradient CTA bar + light streak card ── */
-  function aiPulse(state, d) {
-    const w = d.workout;
+  /* ── Compact Home streak — the "this week" detail now lives ONLY on the Streak page,
+     so Home stays tight. Three exchangeable, genuinely-different compact layouts
+     (setStreak / ?streak=): 1 momentum strip · 2 flame ring · 3 bold banner.
+     Minimal text, streak number is the hero, Electric-Orange forward. ── */
+  let _streakV = "1";
+  function setStreak(v) { _streakV = v || "1"; }
+  function streakCompact(state, d, v) {
+    const w = d.workout, s = w.streak || 0, best = w.best || 0, started = s > 0;
+    v = v || _streakV;
+
+    if (v === "2") {                                   // flame ring — fills toward your best
+      const pct = best ? Math.min(100, Math.round(s / best * 100)) : 0;
+      const ring = H.ring({ pct, size: 58, r: 24, stroke: 6, track: "var(--surface-alt)", prog: "var(--primary)",
+        center: `<div class="stk2-c">${started ? s : I("flame", 20)}</div>` });
+      const hint = !started ? "Work out today to begin"
+        : s >= best ? "Personal best — keep it up!" : `${best - s} days to beat your best`;
+      return `<div class="stk stk2"><div class="stk2-ring">${ring}</div>
+        <div class="stk2-r"><div class="stk2-lab">${started ? "Day streak" : "Start your streak"}</div>
+          <div class="stk2-hint">${I("flame", 12)} ${hint}</div></div>
+        <div class="stk2-best"><b>${best}</b><span>best</span></div></div>`;
+    }
+    if (v === "3") {                                   // bold banner — orange-tinted, premium
+      if (!started) return `<div class="stk stk3 stk3-0"><span class="stk3-bg">${I("flame", 96)}</span>
+        <span class="stk3-fl">${I("flame", 26)}</span>
+        <div class="stk3-mid"><div class="stk3-lab">DAY STREAK</div><div class="stk3-motiv">Start your streak today</div></div></div>`;
+      const line = s >= 30 ? "On a strong roll" : s >= 14 ? "Great momentum" : s >= 3 ? "Building momentum" : "Nice start";
+      return `<div class="stk stk3"><span class="stk3-bg">${I("flame", 96)}</span>
+        <div class="stk3-num">${s}</div>
+        <div class="stk3-mid"><div class="stk3-lab">DAY STREAK</div><div class="stk3-motiv">${line}</div></div>
+        <div class="stk3-best"><span>BEST</span><b>${best}</b></div></div>`;
+    }
+    // v1 — momentum strip (default): flame emblem · hero number · best
+    if (!started) return `<div class="stk stk1 stk1-0"><span class="stk1-fl">${I("flame", 22)}</span>
+      <div class="stk1-main"><div class="stk1-num sm">Start your streak</div><div class="stk1-lab">Work out today to begin</div></div></div>`;
+    return `<div class="stk stk1"><span class="stk1-fl">${I("flame", 24)}</span>
+      <div class="stk1-main"><div class="stk1-num">${s}</div><div class="stk1-lab">Day streak</div></div>
+      <div class="stk1-div"></div>
+      <div class="stk1-best"><span class="stk1-tr">${I("trophy", 14)}</span><div><div class="stk1-bv">${best}</div><div class="stk1-bl">Best</div></div></div></div>`;
+  }
+  // AI-workout CTA bar on its own, so Home can order it independently of the streak.
+  function aiCtaBar(state, d) {
     return `<div class="pulse-cta" onclick="HomeData.startWorkout('Squats')">
         <span class="pulse-cta-ic">${I("camera", 22)}</span>
         <div class="pulse-cta-t"><div class="pct-eyebrow">${I("zap", 11)} AI POSE DETECTION</div>
           <div class="pct-title">${state === "new" ? "Try your first AI workout" : "Start an AI workout"}</div></div>
-        <span class="pct-go">${I("chevron", 20)}</span></div>
-      <div class="pulse-streak">
-        <div class="pls-stats">
-          <div class="pls-stat"><span class="pls-ic cur">${I("flame", 15)}</span><div><div class="pls-v">${w.streak} days</div><div class="pls-l">Current streak</div></div></div>
-          <div class="pls-stat"><span class="pls-ic best">${I("trophy", 15)}</span><div><div class="pls-v">${w.best} days</div><div class="pls-l">Best streak</div></div></div>
-        </div>
-        ${streakWeek(state, w, "light")}</div>`;
+        <span class="pct-go">${I("chevron", 20)}</span></div>`;
   }
+  function aiPulse(state, d, v) { return aiCtaBar(state, d) + streakCompact(state, d, v); }
 
   /* ── V6 · Momentum top — bold & streak-forward: giant streak number is the hero ── */
   function aiMomentum(state, d) {
@@ -320,13 +353,17 @@ window.HomePro = (function () {
     const w = d.workout, p = d.steps;
 
     if (kind === "banner") {
+      // Not worked out today → the workout CTA lives in the section's TOP, integrated next to
+      // the title (a compact pill, not overpowering the progress). Worked out → Share sits there.
+      const didWorkout = w.today > 0;
+      const startCta = `<button class="pb-start" onclick="HomeData.startWorkout('Squats')">${I("camera", 14)} Start a workout</button>`;
+      const topR = didWorkout ? shareBtn("daily goal") : startCta;
       if (state === "new" || !p) {
-        return `<div class="pb-top"><div class="pb-t">${I("target", 15)} Daily goal</div></div>
-          <div class="combo-goalcta-l">Set a daily step goal to track progress.
-            <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="Buzzend.alert({icon:'target',title:'Goal set!',message:'Your daily target is 6,000 steps.'})">${I("target", 16)} Set my goal</button></div>`;
+        return `<div class="pb-top"><div class="pb-t">${I("target", 15)} Daily goal</div><div class="pb-top-r">${topR}</div></div>
+          <button class="pb-setgoal" onclick="Buzzend.alert({icon:'target',title:'Goal set!',message:'Your daily target is 6,000 steps.'})">${I("target", 14)} Set a daily step goal</button>`;
       }
       return `<div class="pb-top"><div class="pb-t">${I("target", 15)} Daily goal</div>
-          <div class="pb-top-r">${shareBtn("daily goal")}</div></div>
+          <div class="pb-top-r">${topR}</div></div>
         <div class="pb-row"><div class="pb-val">${p.value} <span>/ ${p.goal} steps</span></div><div class="pb-pct">${p.pct}%</div></div>
         <div class="pb-bar"><i style="width:${p.pct}%"></i></div>
         ${opts && opts.stats ? `<div class="pb-stats">
@@ -377,10 +414,9 @@ window.HomePro = (function () {
     const has = d.sessions && d.sessions.length;
     const head = `<div class="combo-sec"><h3>Today's workouts</h3>${has ? '<a href="my-workouts.html">See all</a>' : ""}</div>`;
     if (!has) {
-      return head + `<div class="combo-empty"><div class="ce-ic">${I("activity", 30)}</div>
-        <div class="ce-t">No workouts yet today</div>
-        <div class="ce-d">Start your first AI workout — reps are counted automatically.</div>
-        <button class="btn btn-primary" style="height:46px;margin-top:12px" onclick="HomeData.startWorkout('Squats')">${I("camera", 17)} Start a workout</button></div>`;
+      // Description + CTA removed here — the CTA now lives integrated in the Daily-goal top area.
+      return head + `<div class="combo-empty compact"><div class="ce-ic">${I("activity", 26)}</div>
+        <div class="ce-t">No workouts yet today</div></div>`;
     }
     const tReps = d.sessions.reduce((a, s) => a + s.reps, 0), tKcal = d.sessions.reduce((a, s) => a + s.kcal, 0);
     const summary = `<div class="combo-summary"><span><b>${d.sessions.length}</b> workouts</span><span><b>${tReps}</b> reps</span><span><b>${tKcal}</b> kcal</span></div>`;
@@ -608,7 +644,7 @@ window.HomePro = (function () {
       <div class="fa-metrics"><span class="fa-m">${I("footprints", 14)} ${p.steps}</span><span class="fa-m">${I("flame", 14)} ${p.kcal} kcal</span><span class="fa-m">${I("clock", 14)} ${p.active}</span></div></div>`;
   }
   function cardChips(p, rank) {
-    return `<div class="fc2-card">${headOf(p, rank)}
+    return `<div class="fc2-card${rank === 1 ? " is-top" : ""}">${headOf(p, rank)}
       <div class="fc2-chips"><span class="fc2-chip fc2-steps">${EXA("footprints")} ${p.steps}</span>${p.ex.map((e) => `<span class="fc2-chip">${EXA(e.i)} ${e.r}</span>`).join("")}</div>
       <div class="fc2-foot"><span>${I("flame", 13)} ${p.kcal} kcal</span><span>${I("clock", 13)} ${p.active}</span><span>${I("pin", 13)} ${p.dist}</span></div></div>`;
   }
@@ -659,7 +695,73 @@ window.HomePro = (function () {
     w.querySelectorAll(".ta-tab").forEach((b) => b.classList.toggle("on", b === btn));
   }
 
-  return { goalSpotlight, aiBand, aiPulse, aiMomentum, goalBanner, statTiles, momentumHero, statPills,
+  /* ═══════ V7 integration — approved lab variants ═══════
+     Top Activities → Variant D · Streak → Variant 3 · My Activity → Variant 1.
+     Reuses real Home data; Today's-Workouts icon style; Electric Orange. */
+  const W = (k, s) => window.Icons.workout(k, s || 30, "plain");
+
+  // Top Activities · Variant D (per user · top activity + "+N more") with Global/Friends filter
+  function cardD(p, rank) {
+    const hero = p.ex[0], moreN = Math.max(0, p.ex.length - 1);
+    const fig = hero ? W(hero.i, 40) : `<span style="color:var(--primary)">${I("footprints", 34)}</span>`;
+    return `<div class="xt-card xt-d">
+      <div class="xt-d-h"><span class="xt-av" style="background-image:linear-gradient(135deg,${p.av})"></span><span class="xt-d-nm">${p.n.split(" ")[0]}</span>${rankBadge(rank)}</div>
+      <div class="xt-d-hero"><span class="xt-d-fig">${fig}</span><div class="xt-d-htx"><div class="xt-d-en">${hero ? hero.n : "Steps"}</div><div class="xt-d-r">${hero ? hero.r + '<span> reps</span>' : p.steps}</div></div></div>
+      ${moreN > 0 ? `<div class="xt-d-more">+${moreN} more ${moreN > 1 ? "activities" : "activity"}</div>` : ""}</div>`;
+  }
+  function topActivitiesV7(state, d) {
+    const h = `<div class="sec"><h2>Top activities</h2><a href="top-activities.html">See all</a></div>`;
+    const tabs = `<div class="ta-tabs">
+      <button class="ta-tab on" onclick="HomePro.scope(this,'top')">${I("globe", 14)} Global</button>
+      <button class="ta-tab" onclick="HomePro.scope(this,'friends')">${I("users", 14)} Friends</button></div>`;
+    const g = `<div class="xt-rail">${TOP_ACT.map((p, i) => cardD(p, i + 1)).join("")}</div>`;
+    const f = state === "new" ? H.empty("users", "No friends yet", "Follow friends to see their activity here.", "Find friends")
+      : `<div class="xt-rail">${FRIENDS_ACT.map((p, i) => cardD(p, i + 1)).join("")}</div>`;
+    return h + `<div class="ta-wrap scope-top">${tabs}<div class="ta-top">${g}</div><div class="ta-friends">${f}</div></div>`;
+  }
+
+  // Streak · Variant 3 (number hero). Status from real data: active / broken / inactive.
+  const STAT = { active: { label: "Active", badge: "check", tint: "#16a34a" }, broken: { label: "Broken", badge: "x", tint: "#dc2626" }, inactive: { label: "Inactive", badge: "", tint: "#8a9099" } };
+  function emblem(status, size) {
+    const s = STAT[status], b = Math.round(size * 0.3);
+    const crack = status === "broken" ? `<svg class="xs-crk" viewBox="0 0 24 24"><path d="M14 3 L10 11 L14 12 L8 21"/></svg>` : "";
+    const badge = s.badge ? `<span class="xs-badge" style="--bc:${s.tint}">${I(s.badge, b)}</span>` : `<span class="xs-badge dash" style="--bc:${s.tint}"></span>`;
+    return `<span class="xs-emb xs-${status}" style="width:${size}px;height:${size}px">${I("flame", Math.round(size * 0.52))}${crack}${badge}</span>`;
+  }
+  const bubble = (status) => `<span class="xs-bub xs-b-${status}"><span class="xs-dot"></span>${STAT[status].label}</span>`;
+  function streakHero(state, d) {
+    const s = d.workout.streak || 0, status = s > 0 ? "active" : (state === "new" ? "inactive" : "broken");
+    return `<div class="xs xs3 xs3-${status}"><div class="xs3-num">${s}</div>
+      <div class="xs3-mid"><div class="xs3-lab">DAY STREAK</div>${bubble(status)}</div>${emblem(status, 40)}</div>`;
+  }
+
+  // My Activity · Variant 1 (was Daily Goal): activities row (+ Add in header when non-empty) →
+  // divider → metrics. Steps-only goal with a completion ring on the Steps card. Share only when active.
+  function myActivity(state, d) {
+    const p = d.steps, sessions = d.sessions || [], has = !!p && sessions.length > 0;
+    const editBtn = `<button class="xa-ic" onclick="Buzzend.alert({icon:'target',title:'Daily steps goal',message:'Set your daily steps target.'})" title="Edit steps goal">${I("edit", 15)}</button>`;
+    if (!has) {
+      return `<div class="xa xa1"><div class="xa-h"><div class="xa-t">My Activity</div><div class="xa-acts">${editBtn}</div></div>
+        <div class="xa-rail"><button class="xa-act xa-add" onclick="HomeData.startWorkout('Squats')"><span class="xa-addic">${I("plus", 20)}</span><span class="xa-addt">${state === "new" ? "Add activity" : "Start a workout"}</span></button></div>
+        <div class="xa-emptynote">${state === "new" ? "Track steps and workouts as you go." : "No workout logged yet today."}</div></div>`;
+    }
+    const done = p.pct >= 100;
+    const stepRing = H.ring({ pct: p.pct, size: 36, r: 14, stroke: 4, track: "var(--surface-alt)", prog: done ? "var(--success)" : "var(--primary)", center: `<span style="color:${done ? "var(--success)" : "var(--primary)"};display:grid;place-items:center">${I(done ? "check" : "footprints", 15)}</span>` });
+    const stepCard = `<div class="xa-act xa-actstep"><div class="xa-stepic">${stepRing}</div><div class="xa-actv">${p.value}</div><div class="xa-actn">Steps${done ? " · goal" : ""}</div></div>`;
+    const wCard = (s) => `<div class="xa-act"><span class="xa-actic">${W(s.i, 24)}</span><div class="xa-actv">${s.reps}<span> reps</span></div><div class="xa-actn">${s.n}</div></div>`;
+    const metrics = `<div class="xa-metrics">
+      <div class="xa-metric"><div class="xa-mv">${p.kcal}</div><div class="xa-ml">${I("flame", 12)} calories</div></div>
+      <div class="xa-metric"><div class="xa-mv">${p.distance}</div><div class="xa-ml">${I("pin", 12)} distance</div></div>
+      <div class="xa-metric"><div class="xa-mv">${p.active}</div><div class="xa-ml">${I("clock", 12)} active</div></div></div>`;
+    return `<div class="xa xa1">
+      <div class="xa-h"><div class="xa-t">My Activity</div><div class="xa-acts">
+        <button class="xa-ic add" onclick="HomeData.startWorkout('Squats')" title="Add activity">${I("plus", 16)}</button>${editBtn}
+        <button class="xa-ic" onclick="Buzzend.alert({icon:'share',title:'Share your activity',message:'Post your activity to the community feed.'})" title="Share">${I("share", 15)}</button></div></div>
+      <div class="xa-rail">${stepCard}${sessions.map(wCard).join("")}</div>
+      <div class="xa-div"></div>${metrics}</div>`;
+  }
+
+  return { goalSpotlight, aiBand, aiPulse, aiCtaBar, aiMomentum, streakCompact, setStreak, goalBanner, statTiles, momentumHero, statPills,
     leaderPodium, leaderList, leagueBoard, friendsRail, friendsActivity, friendsChips, friendsBars, friendsCompact,
-    topActivities, scope, challengesPro, feedTabs, switchTab, feed, feedActivity, feedImmersive, feedImmersivePro, todayCard };
+    topActivities, topActivitiesV7, streakHero, myActivity, scope, challengesPro, feedTabs, switchTab, feed, feedActivity, feedImmersive, feedImmersivePro, todayCard };
 })();

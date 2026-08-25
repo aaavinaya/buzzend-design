@@ -99,11 +99,11 @@
 .combo-rail { display:flex; gap:10px; overflow-x:auto; margin:0 -16px; padding:2px 16px 6px; }
 .combo-rail::-webkit-scrollbar { display:none; }
 .cw-card { flex:none; width:120px; height:112px; background:var(--surface); border:1px solid var(--border);
-  border-radius:var(--r-md); padding:12px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; }
-.cw-card .cw-ic { width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+  border-radius:var(--r-md); padding:12px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.cw-card .cw-ic { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; flex:none;
   background:color-mix(in srgb, var(--primary) 12%, transparent); color:var(--primary); }
-.cw-card .cw-n { font:800 13px var(--font); color:var(--text-primary); margin-top:auto; }
-.cw-card .cw-reps { font:900 17px var(--font); color:var(--primary); margin-top:3px; }
+.cw-card .cw-n { font:800 13px var(--font); color:var(--text-primary); margin-top:9px; }
+.cw-card .cw-reps { font:900 18px var(--font); color:var(--primary); margin-top:3px; }
 .cw-card .cw-reps span { font:700 10.5px var(--font); color:var(--text-tertiary); }
 .cw-card .cw-meta { font:700 10.5px var(--font); color:var(--text-tertiary); margin-top:2px; }
 .cw-card.cw-add { align-items:center; justify-content:center; gap:8px; cursor:pointer;
@@ -190,9 +190,9 @@
 
 /* ── A · chips grid ── */
 .fc2-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:14px; box-shadow:var(--shadow-card); margin-bottom:12px; }
-.fc2-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
-.fc2-chip { display:inline-flex; align-items:center; gap:5px; font:800 12px var(--font); color:var(--text-secondary);
-  background:var(--surface-alt); border-radius:99px; padding:6px 11px; }
+.fc2-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:11px; }
+.fc2-chip { display:inline-flex; align-items:center; gap:5px; font:800 11.5px var(--font); color:var(--text-secondary);
+  background:var(--surface-alt); border-radius:99px; padding:5px 9px; }
 .fc2-chip svg { color:var(--primary); }
 /* steps chip reads identically to every other workout chip (same icon + count color) */
 .fc2-chip.fc2-steps { background:var(--surface-alt); color:var(--text-secondary); }
@@ -546,3 +546,126 @@
   box-shadow:0 0 0 1px var(--divider); }
 .cx-own.mine { display:grid; place-items:center; background:color-mix(in srgb, #f59e0b 16%, var(--surface)); color:#d98a10; box-shadow:none; }
 .cx-own.mine svg { width:11px; height:11px; }
+
+/* ════════════ Compact Home streak — 3 variations (week detail lives on the Streak page) ════════════ */
+.stk { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); margin-bottom:16px; }
+
+/* 1 · momentum strip — flame emblem · hero number · best */
+.stk1 { display:flex; align-items:center; gap:14px; padding:14px 16px; }
+.stk1-fl { width:46px; height:46px; border-radius:14px; flex:none; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb, var(--primary) 13%, transparent); }
+.stk1-main { flex:1; min-width:0; }
+.stk1-num { font:900 30px var(--font); line-height:1; color:var(--primary); letter-spacing:-1px; }
+.stk1-num.sm { font-size:17px; letter-spacing:0; color:var(--text-primary); }
+.stk1-lab { font:800 10.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.5px; margin-top:6px; }
+.stk1-0 .stk1-lab { text-transform:none; letter-spacing:0; font-weight:700; }
+.stk1-div { width:1px; align-self:stretch; background:var(--divider); margin:3px 0; }
+.stk1-best { display:flex; align-items:center; gap:9px; flex:none; }
+.stk1-tr { color:var(--text-tertiary); display:inline-flex; }
+.stk1-bv { font:900 18px var(--font); color:var(--text-primary); line-height:1; }
+.stk1-bl { font:700 9.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.5px; margin-top:3px; }
+
+/* 2 · flame ring — fills toward your best */
+.stk2 { display:flex; align-items:center; gap:15px; padding:14px 16px; }
+.stk2-ring { flex:none; }
+.stk2-c { font:900 19px var(--font); color:var(--primary); line-height:1; display:grid; place-items:center; }
+.stk2-c svg { color:var(--primary); }
+.stk2-r { flex:1; min-width:0; }
+.stk2-lab { font:900 15px var(--font); color:var(--text-primary); }
+.stk2-hint { display:inline-flex; align-items:center; gap:5px; font:700 11.5px var(--font); color:var(--primary); margin-top:5px; }
+.stk2-hint svg { color:var(--primary); }
+.stk2-best { flex:none; text-align:center; padding-left:14px; border-left:1px solid var(--divider); }
+.stk2-best b { font:900 19px var(--font); color:var(--text-primary); display:block; line-height:1; }
+.stk2-best span { font:700 9.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.5px; }
+
+/* 3 · bold banner — orange-tinted, premium */
+.stk3 { position:relative; overflow:hidden; display:flex; align-items:center; gap:14px; padding:15px 18px;
+  background:color-mix(in srgb, var(--primary) 7%, var(--surface)); border-color:color-mix(in srgb, var(--primary) 20%, transparent); }
+.stk3-bg { position:absolute; right:-16px; top:50%; transform:translateY(-50%); color:var(--primary); opacity:.08; pointer-events:none; }
+.stk3-num { font:900 46px var(--font); line-height:1; color:var(--primary); letter-spacing:-2px; flex:none; }
+.stk3-fl { color:var(--primary); flex:none; display:grid; place-items:center; }
+.stk3-mid { flex:1; min-width:0; position:relative; z-index:1; }
+.stk3-lab { font:900 10px var(--font); color:var(--primary); letter-spacing:1.2px; }
+.stk3-motiv { font:800 13.5px var(--font); color:var(--text-primary); margin-top:4px; }
+.stk3-best { flex:none; text-align:right; position:relative; z-index:1; }
+.stk3-best span { display:block; font:700 9px var(--font); color:var(--text-tertiary); letter-spacing:.6px; }
+.stk3-best b { font:900 18px var(--font); color:var(--text-primary); }
+
+/* ════ Daily-goal: integrated top CTA (Start a workout) + slim set-goal ════ */
+.pb-start { display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 14px; border:none; border-radius:var(--r-btn, 12px);
+  background:var(--primary); color:var(--on-primary); font:800 12.5px var(--font); cursor:pointer; box-shadow:var(--shadow-btn); white-space:nowrap; }
+.pb-start:active { transform:scale(.97); }
+.pb-setgoal { display:inline-flex; align-items:center; gap:7px; margin-top:12px; height:42px; padding:0 16px; border:1.5px solid var(--border);
+  border-radius:var(--r-btn, 12px); background:var(--surface); color:var(--text-primary); font:800 13px var(--font); cursor:pointer; }
+.pb-setgoal svg { color:var(--primary); }
+
+/* compact empty-workouts (CTA moved up into the daily-goal top) */
+.combo-empty.compact { padding:14px 6px 8px; }
+.combo-empty.compact .ce-t { margin-top:6px; }
+
+/* Top activities — subtle Electric-Orange emphasis on the #1 (leader) card */
+.fc2-card.is-top { box-shadow:var(--shadow-card), inset 3px 0 0 var(--primary); border-color:color-mix(in srgb, var(--primary) 22%, var(--border)); }
+
+/* ════════════ V7 integration: Top D · Streak 3 · My Activity 1 ════════════ */
+/* Top Activities — Variant D (per-user rail, ~2.5 cards) */
+.xt-rail { display:flex; gap:9px; overflow-x:auto; margin:0 -18px; padding:2px 18px 8px; scrollbar-width:none; }
+.xt-rail::-webkit-scrollbar { display:none; }
+.xt-card { flex:none; width:144px; position:relative; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); box-shadow:var(--shadow-card); padding:12px; }
+.xt-av { width:26px; height:26px; border-radius:50%; flex:none; background-size:cover; background-position:center; }
+.xt-d-h { display:flex; align-items:center; gap:8px; }
+.xt-d-nm { flex:1; min-width:0; font:800 12.5px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-d-hero { display:flex; align-items:center; gap:11px; margin:12px 0 10px; }
+.xt-d-fig { width:48px; height:48px; border-radius:13px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 11%,transparent); flex:none; }
+.xt-d-en { font:800 12px var(--font); color:var(--text-primary); }
+.xt-d-r { font:900 20px var(--font); color:var(--primary); line-height:1; margin-top:2px; }
+.xt-d-r span { font:700 10px var(--font); color:var(--text-tertiary); }
+.xt-d-more { font:800 10.5px var(--font); color:var(--text-tertiary); }
+
+/* Streak — Variant 3 (number hero) */
+.xs { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); margin-bottom:16px; }
+.xs3 { display:flex; align-items:center; gap:14px; padding:14px 16px; }
+.xs3-num { font:900 44px var(--font); color:var(--primary); line-height:.9; letter-spacing:-2px; flex:none; }
+.xs3-inactive .xs3-num, .xs3-broken .xs3-num { color:var(--text-tertiary); }
+.xs3-mid { flex:1; min-width:0; }
+.xs3-lab { font:900 11px var(--font); color:var(--text-secondary); letter-spacing:.8px; margin-bottom:7px; }
+.xs-emb { position:relative; border-radius:14px; display:grid; place-items:center; flex:none; }
+.xs-emb > svg { position:relative; z-index:1; }
+.xs-active { background:color-mix(in srgb,var(--primary) 15%,transparent); color:var(--primary); }
+.xs-active > svg { filter:drop-shadow(0 0 5px color-mix(in srgb,var(--primary) 45%,transparent)); }
+.xs-broken { background:color-mix(in srgb,#dc2626 12%,transparent); color:#dc2626; }
+.xs-inactive { background:var(--surface-alt); color:var(--text-tertiary); }
+.xs-crk { position:absolute; inset:0; z-index:2; stroke:var(--surface); stroke-width:2.4; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.xs-badge { position:absolute; right:-4px; bottom:-4px; width:17px; height:17px; border-radius:50%; background:var(--bc); display:grid; place-items:center; border:2px solid var(--surface); z-index:3; }
+.xs-badge svg { color:#fff; }
+.xs-badge.dash::after { content:""; width:6px; height:2px; border-radius:2px; background:#fff; }
+.xs-bub { display:inline-flex; align-items:center; gap:5px; font:800 11px var(--font); padding:4px 9px; border-radius:99px; white-space:nowrap; flex:none; }
+.xs-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+.xs-b-active { color:#15803d; background:color-mix(in srgb,#16a34a 14%,transparent); } .xs-b-active .xs-dot { background:#16a34a; }
+.xs-b-broken { color:#b91c1c; background:color-mix(in srgb,#dc2626 12%,transparent); } .xs-b-broken .xs-dot { background:#dc2626; }
+.xs-b-inactive { color:var(--text-secondary); background:var(--surface-alt); } .xs-b-inactive .xs-dot { background:var(--text-tertiary); }
+
+/* My Activity — Variant 1 */
+.xa { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); padding:16px; margin-bottom:16px; overflow:hidden; }
+.xa-h { display:flex; align-items:center; justify-content:space-between; }
+.xa-t { font:900 15px var(--font); color:var(--text-primary); }
+.xa-acts { display:flex; gap:8px; }
+.xa-ic { width:34px; height:34px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; }
+.xa-ic:active { transform:scale(.94); }
+.xa-ic.add { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+.xa-rail { display:flex; gap:9px; overflow-x:auto; margin:13px -16px 0; padding:2px 16px 4px; scrollbar-width:none; }
+.xa-rail::-webkit-scrollbar { display:none; }
+.xa-act { flex:none; width:94px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:11px 10px; display:flex; flex-direction:column; align-items:flex-start; box-shadow:var(--shadow-card); }
+.xa-actic { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 11%,transparent); color:var(--primary); margin-bottom:8px; }
+.xa-actv { font:900 16px var(--font); color:var(--text-primary); line-height:1; }
+.xa-actv span { font:700 9.5px var(--font); color:var(--text-tertiary); }
+.xa-actn { font:700 11px var(--font); color:var(--text-tertiary); margin-top:2px; }
+.xa-add { align-items:center; justify-content:center; text-align:center; border-style:dashed; box-shadow:none; background:color-mix(in srgb,var(--primary) 5%,transparent); cursor:pointer; }
+.xa-addic { width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 13%,transparent); color:var(--primary); margin-bottom:7px; }
+.xa-addt { font:800 11px var(--font); color:var(--primary); }
+.xa-actstep .xa-stepic { width:36px; height:36px; margin-bottom:8px; }
+.xa-div { height:1px; background:var(--divider); margin:15px -16px 14px; }
+.xa-metrics { display:flex; gap:9px; }
+.xa-metric { flex:1; min-width:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:11px 10px; box-shadow:var(--shadow-card); }
+.xa-mv { font:900 16px var(--font); color:var(--text-primary); line-height:1; white-space:nowrap; }
+.xa-ml { display:flex; align-items:center; gap:4px; font:700 10px var(--font); color:var(--text-tertiary); margin-top:5px; }
+.xa-ml svg { color:var(--primary); }
+.xa-emptynote { font:600 12.5px var(--font); color:var(--text-tertiary); margin-top:14px; }

@@ -95,17 +95,19 @@
   <script src="../../js/app.js"></script>
   <script>
     const H = HomeData, P = HomePro;
+    const STREAK_V = new URLSearchParams(location.search).get("streak") || "1";
     function render(state) {
       const d = H.DATA[state];
       document.getElementById("hi").textContent = d.greeting;
       document.getElementById("bell").querySelector(".dot").style.display = d.bell ? "block" : "none";
-      // V7 = V5 body + V6's bold streak-forward top section
-      let h = P.aiPulse(state, d)            // TOP — clean separated CTA bar + streak card (less busy)
-        + P.todayCard(state, d, "banner", { stats: true, addFirst: true }) // goal banner + distance/active + today's workouts (Start another first)
+      // Section order: AI workout · Top activities · Streak · My Activity · My challenges · rest
+      let h = P.aiCtaBar(state, d)           // 1 · Start an AI workout (CTA bar)
+        + P.topActivitiesV7(state, d)        // 2 · Top activities — Variant D · Global / Friends
+        + P.streakHero(state, d)             // 3 · Streak — Variant 3 (number hero + status)
+        + P.myActivity(state, d)             // 4 · My Activity — Variant 1 (activities → metrics, steps goal)
         + (state === "new" ? H.checklist() : "")
-        + P.challengesPro(state, d)          // active challenges — ring progress + group chat
-        + P.topActivities(state, d)          // Top activities — horizontal scroll · Top / Friends
-        + Community.homeFeed(state);         // community — full-bleed immersive, multi-asset, tap → post detail
+        + P.challengesPro(state, d)          // 5 · My challenges (active challenges)
+        + Community.homeFeed(state);         // rest as-is — community feed
       document.getElementById("content").innerHTML = h;
       window.Icons.init(document.getElementById("content"));
       document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.st === state));

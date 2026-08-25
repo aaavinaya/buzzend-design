@@ -1,0 +1,203 @@
+/* Buzzend — Section Design Exploration (LAB) styles. Token/palette driven, Electric-Orange,
+   V7 · Pulse + Momentum. Scoped with xt- / xs- / xa- / lab- prefixes so nothing here can
+   affect the real Home screen. */
+
+/* ── page chrome ── */
+.lab-page { max-width:430px; margin:0 auto; padding:26px 0 80px; }
+.lab-hero { padding:0 20px 4px; }
+.lab-hero h1 { font:900 24px var(--font); color:var(--text-primary); }
+.lab-hero p { font:600 13px var(--font); color:var(--text-secondary); margin-top:5px; }
+.lab-nav { position:sticky; top:0; z-index:20; display:flex; gap:8px; padding:12px 20px; background:color-mix(in srgb,var(--bg-canvas) 88%,transparent); backdrop-filter:blur(8px); margin:14px 0 6px; }
+.lab-nav a { flex:1; text-align:center; font:800 12.5px var(--font); color:var(--text-secondary); background:var(--surface); border:1px solid var(--border); border-radius:99px; padding:9px 6px; text-decoration:none; }
+.lab-nav a.on { color:var(--on-primary); background:var(--primary); border-color:var(--primary); }
+.lab-secttl { font:900 17px var(--font); color:var(--text-primary); padding:26px 20px 2px; }
+.lab-secsub { font:600 12.5px var(--font); color:var(--text-secondary); padding:0 20px 6px; }
+.lab-block { margin:16px 0; }
+.lab-bh { display:flex; align-items:baseline; gap:9px; padding:0 20px 9px; }
+.lab-bn { font:900 14px var(--font); color:var(--primary); }
+.lab-bs { font:700 11.5px var(--font); color:var(--text-tertiary); }
+.lab-body { width:390px; margin:0 auto; padding:14px 16px; background:var(--surface-alt); border-radius:18px; overflow:hidden; }
+.lab-states { display:flex; flex-direction:column; gap:14px; }
+.lab-state.wide { width:100%; }
+.lab-sk { font:800 10.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.5px; margin-bottom:7px; }
+.lab-sech { display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; }
+.lab-sech h3 { font:900 15px var(--font); color:var(--text-primary); }
+.lab-sech a { font:800 12.5px var(--font); color:var(--primary); text-decoration:none; }
+
+/* shared ring */
+.xr .xr-t { fill:none; stroke:var(--surface-alt); }
+.xr .xr-p { fill:none; stroke-linecap:round; }
+.lab-body .xr .xr-t { stroke:color-mix(in srgb,var(--text-tertiary) 22%,transparent); }
+
+/* ══════════════ TOP ACTIVITIES (per user · multiple activities) ══════════════ */
+.xt-tabs { display:flex; gap:8px; margin-bottom:12px; }
+.xt-tab { display:inline-flex; align-items:center; gap:6px; font:800 12.5px var(--font); color:var(--text-secondary); background:var(--surface); border:1px solid var(--border); border-radius:99px; padding:8px 15px; cursor:pointer; }
+.xt-tab svg { color:var(--primary); }
+.xt-tab.on { color:var(--on-primary); background:var(--primary); border-color:var(--primary); }
+.xt-tab.on svg { color:var(--on-primary); }
+.xt-wrap.scope-global .ta-friends { display:none; }
+.xt-wrap.scope-friends .ta-global { display:none; }
+.xt-rail { display:flex; gap:9px; overflow-x:auto; margin:0 -16px; padding:2px 16px 6px; scrollbar-width:none; }
+.xt-rail::-webkit-scrollbar { display:none; }
+.xt-card { flex:none; width:144px; position:relative; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); box-shadow:var(--shadow-card); padding:12px; }
+.xt-rk { width:19px; height:19px; border-radius:50%; display:grid; place-items:center; font:900 10.5px var(--font); background:var(--surface-alt); color:var(--text-secondary); flex:none; }
+.xt-rk.r1 { background:var(--primary); color:var(--on-primary); }
+.xt-rk.r2 { background:#c8ced6; color:#1b1b1b; } .xt-rk.r3 { background:#e0a06a; color:#1b1b1b; }
+.xt-av { width:26px; height:26px; border-radius:50%; flex:none; background-size:cover; background-position:center; }
+.xt-av.lg { width:32px; height:32px; }
+
+/* A — athlete card: activity rows */
+.xt-a-h { display:flex; align-items:center; gap:8px; }
+.xt-a-nm { flex:1; min-width:0; font:800 13px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-a-list { margin-top:11px; display:flex; flex-direction:column; gap:7px; }
+.xt-a-row { display:flex; align-items:center; gap:7px; }
+.xt-a-ic { width:24px; height:24px; border-radius:7px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 11%,transparent); flex:none; }
+.xt-a-en { flex:1; min-width:0; font:700 11.5px var(--font); color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-a-r { font:900 14px var(--font); color:var(--primary); flex:none; }
+.xt-a-more { margin-top:9px; font:800 10.5px var(--font); color:var(--text-tertiary); }
+
+/* B — icon cluster + total reps */
+.xt-b-h { display:flex; align-items:center; gap:8px; }
+.xt-b-nm { flex:1; min-width:0; font:800 13px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-b-figs { display:flex; gap:6px; margin:12px 0 11px; }
+.xt-b-fig { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 9%,transparent); flex:none; }
+.xt-b-total { font:900 22px var(--font); color:var(--primary); line-height:1; }
+.xt-b-total span { font:700 11px var(--font); color:var(--text-tertiary); }
+
+/* C — premium chips + total pill */
+.xt-c-h { display:flex; align-items:center; gap:8px; }
+.xt-c-nm { flex:1; min-width:0; font:800 13px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-c-chips { display:flex; flex-wrap:wrap; gap:6px; margin:11px 0; }
+.xt-c-chip { display:inline-flex; align-items:center; gap:4px; font:800 11px var(--font); color:var(--text-secondary); background:var(--surface-alt); border-radius:99px; padding:4px 8px; }
+.xt-c-chip svg { width:14px; height:14px; }
+.xt-c-pill { text-align:center; background:var(--primary); color:var(--on-primary); font:900 12.5px var(--font); padding:8px; border-radius:11px; }
+
+/* D — top-activity forward */
+.xt-d-h { display:flex; align-items:center; gap:8px; }
+.xt-d-nm { flex:1; min-width:0; font:800 12.5px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.xt-d-hero { display:flex; align-items:center; gap:11px; margin:12px 0 10px; }
+.xt-d-fig { width:48px; height:48px; border-radius:13px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 11%,transparent); flex:none; }
+.xt-d-en { font:800 12px var(--font); color:var(--text-primary); }
+.xt-d-r { font:900 20px var(--font); color:var(--primary); line-height:1; margin-top:2px; }
+.xt-d-r span { font:700 10px var(--font); color:var(--text-tertiary); }
+.xt-d-more { font:800 10.5px var(--font); color:var(--text-tertiary); }
+
+/* ══════════════ STREAK (active · broken · inactive) ══════════════ */
+.xs-emb { position:relative; border-radius:14px; display:grid; place-items:center; flex:none; }
+.xs-emb > svg { position:relative; z-index:1; }
+.xs-active { background:color-mix(in srgb,var(--primary) 15%,transparent); color:var(--primary); }
+.xs-active > svg { filter:drop-shadow(0 0 5px color-mix(in srgb,var(--primary) 45%,transparent)); }
+.xs-broken { background:color-mix(in srgb,#dc2626 12%,transparent); color:#dc2626; }
+.xs-inactive { background:var(--surface-alt); color:var(--text-tertiary); }
+.xs-crk { position:absolute; inset:0; z-index:2; stroke:var(--surface); stroke-width:2.4; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.xs-badge { position:absolute; right:-4px; bottom:-4px; width:17px; height:17px; border-radius:50%; background:var(--bc); display:grid; place-items:center; border:2px solid var(--surface); z-index:3; }
+.xs-badge svg { color:#fff; }
+.xs-badge.dash::after { content:""; width:6px; height:2px; border-radius:2px; background:#fff; }
+.xs-bub { display:inline-flex; align-items:center; gap:5px; font:800 11px var(--font); padding:4px 9px; border-radius:99px; white-space:nowrap; flex:none; }
+.xs-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+.xs-b-active { color:#15803d; background:color-mix(in srgb,#16a34a 14%,transparent); } .xs-b-active .xs-dot { background:#16a34a; }
+.xs-b-broken { color:#b91c1c; background:color-mix(in srgb,#dc2626 12%,transparent); } .xs-b-broken .xs-dot { background:#dc2626; }
+.xs-b-inactive { color:var(--text-secondary); background:var(--surface-alt); } .xs-b-inactive .xs-dot { background:var(--text-tertiary); }
+
+.xs { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); }
+.xs1 { display:flex; align-items:center; gap:12px; padding:12px 14px; }
+.xs1-main { flex:1; min-width:0; }
+.xs1-num { font:900 22px var(--font); color:var(--text-primary); line-height:1; }
+.xs1-num span { font:800 10.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.4px; }
+.xs1-sub { font:700 11px var(--font); color:var(--text-tertiary); margin-top:5px; }
+.xs2 { display:flex; align-items:center; gap:14px; padding:12px 14px; }
+.xr-wrap { position:relative; display:grid; place-items:center; flex:none; }
+.xs2-emb { position:absolute; inset:0; display:grid; place-items:center; }
+.xs2-r { flex:1; min-width:0; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.xs2-num { font:900 22px var(--font); color:var(--text-primary); line-height:1; }
+.xs2-num span { display:block; font:800 10px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.4px; margin-top:4px; }
+.xs3 { display:flex; align-items:center; gap:14px; padding:14px 16px; }
+.xs3-num { font:900 44px var(--font); color:var(--primary); line-height:.9; letter-spacing:-2px; flex:none; }
+.xs3-inactive .xs3-num, .xs3-broken .xs3-num { color:var(--text-tertiary); }
+.xs3-mid { flex:1; min-width:0; }
+.xs3-lab { font:900 11px var(--font); color:var(--text-secondary); letter-spacing:.8px; margin-bottom:7px; }
+.xs4 { position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; padding:14px 16px; }
+.xs4-bg { position:absolute; right:-14px; top:50%; transform:translateY(-50%); opacity:.07; pointer-events:none; }
+.xs4-active { background:color-mix(in srgb,var(--primary) 7%,var(--surface)); border-color:color-mix(in srgb,var(--primary) 20%,transparent); }
+.xs4-active .xs4-bg { color:var(--primary); }
+.xs4-broken { background:color-mix(in srgb,#dc2626 6%,var(--surface)); border-color:color-mix(in srgb,#dc2626 18%,transparent); }
+.xs4-broken .xs4-bg { color:#dc2626; }
+.xs4-inactive .xs4-bg { color:var(--text-tertiary); }
+.xs4-mid { flex:1; min-width:0; position:relative; z-index:1; }
+.xs4-num { font:900 22px var(--font); color:var(--text-primary); line-height:1; }
+.xs4-num span { font:800 10.5px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.4px; }
+.xs4-note { font:700 11px var(--font); color:var(--text-tertiary); margin-top:5px; }
+
+/* ══════════════ MY ACTIVITY (activities row · divider · metrics; steps-only goal) ══════════════ */
+.xa { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); padding:16px; text-align:left; overflow:hidden; }
+.xa-h { display:flex; align-items:center; justify-content:space-between; }
+.xa-t { font:900 15px var(--font); color:var(--text-primary); }
+.xa-acts { display:flex; gap:8px; }
+.xa-ic { width:34px; height:34px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; }
+.xa-ic.sm { width:30px; height:30px; }
+.xa-ic:active { transform:scale(.94); }
+.xa-share { display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:none; border-radius:var(--r-btn,12px); background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); font:800 12.5px var(--font); cursor:pointer; }
+.xa-done.inline { display:inline-flex; align-items:center; gap:6px; font:800 12.5px var(--font); color:var(--success); }
+
+/* activity cards (+ add) */
+.xa-rail { display:flex; gap:9px; overflow-x:auto; margin:13px -16px 0; padding:2px 16px 4px; scrollbar-width:none; }
+.xa-rail::-webkit-scrollbar { display:none; }
+.xa-act { flex:none; width:94px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:11px 10px; display:flex; flex-direction:column; align-items:flex-start; box-shadow:var(--shadow-card); }
+.xa-actic { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 11%,transparent); color:var(--primary); margin-bottom:8px; }
+.xa-actv { font:900 16px var(--font); color:var(--text-primary); line-height:1; }
+.xa-actv span { font:700 9.5px var(--font); color:var(--text-tertiary); }
+.xa-actn { font:700 11px var(--font); color:var(--text-tertiary); margin-top:2px; }
+.xa-add { align-items:center; justify-content:center; text-align:center; border-style:dashed; box-shadow:none; background:color-mix(in srgb,var(--primary) 5%,transparent); cursor:pointer; }
+.xa-add:active { transform:scale(.97); }
+.xa-addic { width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 13%,transparent); color:var(--primary); margin-bottom:7px; }
+.xa-addt { font:800 11px var(--font); color:var(--primary); }
+/* Steps card — daily-goal ring + completion indicator (steps only) */
+.xa-actstep .xa-stepic { position:relative; width:36px; height:36px; display:grid; place-items:center; margin-bottom:8px; }
+.xa-stepc { position:absolute; inset:0; display:grid; place-items:center; color:var(--primary); }
+.xa-stepic.done .xa-stepc { color:var(--success); }
+
+/* divider + metrics */
+.xa-div { height:1px; background:var(--divider); margin:15px -16px 14px; }
+.xa-metrics { display:flex; gap:9px; }
+.xa-metric { flex:1; min-width:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:11px 10px; box-shadow:var(--shadow-card); }
+.xa-mv { font:900 16px var(--font); color:var(--text-primary); line-height:1; white-space:nowrap; }
+.xa-ml { display:flex; align-items:center; gap:4px; font:700 10px var(--font); color:var(--text-tertiary); margin-top:5px; }
+.xa-ml svg { color:var(--primary); }
+.xa-emptynote { font:600 12.5px var(--font); color:var(--text-tertiary); margin-top:14px; }
+
+/* v2 — steps-goal ring hero + inline metrics */
+.xa2-top { display:flex; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap; }
+.xa2-goal { display:flex; align-items:center; gap:11px; }
+.xa2-ring { position:relative; flex:none; display:grid; place-items:center; }
+.xa2-rc { position:absolute; inset:0; display:grid; place-items:center; font:900 12.5px var(--font); color:var(--text-primary); }
+.xa2-rc svg { color:var(--success); }
+.xa2-gl b { display:block; font:800 12.5px var(--font); color:var(--text-primary); }
+.xa2-gl span { font:700 10.5px var(--font); color:var(--text-tertiary); }
+.xa2-mini { margin-left:auto; display:flex; gap:11px; font:800 11px var(--font); color:var(--text-secondary); }
+.xa2-mini span { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+.xa2-mini svg { color:var(--primary); }
+.xa2-actl { font:800 11px var(--font); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.4px; }
+.xa2 .xa-rail { margin-top:8px; }
+
+/* v3 — metrics hero + Share footer */
+.xa3 .xa-metrics { margin-top:14px; }
+.xa3-actl { font:800 12px var(--font); color:var(--text-primary); }
+.xa3 .xa-rail { margin-top:9px; }
+.xa3-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid var(--divider); }
+.xa3-status { display:inline-flex; align-items:center; gap:6px; font:800 12px var(--font); color:var(--text-secondary); }
+
+/* v4 — compact: steps goal in header · slim metric strip */
+.xa4-hr { display:flex; align-items:center; gap:10px; }
+.xa4-sgoal { display:inline-flex; align-items:center; gap:4px; font:900 11px var(--font); color:var(--text-secondary); background:var(--surface-alt); padding:5px 10px; border-radius:99px; white-space:nowrap; }
+.xa4-sgoal.done { color:var(--success); background:color-mix(in srgb,var(--success) 13%,transparent); }
+.xa4-sgoal svg { color:inherit; }
+.xa4 .xa-rail { margin-top:12px; }
+.xa4-strip { display:flex; align-items:center; gap:13px; margin-top:13px; padding-top:12px; border-top:1px solid var(--divider); font:800 11.5px var(--font); color:var(--text-secondary); }
+.xa4-strip > span { display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.xa4-strip svg { color:var(--primary); }
+.xa4-strip.empty > span { color:var(--text-tertiary); font-weight:700; }
+.xa4-share { margin-left:auto; width:32px; height:32px; border-radius:9px; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; flex:none; }
+
+/* My Activity v1: Add promoted into the header (primary), when activities exist */
+.xa-ic.add { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+.xa-ic.add:active { transform:scale(.94); }

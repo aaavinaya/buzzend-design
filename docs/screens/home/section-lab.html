@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="energyorange" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Buzzend · Section Design Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/section-lab.css" />
+</head>
+<body style="background:var(--bg-canvas);align-items:flex-start;padding:0;">
+  <button class="theme-toggle" onclick="toggleTheme()" style="top:16px">🌙</button>
+  <div class="lab-page">
+    <div class="lab-hero"><h1>Section Design Exploration</h1>
+      <p>Standalone lab — the V7 Home screen is untouched. Electric Orange · V7 · Pulse + Momentum. Pick the strongest per section to integrate later.</p></div>
+    <nav class="lab-nav">
+      <a href="#s-top" class="on">Top Activities</a><a href="#s-streak">Streak</a><a href="#s-activity">My Activity</a>
+    </nav>
+
+    <section id="s-top"><div class="lab-secttl">1 · Top Activities</div>
+      <div class="lab-secsub">4 variants · rep count is the hero · no kcal/time/km footer · ~2.5 cards visible (scroll) · Today's-Workouts icon style.</div>
+      <div id="lab-top"></div></section>
+
+    <section id="s-streak"><div class="lab-secttl">2 · Streak</div>
+      <div class="lab-secsub">4 variants across states. One coherent flame emblem communicates Active · Broken · Inactive via shape + badge + crack (not colour alone). Large numbers supported.</div>
+      <div id="lab-streak"></div></section>
+
+    <section id="s-activity"><div class="lab-secttl">3 · My Activity</div>
+      <div class="lab-secsub">4 variants across states — built from your sketch: activity cards (+ add) → divider → summary metrics. Left-aligned/structured, Edit + Share, all use-cases.</div>
+      <div id="lab-activity"></div></section>
+  </div>
+
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/section-lab.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    // force Electric Orange on this lab only (after app.js), without touching the saved preference
+    document.documentElement.setAttribute("data-palette", "energyorange");
+    Lab.mount();
+    // scroll-spy for the sticky nav
+    const links = [...document.querySelectorAll(".lab-nav a")];
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) links.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
+    }), { rootMargin: "-45% 0px -50% 0px" });
+    ["s-top", "s-streak", "s-activity"].forEach((id) => io.observe(document.getElementById(id)));
+  </script>
+</body>
+</html>

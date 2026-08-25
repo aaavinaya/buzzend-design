@@ -43,7 +43,7 @@ JUMPING JACKS  (coach-voice/jumping_jacks/)
 ============================================================
 arms_not_high.mp3          | Reach those arms all the way overhead!
                              (Arms not high enough: "Raise your arms fully overhead.")
-feet_not_wide.mp3          | Jump your feet wider apart!
+feet_not_wide.mp3          | Take your feet a little wider apart.   (re-recorded 2026-08 — softer, was "Jump your feet wider apart!")
                              (Feet not wide enough: "Jump your feet wider apart.")
 arms_feet_out_of_sync.mp3  | Sync it up [pause] — raise your arms as your feet jump out.
                              (Arms and feet out of sync: "Coordinate the movement — raise your arms as your feet move outward.")
