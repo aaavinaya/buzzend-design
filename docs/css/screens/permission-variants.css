@@ -1,0 +1,90 @@
+/* Camera-permission screen — 5 readability-focused redesigns.
+   Reuses the current identity (fl-ic camera tile, fl-c-t/fl-c-d type, fl-btn pills
+   from moment.css); only the middle content changes so users actually READ the
+   reassurance instead of skipping to the button. Exploration canvas only. */
+
+.pv-canvas { min-height: 100vh; background: color-mix(in srgb, var(--text-primary) 7%, var(--bg-canvas)); padding: 30px 0 60px; }
+.pv-head { text-align: center; padding: 8px 20px 4px; }
+.pv-head h1 { font: 900 24px var(--font); color: var(--text-primary); margin: 0; }
+.pv-head p { font: 600 13px var(--font); color: var(--text-secondary); margin: 6px 0 0; }
+
+.pv-scroll { overflow-x: auto; padding: 24px 30px 10px; -webkit-overflow-scrolling: touch; }
+.pv-wrap { display: flex; gap: 30px; align-items: flex-start; min-width: max-content; width: max-content; margin: 0 auto; }
+.pv-col { flex: none; }
+.pv-wrap .screen-box { margin: 0; flex: none; }
+
+.pv-lab { padding: 0 4px 14px; max-width: 390px; }
+.pv-lab .pv-tagrow { display: flex; align-items: center; gap: 10px; }
+.pv-tag { font: 900 12px var(--font); letter-spacing: .5px; color: var(--on-primary); background: var(--primary); border-radius: var(--r-pill); padding: 5px 11px; }
+.pv-lab b { font: 900 18px var(--font); color: var(--text-primary); }
+.pv-lab p { font: 600 12.5px var(--font); color: var(--text-secondary); margin: 8px 0 0; line-height: 1.4; }
+
+/* the screen body layout — content centered, buttons pinned to the bottom */
+.pm { flex: 1; display: flex; flex-direction: column; min-height: 772px; padding: 0 26px 26px; background: var(--bg-canvas); }
+.pm-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 0; }
+.pm-body.top { justify-content: flex-start; padding-top: 42px; }
+.pm-foot { display: flex; flex-direction: column; gap: 10px; }
+.pm .fl-ic { margin-bottom: 20px; }
+.pm .fl-ic.sm { width: 68px; height: 68px; border-radius: 20px; margin-bottom: 16px; }
+.pm-eyebrow { font: 900 11.5px var(--font); letter-spacing: .8px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+
+/* ── V1 · benefit rows ── */
+.pm-rows { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; text-align: left; width: 100%; max-width: 330px; }
+.pm-row { display: flex; gap: 14px; align-items: flex-start; }
+.pm-row-ic { width: 44px; height: 44px; border-radius: 13px; background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); display: grid; place-items: center; flex: none; }
+.pm-row-tx b { font: 800 15.5px var(--font); color: var(--text-primary); display: block; }
+.pm-row-tx span { font: 600 13px var(--font); color: var(--text-secondary); line-height: 1.45; margin-top: 3px; display: block; }
+
+/* ── V2 · privacy callout ── */
+.pm-note { display: flex; gap: 12px; align-items: flex-start; text-align: left; max-width: 330px; margin: 22px auto 0;
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--primary) 24%, transparent);
+  border-radius: var(--r-lg); padding: 16px 16px 17px; }
+.pm-note .pm-note-ic { color: var(--primary); flex: none; }
+.pm-note b { font: 800 14.5px var(--font); color: var(--text-primary); }
+.pm-note p { font: 600 13px var(--font); color: var(--text-secondary); line-height: 1.5; margin: 4px 0 0; }
+.pm-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+.pm-chip { display: inline-flex; align-items: center; gap: 6px; font: 800 12px var(--font); color: var(--text-secondary);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 6px 12px; }
+.pm-chip .bz-ico { color: var(--primary); }
+
+/* ── V3 · numbered steps ── */
+.pm-steps { display: flex; flex-direction: column; margin-top: 24px; text-align: left; width: 100%; max-width: 320px; }
+.pm-step { display: flex; gap: 15px; align-items: flex-start; position: relative; }
+.pm-step-n { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: var(--on-primary); font: 900 15px var(--font); display: grid; place-items: center; flex: none; z-index: 1; }
+.pm-step:not(:last-child)::before { content: ""; position: absolute; left: 16px; top: 32px; bottom: -4px; width: 2px; background: var(--divider); }
+.pm-step-tx { padding: 5px 0 22px; }
+.pm-step-tx b { font: 800 15.5px var(--font); color: var(--text-primary); display: block; }
+.pm-step-tx span { font: 600 13px var(--font); color: var(--text-secondary); margin-top: 3px; display: block; line-height: 1.45; }
+
+/* ── V4 · do / don't ── */
+.pm-dd { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; text-align: left; width: 100%; max-width: 344px; }
+.pm-dd-grp .h { font: 900 16px var(--font); letter-spacing: .3px; display: flex; align-items: center; gap: 8px; margin-top: 1rem; margin-bottom: 12px; }
+.pm-dd-grp.ok .h { color: var(--success); }
+.pm-dd-grp.no .h { color: #e5524a; }
+.pm-dd-grp .h .hic { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+.pm-dd-grp.ok .h .hic { background: color-mix(in srgb, var(--success) 16%, transparent); }
+.pm-dd-grp.no .h .hic { background: rgba(229,82,74,.13); }
+.pm-dd-item { display: flex; gap: 12px; align-items: flex-start; padding: 7px 0; font: 700 15.5px var(--font); line-height: 1.4; color: var(--text-primary); }
+.pm-dd-item .ic { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex: none; margin-top: 1px; }
+.pm-dd-grp.ok .ic { background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--success); }
+.pm-dd-grp.no .ic { background: rgba(229,82,74,.13); color: #e5524a; }
+
+/* ── V5 · Q&A ── */
+.pm-qa { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; text-align: left; width: 100%; max-width: 330px; }
+.pm-qa-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; box-shadow: var(--shadow-card); }
+.pm-qa-q { font: 800 14.5px var(--font); color: var(--text-primary); display: flex; gap: 9px; align-items: center; }
+.pm-qa-q .bz-ico { color: var(--primary); flex: none; }
+.pm-qa-a { font: 600 13px var(--font); color: var(--text-secondary); line-height: 1.5; margin-top: 7px; padding-left: 27px; }
+
+@media (max-width: 900px) {
+  .pv-scroll { padding: 18px 16px; }
+  .pv-wrap { flex-direction: column; min-width: 0; width: 100%; align-items: center; }
+}
+
+/* standalone final page — single screen centered on the canvas */
+.pv-single { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--text-primary) 7%, var(--bg-canvas)); }
+
+/* permission already granted — confirmation chip in place of Enable/Not now */
+.pm-granted { display:inline-flex; align-items:center; gap:7px; margin-top:16px; padding:8px 14px; border-radius:var(--r-pill);
+  font:800 13px var(--font); color:var(--success); background:color-mix(in srgb,var(--success) 14%,transparent); }
+.pm-granted .bz-ico { width:15px; height:15px; }

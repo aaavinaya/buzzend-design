@@ -619,6 +619,17 @@
 .xt-d-r { font:900 20px var(--font); color:var(--primary); line-height:1; margin-top:2px; }
 .xt-d-r span { font:700 10px var(--font); color:var(--text-tertiary); }
 .xt-d-more { font:800 10.5px var(--font); color:var(--text-tertiary); }
+/* multi-workout: a spaced row of outlined exercise figures (clean at small size),
+   a summed total, and a footer that carries the exact count + the rank badge. */
+.xt-d-figs { display:flex; align-items:center; gap:7px; margin:12px 0 9px; min-height:28px; }
+.xt-d-fig2 { width:26px; height:26px; flex:none; display:grid; place-items:center; }
+.xt-d-fig2 img { display:block; }
+.xt-d-plus { font:800 12px var(--font); color:var(--text-tertiary); margin-left:1px; }
+.xt-d-tot { display:flex; align-items:baseline; gap:5px; }
+.xt-d-totn { font:900 22px var(--font); color:var(--primary); line-height:1; }
+.xt-d-totl { font:700 11px var(--font); color:var(--text-tertiary); }
+.xt-d-foot { display:flex; align-items:center; justify-content:space-between; margin-top:11px; }
+.xt-d-cnt { font:800 11px var(--font); color:var(--text-tertiary); }
 
 /* Streak — Variant 3 (number hero) */
 .xs { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); margin-bottom:16px; }

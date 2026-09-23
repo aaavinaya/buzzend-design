@@ -102,12 +102,20 @@
 .fl-head { display:flex; align-items:center; gap:12px; padding:18px 16px 6px; }
 .fl-title { font:900 23px var(--font); color:var(--text-primary); }
 .fl-sub { padding:2px 18px 16px; font:600 13.5px var(--font); color:var(--text-secondary); }
-.fl-list { padding:0 16px; display:flex; flex-direction:column; gap:11px; }
-.fl-ex { display:flex; align-items:center; gap:15px; padding:16px; border-radius:var(--r-md); cursor:pointer; width:100%; text-align:left; transition:transform .1s; box-shadow:var(--shadow-card); }
+.fl-list { padding:0 16px; display:flex; flex-direction:column; gap:10px; }
+.fl-ex { display:flex; align-items:center; gap:14px; padding:12px; border-radius:var(--r-md); cursor:pointer; width:100%; text-align:left; transition:transform .1s; box-shadow:var(--shadow-card); }
 .fl-ex:active { transform:scale(.99); }
-.fl-ex-ic { width:50px; height:50px; border-radius:15px; display:grid; place-items:center; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); flex:none; }
-.fl-ex-n { flex:1; font:800 17px var(--font); color:var(--text-primary); }
-.fl-ex-go { color:var(--text-tertiary); display:inline-flex; }
+/* enlarged illustration thumbnail with a play button — synced with the native cards */
+.fl-ex-thumb { position:relative; width:70px; height:70px; border-radius:14px; flex:none; display:grid; place-items:center; overflow:hidden; cursor:pointer;
+  background:color-mix(in srgb,var(--primary) 12%,transparent); }
+.fl-ex-thumb:active { transform:scale(.96); }
+.fl-ex-play { position:absolute; right:5px; bottom:5px; width:23px; height:23px; border-radius:50%; background:var(--primary); color:var(--on-primary); display:grid; place-items:center; box-shadow:0 2px 7px rgba(0,0,0,.22); }
+.fl-ex-play .bz-ico { width:10px; height:10px; margin-left:1px; }
+.fl-ex-tx { flex:1; min-width:0; }
+.fl-ex-n { display:block; font:800 19px var(--font); color:var(--text-primary); }
+.fl-ex-sub { display:flex; align-items:center; gap:5px; font:700 12px var(--font); color:var(--text-tertiary); margin-top:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fl-ex-sub .bz-ico { width:11px; height:11px; flex:none; }
+.fl-ex-go { color:var(--text-tertiary); display:inline-flex; flex:none; }
 
 /* ── finish ── */
 .fl-finish { align-items:center; justify-content:center; text-align:center; padding:30px; }
@@ -267,3 +275,14 @@
 .fl-quit-card .d { font:600 13px var(--font); color:rgba(255,255,255,.65); margin-top:8px; }
 .fl-quit-card .row { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
 .fl-quit-card .fl-btn-ghost { color:#fff; border-color:rgba(255,255,255,.22); }
+
+/* Select screen → camera-permission entry. A soft, reassuring info row under the
+   exercise list — deliberately unlike the .fl-ex exercise buttons so it reads as
+   info, not another workout. Opens the "How Buzzend uses your camera" screen. */
+.fl-priv { display:flex; align-items:center; gap:13px; width:calc(100% - 32px); margin:16px 16px 4px; padding:13px 15px; border-radius:var(--r-md); cursor:pointer; text-align:left;
+  background:color-mix(in srgb,var(--primary) 7%,var(--surface)); border:1px solid color-mix(in srgb,var(--primary) 18%,transparent); transition:transform .1s; }
+.fl-priv:active { transform:scale(.99); }
+.fl-priv-ic { width:38px; height:38px; border-radius:11px; flex:none; display:grid; place-items:center; background:color-mix(in srgb,var(--primary) 14%,transparent); color:var(--primary); }
+.fl-priv-tx { flex:1; min-width:0; }
+.fl-priv-tx b { display:block; font:800 14px var(--font); color:var(--text-primary); }
+.fl-priv-tx span { display:block; font:700 12px var(--font); color:var(--text-secondary); margin-top:2px; }

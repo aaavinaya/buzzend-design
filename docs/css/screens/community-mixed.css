@@ -1,0 +1,72 @@
+/* Mixed community feed — shows the new auto-activity cards interleaved with the
+   EXISTING media posts (.cf-card) in one scroll, so the two styles can be judged
+   together. A dev toggle swaps the activity-card style. Isolated preview only. */
+
+.cf-sub { font: 700 12px var(--font); color: var(--text-tertiary); margin-top: 5px; }
+
+.mx-note { display: flex; gap: 9px; align-items: flex-start; margin: 0; padding: 11px 18px;
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface)); border-bottom: 1px solid var(--border); }
+.mx-note .bz-ico { color: var(--primary); flex: none; margin-top: 1px; }
+.mx-note span { font: 700 11.5px var(--font); color: var(--text-secondary); line-height: 1.45; }
+.mx-note b { color: var(--text-primary); font-weight: 800; }
+
+.mx-feed { background: var(--bg-canvas); }
+
+/* edge-to-edge modes (Rows / Dense grouped): activity rows + full-bleed media align */
+.mx-feed .af-act:first-child { border-top: none; }
+
+/* boxed modes (Podium / Session): pad the rail and give the existing media post the
+   same rounded-card treatment so it reads as part of the same set */
+.mx-feed.boxed { padding: 12px 12px 4px; }
+.mx-feed.boxed .cf-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-card);
+  overflow: hidden; margin-bottom: 14px; padding: 14px 0;
+}
+.mx-feed.boxed .cf-card:last-child { border-bottom: 1px solid var(--border); }
+.mx-feed.boxed .va-card,
+.mx-feed.boxed .vb-card,
+.mx-feed.boxed .vc-card { margin-bottom: 14px; }
+
+/* dense-grouped card gets a subtle "session group" header row spacing */
+.mx-feed.boxed .vc-card { padding: 4px 16px; }
+
+/* ── plain header (V2 final): title row only, no tabs ── */
+.cf-top-plain { padding-bottom: 12px; }
+
+/* session card: quiet timestamp on the name line (badges removed) */
+.vb-who .n .tm { font: 700 12.5px var(--font); color: var(--text-tertiary); white-space: nowrap; }
+
+/* ── shared engagement bar (.pa) — Facebook-style, on session, post AND competition
+   cards. Thumbs-up toggles the like (count sits tight to it), the eye opens "who
+   viewed", the arrow shares, and the filled reaction circle on the right opens
+   "who liked". Icon + count are one tap target; buttons are lightly padded.       */
+.pa {
+  display: flex; align-items: center; gap: 2px;
+  border-top: 1px solid var(--divider); margin-top: 10px; padding-top: 5px;
+}
+/* full-bleed media posts inset the items; the divider still spans edge to edge */
+.cf-card .pa { padding-left: 8px; padding-right: 8px; }
+
+.pa-act {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: none; border: none; cursor: pointer; border-radius: var(--r-md);
+  padding: 8px 11px; font: 800 13px var(--font); color: var(--text-secondary);
+  -webkit-tap-highlight-color: transparent; transition: background .15s, color .15s;
+}
+.pa-act:active { background: color-mix(in srgb, var(--text-primary) 7%, transparent); }
+.pa-act .bz-ico { width: 20px; height: 20px; }
+.pa-act.pa-icon { padding-left: 9px; padding-right: 9px; }
+.pa-act.love.loved { color: #e5524a; }
+.pa-act.love.loved .bz-ico { fill: #e5524a; stroke: #e5524a; }
+
+/* right-side reaction summary — the aggregate "who loved" pill */
+.pa-react {
+  margin-left: auto; flex: none;
+  width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
+  background: #e5524a; color: #fff;
+  display: grid; place-items: center; -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(229, 82, 74, .35);
+}
+.pa-react:active { transform: scale(.94); }
+.pa-react .bz-ico { width: 15px; height: 15px; fill: currentColor; stroke: currentColor; }

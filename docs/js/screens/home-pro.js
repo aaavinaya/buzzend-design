@@ -627,7 +627,8 @@ window.HomePro = (function () {
       ex: [{ i: "squat", n: "Squats", r: 200 }, { i: "pushup", n: "Push-ups", r: 150 }, { i: "situp", n: "Sit-ups", r: 140 }, { i: "jumping", n: "Jumping Jacks", r: 120 }, { i: "lunge", n: "Lunges", r: 90 }] },
     { n: "Priya Sharma", t: "2h", av: "#c9a6a6,#a87", steps: "10.8k", dist: "7.1km", kcal: 760, active: "1h 30m",
       ex: [{ i: "pushup", n: "Push-ups", r: 160 }, { i: "squat", n: "Squats", r: 130 }, { i: "lunge", n: "Lunges", r: 80 }] },
-    { n: "Sara Lama", t: "3h", av: "#a6c9b5,#5e996f", steps: "11.2k", dist: "7.4km", kcal: 540, active: "1h 05m", ex: [] },
+    { n: "Sara Lama", t: "3h", av: "#a6c9b5,#5e996f", steps: "11.2k", dist: "7.4km", kcal: 540, active: "1h 05m",
+      ex: [{ i: "squat", n: "Squats", r: 140 }, { i: "situp", n: "Sit-ups", r: 120 }, { i: "jumping", n: "Jumping Jacks", r: 100 }] },
     { n: "Dev Gurung", t: "3h", av: "#9bb7c9,#5e7d99", steps: "9.5k", dist: "6.3km", kcal: 680, active: "1h 12m",
       ex: [{ i: "situp", n: "Sit-ups", r: 180 }, { i: "jumping", n: "Jumping Jacks", r: 140 }] },
   ];
@@ -700,14 +701,29 @@ window.HomePro = (function () {
      Reuses real Home data; Today's-Workouts icon style; Electric Orange. */
   const W = (k, s) => window.Icons.workout(k, s || 30, "plain");
 
-  // Top Activities · Variant D (per user · top activity + "+N more") with Global/Friends filter
+  // Top Activities · Variant D (per user) with Global/Friends filter.
+  // Multiple workouts → stacked exercise icons + a summed "Total" reps count; the
+  // bottom label states the exact number of activities. Single/steps-only keep the
+  // original single-figure layout.
   function cardD(p, rank) {
-    const hero = p.ex[0], moreN = Math.max(0, p.ex.length - 1);
+    const head = `<div class="xt-d-h"><span class="xt-av" style="background-image:linear-gradient(135deg,${p.av})"></span><span class="xt-d-nm">${p.n.split(" ")[0]}</span></div>`;
+    const foot = (label) => `<div class="xt-d-foot"><span class="xt-d-cnt">${label}</span>${rankBadge(rank)}</div>`;
+    if (p.ex.length >= 2) {
+      const total = p.ex.reduce((a, e) => a + e.r, 0);
+      const MAX = 3, shown = p.ex.slice(0, MAX), extra = p.ex.length - shown.length;
+      // outlined line-art figures (the design system's small-size style) on their own
+      // row, spaced not overlapped — reads cleanly where the detailed figures turn to mush.
+      const figs = `<div class="xt-d-figs">${shown.map((e) => `<span class="xt-d-fig2">${EXA(e.i, 26)}</span>`).join("")}${extra > 0 ? `<span class="xt-d-plus">+${extra}</span>` : ""}</div>`;
+      return `<div class="xt-card xt-d">${head}
+        ${figs}
+        <div class="xt-d-tot"><span class="xt-d-totn">${total}</span><span class="xt-d-totl">total reps</span></div>
+        ${foot(p.ex.length + " activities")}</div>`;
+    }
+    const hero = p.ex[0];
     const fig = hero ? W(hero.i, 40) : `<span style="color:var(--primary)">${I("footprints", 34)}</span>`;
-    return `<div class="xt-card xt-d">
-      <div class="xt-d-h"><span class="xt-av" style="background-image:linear-gradient(135deg,${p.av})"></span><span class="xt-d-nm">${p.n.split(" ")[0]}</span>${rankBadge(rank)}</div>
+    return `<div class="xt-card xt-d">${head}
       <div class="xt-d-hero"><span class="xt-d-fig">${fig}</span><div class="xt-d-htx"><div class="xt-d-en">${hero ? hero.n : "Steps"}</div><div class="xt-d-r">${hero ? hero.r + '<span> reps</span>' : p.steps}</div></div></div>
-      ${moreN > 0 ? `<div class="xt-d-more">+${moreN} more ${moreN > 1 ? "activities" : "activity"}</div>` : ""}</div>`;
+      ${foot(hero ? "1 activity" : "Steps only")}</div>`;
   }
   function topActivitiesV7(state, d) {
     const h = `<div class="sec"><h2>Top activities</h2><a href="top-activities.html">See all</a></div>`;

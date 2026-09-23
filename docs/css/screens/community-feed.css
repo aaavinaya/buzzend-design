@@ -1,0 +1,120 @@
+/* Community feed (V1) — the lightweight auto-activity cards.
+   Everything visual reuses community.css tokens/classes; this file only adds the
+   compact activity-row (.af-*), the time-group divider, the sub line, and states.
+   No new colors, radii, or type scale — all pulled from tokens.css. */
+
+/* header sub line — sits between title row and the reused .cf-tabs */
+.cf-sub { font: 700 12px var(--font); color: var(--text-tertiary); margin-top: 5px; }
+
+.af-list { background: var(--bg-canvas); }
+
+/* time-group divider */
+.af-group {
+  font: 900 11.5px var(--font); letter-spacing: .4px; text-transform: uppercase;
+  color: var(--text-tertiary); padding: 16px 18px 7px; background: var(--bg-canvas);
+}
+.af-list .af-group:first-child { padding-top: 12px; }
+
+/* ── compact activity card ── */
+.af-act {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 18px; border-bottom: 1px solid var(--border);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.af-act:active { background: color-mix(in srgb, var(--text-primary) 4%, transparent); }
+
+.af-avwrap { position: relative; flex: none; }
+.af-av {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center;
+  font: 800 13px var(--font); color: #fff; background-size: cover;
+}
+/* small workout-type glyph clipped to the avatar corner */
+.af-type {
+  position: absolute; right: -3px; bottom: -3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--bg-canvas);
+  display: grid; place-items: center; color: var(--text-secondary);
+}
+.af-type.milestone { color: var(--on-primary); background: var(--primary); border-color: var(--bg-canvas); }
+.af-type .bz-ico { width: 11px; height: 11px; }
+
+.af-mid { flex: 1; min-width: 0; }
+.af-txt {
+  display: block; font: 700 13.5px var(--font); color: var(--text-secondary);
+  line-height: 1.4;
+}
+.af-txt b { font-weight: 800; color: var(--text-primary); }
+.af-txt .m { font-weight: 800; color: var(--text-primary); white-space: nowrap; }
+.af-txt .m.mile { color: var(--primary); }
+.af-time { display: block; font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 2px; }
+
+/* cheer — mirrors the like affordance, quiet until pressed */
+.af-cheer {
+  flex: none; display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-tertiary); border-radius: var(--r-pill);
+  padding: 6px 11px; cursor: pointer; font: 800 12px var(--font);
+  transition: background .15s, color .15s, border-color .15s;
+}
+.af-cheer .bz-ico { width: 14px; height: 14px; }
+.af-cheer:active { transform: scale(.95); }
+.af-cheer.on {
+  color: var(--primary); border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+.af-cheer.on .bz-ico { fill: currentColor; }
+
+/* ── in-feed "nothing under this filter" (feed exists, filter is narrow) ── */
+.af-none {
+  display: grid; place-items: center; text-align: center;
+  gap: 6px; padding: 54px 32px; color: var(--text-tertiary); background: var(--bg-canvas);
+}
+.af-none .bz-ico { color: var(--text-tertiary); opacity: .6; }
+.af-none .t { font: 800 14px var(--font); color: var(--text-secondary); margin-top: 4px; }
+.af-none .d { font: 600 12.5px var(--font); color: var(--text-tertiary); }
+
+/* ── full empty state (no activity at all) — encouraging, not "no posts yet" ── */
+.af-empty {
+  display: grid; place-items: center; text-align: center;
+  padding: 62px 34px; background: var(--bg-canvas);
+}
+.af-empty .ill {
+  position: relative; width: 92px; height: 92px; border-radius: 50%;
+  display: grid; place-items: center; margin-bottom: 18px;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+.af-empty .ill span { position: absolute; border-radius: 50%; background: var(--primary); }
+.af-empty .ill .p1 { width: 7px; height: 7px; top: 6px; right: 12px; opacity: .5; }
+.af-empty .ill .p2 { width: 5px; height: 5px; bottom: 12px; left: 8px; opacity: .35; }
+.af-empty .ill .p3 { width: 9px; height: 9px; bottom: 2px; right: 18px; opacity: .25; }
+.af-empty h3 { font: 900 18px var(--font); color: var(--text-primary); margin: 0 0 7px; }
+.af-empty p { font: 600 13px var(--font); color: var(--text-secondary); line-height: 1.5; max-width: 270px; margin: 0 0 20px; }
+
+.af-eacts { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px; }
+.af-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: var(--r-btn); padding: 12px 16px; font: 800 14px var(--font);
+  cursor: pointer; border: 1px solid transparent;
+}
+.af-btn.p { background: var(--primary); color: var(--on-primary); box-shadow: var(--shadow-btn); }
+.af-btn.s { background: var(--surface); color: var(--text-primary); border-color: var(--border); }
+.af-btn:active { transform: translateY(1px); }
+
+/* post-menu sheet rows (reused by the media card ⋯) */
+.cf-pmenu { padding: 6px 0 4px; }
+.cf-pm {
+  display: flex; align-items: center; gap: 13px; width: 100%;
+  padding: 14px 20px; background: none; border: none; cursor: pointer;
+  font: 800 14.5px var(--font); color: var(--text-primary); text-align: left;
+}
+.cf-pm:active { background: color-mix(in srgb, var(--text-primary) 5%, transparent); }
+.cf-pm .bz-ico { color: var(--text-secondary); }
+.cf-pm.danger { color: #e5524a; }
+.cf-pm.danger .bz-ico { color: #e5524a; }
+
+/* tablet / desktop: the screen-box already caps width; keep rows comfortable */
+@media (min-width: 700px) {
+  .af-act { padding-left: 20px; padding-right: 20px; }
+}

@@ -147,11 +147,14 @@ window.AIFlow = (function () {
     root.innerHTML = `<div class="fl">
       <div class="fl-head"><button class="cm-x glass" onclick="location.href='index.html'">${I("x", 20)}</button><div class="fl-title">Choose a workout</div></div>
       <div class="fl-sub">Pick an exercise — the camera will count your reps automatically.</div>
-      <div class="fl-list">${ORDER.map((k) => `<button class="fl-ex glass" data-ex="${k}"><span class="fl-ex-ic">${I(EX[k].i, 26)}</span><span class="fl-ex-n">${EX[k].n}</span><span class="fl-ex-go">${I("chevron", 20)}</span></button>`).join("")}</div></div>`;
+      <div class="fl-list">${ORDER.map((k) => `<div class="fl-ex glass" data-ex="${k}" role="button"><span class="fl-ex-thumb" data-guide="${k}">${I(EX[k].i, 54)}<span class="fl-ex-play">${I("play", 12)}</span></span><span class="fl-ex-tx"><span class="fl-ex-n">${EX[k].n}</span><span class="fl-ex-sub">${I("play", 12)} Tap the icon to see how it's done</span></span><span class="fl-ex-go">${I("chevron", 20)}</span></div>`).join("")}</div>
+      <button class="fl-priv" onclick="location.href='permission.html'"><span class="fl-priv-ic">${I("lock", 18)}</span><span class="fl-priv-tx"><b>Your camera stays private</b><span>See how Buzzend uses it</span></span></button></div>`;
     // First time on an exercise the guide comes first — it prevents the silent-zero setups that no
     // in-set cue can undo. Once seen (or dismissed) it's skipped and reachable from get-ready's ⓘ.
     const afterPick = () => (S.guideSeen || S.guideSkip ? "getready" : "guide");
     root.querySelectorAll("[data-ex]").forEach((b) => b.addEventListener("click", () => { S.exKey = b.dataset.ex; go(S.granted ? afterPick() : "permission"); }));
+    // tapping the illustration/play opens the "how it's done" guide for that exercise
+    root.querySelectorAll("[data-guide]").forEach((g) => g.addEventListener("click", (e) => { e.stopPropagation(); S.exKey = g.dataset.guide; go("guide"); }));
   }
 
   function rPermission() {
