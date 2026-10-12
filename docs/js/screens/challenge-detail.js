@@ -10,7 +10,9 @@ window.CDetail = (function () {
   const C = { title: "Squats Challenge", ex: "squat", by: "Adesh Pokhrel", byAv: "#9bb7c9,#5e7d99",
     range: "1–30 Jun", freq: "Daily", vis: "Public", status: "active", members: 245, day: 12, days: 30,
     myReps: 240, goal: 600, cover: "linear-gradient(135deg,#1f6e5f,#2a9d8f)",
+    prizes: ["Rs. 5,000 cash", "Buzzend hoodie", "1-month Pro"],   // firstPrize/secondPrize/thirdPrize (free-text; any set are shown)
     desc: "Do squats every day for 30 days. Camera verification counts every rep automatically — climb the board and win." };
+  const PRIZES_ALL = C.prizes.slice();   // a challenge can set 1, 2, or 3 prizes (nulls dropped)
   const exName = () => EX[C.ex], exIcon = () => EXI[C.ex];
   const daysLeft = () => Math.max(0, C.days - C.day);
   const statusLabel = () => ({ active: "Active", upcoming: "Upcoming", expired: "Expired", ended: "Ended" }[C.status] || "Active");
@@ -185,17 +187,51 @@ window.CDetail = (function () {
       ${about()}<div class="cd6-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
   }
   // ═══════ E — poster + meta grid ═══════
+  // Prizes (what the top 3 win) — shown WHILE the challenge runs. firstPrize/secondPrize/thirdPrize are
+  // free-text on the wire; render whichever are set.
+  // prize text is free-text and may be long → tier label + prize stacked, prize wraps.
+  function prizesBlock() {
+    const tier = ["1st place", "2nd place", "3rd place"], cls = ["gold", "silver", "bronze"];
+    return `<div class="cd7-prizes">
+      <div class="cd7-sec"><span>${I("trophy", 15)} Prizes</span><span class="r">Top ${C.prizes.length} win</span></div>
+      ${C.prizes.map((p, i) => `<div class="cd7-prow"><span class="cd7-rk ${cls[i]}">${i + 1}</span><div class="cd7-ptx"><span class="cd7-tier">${tier[i]}</span><span class="cd7-prize">${p}</span></div></div>`).join("")}</div>`;
+  }
+  // Winners — shown once the challenge has ENDED. Champion spotlight + runner-up rows; prize text wraps.
+  // Real source: GET /members/winners (ranked); here the ranked board stands in for it.
+  function winnersBlock() {
+    // one winner per prize (1–3); with no prizes, still show the top-3 final podium (no prize chips)
+    const n = C.prizes && C.prizes.length ? Math.min(C.prizes.length, 3) : 3;
+    const w = board().slice(0, n), cls = ["gold", "silver", "bronze"];
+    const champ = w[0], champPrize = C.prizes && C.prizes[0];
+    const ru = w.slice(1).map((b, k) => { const i = k + 1;
+      return `<div class="cd7-ru"><span class="cd7-rk ${cls[i]}">${i + 1}</span>
+        <div class="cd7-wav" style="background-image:${grad(b.p.av)}"></div>
+        <div class="cd7-ru-tx"><div class="top"><b>${b.p.me ? "You" : b.p.name}</b><span class="rp">${fmt(b.v)} reps</span></div>
+          ${C.prizes && C.prizes[i] ? `<div class="cd7-ru-prize">${I("medal", 12)} ${C.prizes[i]}</div>` : ""}</div></div>`;
+    }).join("");
+    return `<div class="cd7-winners">
+      <div class="cd7-win-top">${I("trophy", 16)} Winners<span>Challenge complete</span></div>
+      <div class="cd7-champ">
+        <div class="cd7-champ-av" style="background-image:${grad(champ.p.av)}"><span class="cd7-champ-badge">${I("trophy", 15)}</span></div>
+        <div class="cd7-champ-nm">${champ.p.me ? "You" : champ.p.name}</div>
+        <div class="cd7-champ-meta">Champion · ${fmt(champ.v)} reps</div>
+        ${champPrize ? `<div class="cd7-champ-prize">${I("medal", 14)} <span>${champPrize}</span></div>` : ""}</div>
+      ${ru}</div>`;
+  }
   function v7() {
     /* The EXERCISE cell carries the exercise ILLUSTRATION, the other three carry stroke glyphs, and the
        app sizes them differently on purpose (28 vs 17): a stroke glyph fills its own box, while an
        illustration is equalised by AREA and so draws smaller than its slot. */
     const cell = (ic, k, v, s) => `<div class="cd7-cell"><div class="ic">${I(ic, s || 17)}</div><div style="min-width:0"><div class="k">${k}</div><div class="val">${v}</div></div></div>`;
+    const ended = C.status === "ended", hasPrizes = C.prizes && C.prizes.length;
     return `<div class="cd7-hero"><div class="img" style="background:${C.cover}"></div><div class="scrim"></div>
         <div class="cd3-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
         <div class="h1">${C.title}</div>
         <div class="cr"><div class="av" style="background-image:${grad(C.byAv)}"></div>by ${C.by} ${badge()}</div></div>
-      <div class="cd7-grid">${cell(exIcon(), "Exercise", exName(), 28)}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", fmt(C.members))}${cell("clock", "Days left", daysLeft())}</div>
+      ${ended ? winnersBlock() : ""}
+      <div class="cd7-grid">${cell(exIcon(), "Exercise", exName(), 28)}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", fmt(C.members))}${cell("clock", ended ? "Ran for" : "Days left", ended ? C.days + "d" : daysLeft())}</div>
       ${about(mchip("calendar", C.range) + mchip(C.vis === "Public" ? "users" : "lock", C.vis))}
+      ${!ended && hasPrizes ? prizesBlock() : ""}
       <div class="cd7-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
   }
 
@@ -266,8 +302,11 @@ window.CDetail = (function () {
       <div class="cd-chat-input"><input placeholder="Message the group…"><button onclick="CDetail.close()">${I("send", 18)}</button></div></div>`);
   }
 
-  function start(mountEl, v, role, tab) {
+  function start(mountEl, v, role, tab, status) {
     root = mountEl; cur.v = +v || 1; cur.role = (role === "owner" ? "creator" : role) || "viewer"; cur.tab = tab || "members"; cur.sub = null;
+    C.status = status || "active";   // preview: ?status=ended shows the Winners state
+    const pc = new URLSearchParams(location.search).get("prizes");   // preview: ?prizes=0|1|2|3
+    C.prizes = PRIZES_ALL.slice(0, pc == null ? PRIZES_ALL.length : +pc);
     render();
   }
   return { start, render, setTab, drill, back, join, record, menu, postMenu, likers, viewers, act, report, pickReason, submitReport, renderReport, confirmLeave, doLeave, confirmDelete, doDelete, chat, close };

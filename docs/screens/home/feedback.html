@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="energyorange" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buzzend · Feedback popup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+<style>
+  /* page chrome only — the popup itself is the Buzzend dialog system (.bz-* + .btn) */
+  body{ padding:26px 22px 60px; }
+  .wrap{ max-width:1180px; margin:0 auto; }
+  a.back{ color:var(--text-secondary); font:700 14px var(--font); text-decoration:none; }
+  h1{ font:900 26px var(--font); letter-spacing:-.4px; margin:6px 0 3px; }
+  .lede{ font:600 14px var(--font); color:var(--text-secondary); margin:0 0 18px; max-width:80ch; line-height:1.6; }
+  .bar{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 16px; box-shadow:var(--shadow-card); margin:0 0 24px; }
+  .blab{ font:800 11px var(--font); letter-spacing:.6px; text-transform:uppercase; color:var(--text-tertiary); margin-right:9px; }
+  .seg{ display:inline-flex; background:var(--surface-alt); border-radius:11px; padding:3px; gap:2px; flex-wrap:wrap; }
+  .seg button{ border:0; background:transparent; font:800 12.5px var(--font); font-family:var(--font); color:var(--text-secondary); padding:7px 12px; border-radius:8px; cursor:pointer; }
+  .seg button.on{ background:var(--surface); color:var(--primary); box-shadow:0 1px 3px rgba(0,0,0,.16); }
+
+  .screen-box{ box-shadow:0 14px 44px rgba(0,0,0,.17); height:760px; min-height:0; position:relative; overflow:hidden; }
+  /* faux app screen the popup sits over (dimmed by the overlay) */
+  .fauxapp{ position:absolute; inset:0; background:var(--bg-canvas); padding:0 18px; }
+  .fx-h{ font:900 24px var(--font); color:var(--text-primary); padding:14px 2px 12px; }
+  .fx-row{ display:flex; align-items:center; gap:13px; padding:15px 4px; border-bottom:1px solid var(--divider); }
+  .fx-ic{ width:38px; height:38px; border-radius:11px; background:var(--surface-alt); flex:none; }
+  .fx-tx{ flex:1; } .fx-tx b{ display:block; height:11px; width:44%; border-radius:6px; background:var(--surface-alt); }
+  .fx-tx span{ display:block; height:9px; width:66%; border-radius:6px; background:var(--surface-alt); opacity:.6; margin-top:8px; }
+  .fx-chev{ width:8px; height:8px; border-right:2px solid var(--text-tertiary); border-top:2px solid var(--text-tertiary); transform:rotate(45deg); opacity:.4; }
+
+  /* ── feedback additions — all token-driven, matching the dialog scale ── */
+  .bz-icon.ok{ background:color-mix(in srgb,var(--success) 14%,transparent); color:var(--success); }
+  .bz-close{ display:grid; place-items:center; } .bz-close .bz-ico{ width:15px; height:15px; }
+  .bz-icon .bz-ico{ width:26px; height:26px; }
+
+  .fb-actions{ display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+
+  /* option rows (not-satisfied → complaint / suggestion) */
+  .fb-opts{ display:flex; flex-direction:column; gap:10px; margin-top:18px; text-align:left; }
+  .fb-opt{ display:flex; align-items:center; gap:13px; width:100%; padding:13px; border:1.5px solid var(--border); border-radius:var(--r-md); background:var(--surface); cursor:pointer; text-align:left; transition:border-color .15s, background .15s, transform .08s; }
+  .fb-opt:hover{ border-color:color-mix(in srgb,var(--primary) 40%,transparent); background:color-mix(in srgb,var(--primary) 4%,var(--surface)); }
+  .fb-opt:active{ transform:scale(.99); }
+  .fb-opt-ic{ width:44px; height:44px; border-radius:var(--r-sm); display:grid; place-items:center; flex:none; }
+  .fb-opt-ic .bz-ico{ width:22px; height:22px; }
+  .fb-opt.warn .fb-opt-ic{ background:color-mix(in srgb,var(--danger) 12%,transparent); color:var(--danger); }
+  .fb-opt.idea .fb-opt-ic{ background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); }
+  .fb-opt-tx{ flex:1; min-width:0; }
+  .fb-opt-tx b{ display:block; font:800 15px var(--font); color:var(--text-primary); }
+  .fb-opt-tx span{ display:block; font:600 12.5px var(--font); color:var(--text-secondary); margin-top:2px; }
+  .fb-opt-go{ color:var(--text-tertiary); flex:none; display:inline-flex; }
+
+  /* form (left aligned) */
+  .bz-dialog.fb-left{ text-align:left; }
+  .fb-head{ display:flex; align-items:center; gap:11px; margin-bottom:11px; }
+  .fb-back{ width:32px; height:32px; border-radius:50%; border:none; background:var(--surface-alt); color:var(--text-secondary); display:grid; place-items:center; cursor:pointer; flex:none; }
+  .fb-back .bz-ico{ width:16px; height:16px; transform:rotate(180deg); }
+  .fb-head .fb-hic{ width:36px; height:36px; border-radius:var(--r-sm); display:grid; place-items:center; flex:none; }
+  .fb-head .fb-hic .bz-ico{ width:19px; height:19px; }
+  .fb-head.warn .fb-hic{ background:color-mix(in srgb,var(--danger) 12%,transparent); color:var(--danger); }
+  .fb-head.idea .fb-hic{ background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); }
+  .fb-head .fb-htitle{ font:800 18px var(--font); color:var(--text-primary); flex:1; }
+  .fb-sub{ font:600 13.5px var(--font); color:var(--text-secondary); line-height:1.5; margin:0 0 15px; }
+  .fb-ta, .fb-in{ width:100%; box-sizing:border-box; border:1.5px solid var(--border); border-radius:var(--r-md); background:var(--surface); font:600 14px var(--font); color:var(--text-primary); transition:border-color .15s, box-shadow .15s; }
+  .fb-ta{ min-height:108px; resize:none; padding:12px 13px; line-height:1.5; }
+  .fb-in{ height:48px; padding:0 13px; margin-top:11px; }
+  .fb-ta:focus, .fb-in:focus{ outline:none; border-color:var(--primary); box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 16%,transparent); }
+  .fb-ta::placeholder, .fb-in::placeholder{ color:var(--text-tertiary); font-weight:600; }
+  .fb-count{ font:700 11px var(--font); color:var(--text-tertiary); text-align:right; margin-top:6px; }
+  /* bare mode (?bare=1): just the phone frame, for clean captures */
+  body.bare{ padding:20px; } body.bare .wrap>*:not(.screen-box){ display:none; } body.bare .theme-toggle{ display:none; }
+  body.bare .wrap{ max-width:none; display:grid; place-items:center; }
+  .fb-toast{ position:absolute; left:50%; bottom:40px; transform:translateX(-50%) translateY(8px); z-index:300;
+    background:var(--text-primary); color:var(--bg-canvas); font:800 12.5px var(--font); padding:11px 16px;
+    border-radius:var(--r-pill); box-shadow:0 8px 24px rgba(0,0,0,.25); opacity:0; pointer-events:none; white-space:nowrap;
+    transition:opacity .2s ease, transform .2s ease; }
+  .fb-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← Home launcher</a>
+  <h1>Feedback popup</h1>
+  <p class="lede">Built on the Buzzend dialog system (<code>.bz-dialog</code> + <code>.btn</code>) and the app’s type
+    scale. A satisfaction ask → if not satisfied, a complaint / suggestion choice → a simple form → a thank-you.
+    Buttons are live; use the state switch to jump to any step.</p>
+  <div class="bar">
+    <div><span class="blab">State</span>
+      <div class="seg" id="segState">
+        <button data-s="ask" class="on">Ask</button>
+        <button data-s="options">Not satisfied</button>
+        <button data-s="complaint">Complaint form</button>
+        <button data-s="suggestion">Suggestion form</button>
+        <button data-s="sent">Sent</button>
+      </div></div>
+    <div><span class="blab">Color</span>
+      <div class="seg" id="segPal">
+        <button data-swatch="energyorange" class="on">Orange</button>
+        <button data-swatch="teal">Teal</button>
+        <button data-swatch="electricblue">Blue</button>
+        <button data-swatch="aipurple">Purple</button>
+      </div></div>
+  </div>
+
+  <div class="screen-box">
+    <div class="fauxapp">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="fx-h">Settings</div>
+      <div class="fx-row"><div class="fx-ic"></div><div class="fx-tx"><b></b><span></span></div><i class="fx-chev"></i></div>
+      <div class="fx-row"><div class="fx-ic"></div><div class="fx-tx"><b></b><span></span></div><i class="fx-chev"></i></div>
+      <div class="fx-row"><div class="fx-ic"></div><div class="fx-tx"><b></b><span></span></div><i class="fx-chev"></i></div>
+      <div class="fx-row"><div class="fx-ic"></div><div class="fx-tx"><b></b><span></span></div><i class="fx-chev"></i></div>
+    </div>
+    <div class="bz-overlay open" id="ov"></div>
+  </div>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+
+<script src="../../js/components/icons.js"></script>
+<script>
+const I=(n,s)=>window.Icons.svg(n,s);
+let ST='ask';
+function dialog(){
+  switch(ST){
+    case 'ask': return `<div class="bz-dialog">
+      <button class="bz-close" onclick="dismiss()">${I('x',15)}</button>
+      <div class="bz-icon">${I('heart',26)}</div>
+      <div class="bz-title">Enjoying Buzzend?</div>
+      <div class="bz-msg">Your feedback shapes what we build next.</div>
+      <div class="fb-actions">
+        <button class="btn btn-primary" onclick="rateApp()">${I('heart',20)} Loving it</button>
+        <button class="btn btn-ghost" onclick="go('options')">Not really</button>
+      </div></div>`;
+
+    case 'options': return `<div class="bz-dialog">
+      <button class="bz-close" onclick="dismiss()">${I('x',15)}</button>
+      <div class="bz-icon">${I('comment',26)}</div>
+      <div class="bz-title">Help us do better</div>
+      <div class="bz-msg">What would you like to share with us?</div>
+      <div class="fb-opts">
+        <button class="fb-opt warn" onclick="go('complaint')">
+          <span class="fb-opt-ic">${I('alert',22)}</span>
+          <span class="fb-opt-tx"><b>Give a complaint</b><span>Report a bug or something wrong</span></span>
+          <span class="fb-opt-go">${I('chevron',20)}</span></button>
+        <button class="fb-opt idea" onclick="go('suggestion')">
+          <span class="fb-opt-ic">${I('wand',22)}</span>
+          <span class="fb-opt-tx"><b>Make a suggestion</b><span>Share an idea to improve Buzzend</span></span>
+          <span class="fb-opt-go">${I('chevron',20)}</span></button>
+      </div></div>`;
+
+    case 'complaint': return form('warn','alert','Give a complaint',
+      'Tell us what went wrong so we can fix it.','Describe the problem…');
+    case 'suggestion': return form('idea','wand','Make a suggestion',
+      'What’s your idea to make Buzzend better?','Share your idea…');
+
+    case 'sent': return `<div class="bz-dialog">
+      <div class="bz-icon ok">${I('check',26)}</div>
+      <div class="bz-title">Thanks for your feedback!</div>
+      <div class="bz-msg">We read every message and use it to make Buzzend better.</div>
+      <div class="fb-actions">
+        <button class="btn btn-primary" onclick="go('ask')">Done</button>
+      </div></div>`;
+  }
+}
+function form(kind, icon, title, sub, ph){
+  return `<div class="bz-dialog fb-left">
+    <div class="fb-head ${kind}">
+      <button class="fb-back" onclick="go('options')">${I('chevron',16)}</button>
+      <span class="fb-hic">${I(icon,19)}</span>
+      <span class="fb-htitle">${title}</span></div>
+    <div class="fb-sub">${sub}</div>
+    <textarea class="fb-ta" maxlength="500" placeholder="${ph}" oninput="cnt(this)"></textarea>
+    <div class="fb-count"><span id="cc">0</span>/500</div>
+    <input class="fb-in" type="email" placeholder="Email (optional) — so we can follow up" />
+    <div class="fb-actions">
+      <button class="btn btn-primary" onclick="go('sent')">${I('send',20)} Send</button>
+    </div></div>`;
+}
+function cnt(t){ const c=document.getElementById('cc'); if(c) c.textContent=t.value.length; }
+function render(){ document.getElementById('ov').innerHTML=dialog();
+  document.querySelectorAll('#segState button').forEach(b=>b.classList.toggle('on', b.dataset.s===ST)); }
+function go(s){ ST=s; document.getElementById('ov').classList.add('open'); render(); }
+function dismiss(){ const ov=document.getElementById('ov'); ov.classList.remove('open'); ov.innerHTML=''; }
+/* "Loving it" hands off to the native iOS/Android store-rating prompt (SKStoreReviewController /
+   In-App Review). We can't render OS UI here, so dismiss and show a neutral note. */
+function rateApp(){ dismiss(); toast('Opening the app store rating…'); }
+function toast(m){ let t=document.getElementById('fbtoast'); if(!t){ t=document.createElement('div'); t.id='fbtoast'; t.className='fb-toast'; document.querySelector('.screen-box').appendChild(t); }
+  t.textContent=m; requestAnimationFrame(()=>t.classList.add('show')); clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),1900); }
+function setPalette(p){ document.documentElement.setAttribute('data-palette',p); try{localStorage.setItem('buzzend-palette',p)}catch(e){} }
+function seg(id,key,fn){ document.getElementById(id).addEventListener('click',e=>{ const x=e.target.closest('button'); if(!x)return;
+  fn(x.dataset[key]); document.querySelectorAll(`#${id} button`).forEach(y=>y.classList.toggle('on',y===x)); }); }
+seg('segState','s',v=>go(v)); seg('segPal','swatch',v=>setPalette(v));
+const _p=new URLSearchParams(location.search); const _qs=_p.get('state'); if(_qs) ST=_qs;   // ?state=options preview
+if(_p.get('bare')) document.body.classList.add('bare');
+render();
+</script>
+<script src="../../js/app.js"></script>
+<script>(function(){var b=document.querySelector('#segPal button.on'); if(b) document.documentElement.setAttribute('data-palette', b.dataset.swatch);})();</script>
+</body>
+</html>

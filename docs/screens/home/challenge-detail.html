@@ -20,6 +20,7 @@
     <button data-v="5" onclick="setV('5')">Card</button>
     <button data-v="6" onclick="setV('6')">Compact</button>
     <button data-v="7" onclick="setV('7')">Poster</button>
+    <button data-v="7e" onclick="setV('7','ended')">Winners</button>
   </div>
   <button class="theme-toggle" onclick="toggleTheme(); CDetail.render()" style="top:64px">🌙</button>
 
@@ -38,12 +39,13 @@
   <script>
     const _p = new URLSearchParams(location.search);
     const app = document.getElementById("app"), sb = document.getElementById("sb");
-    function setV(v) {
-      CDetail.start(app, v, _p.get("role") || "viewer", _p.get("tab"));
+    function setV(v, status) {
+      CDetail.start(app, v, _p.get("role") || "viewer", _p.get("tab"), status);
       sb.style.color = "#fff";
-      document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.v === v));
+      const key = status === "ended" ? "7e" : v;
+      document.querySelectorAll(".state-switch button").forEach(b => b.classList.toggle("active", b.dataset.v === key));
     }
-    setV(_p.get("v") || "1");
+    setV(_p.get("v") || "1", _p.get("status"));
   </script>
 </body>
 </html>

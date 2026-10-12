@@ -11,7 +11,9 @@
       "Bash(cat /private/tmp/claude-501/-Users-avinayaacharya-Development-Buzzend-Design/72b5ae0e-2a10-425e-a925-72c2632877f7/scratchpad/.el_key)",
       "Bash(curl -s -o /private/tmp/claude-501/-Users-avinayaacharya-Development-Buzzend-Design/72b5ae0e-2a10-425e-a925-72c2632877f7/scratchpad/voices.json -w '%{http_code}' -H 'xi-api-key: __TRACKED_VAR__' https://api.elevenlabs.io/v1/voices)",
       "Bash(echo 'HTTP __TRACKED_VAR__')",
-      "Bash(python3 el_tts.py)"
+      "Bash(python3 el_tts.py)",
+      "Bash(ELEVENLABS_API_KEY='sk_f672b047f356cad01b6c409f88c327e6b174e7138f95bbbd' python3 generate_coach_voice.py)",
+      "Bash(ELEVENLABS_API_KEY=sk_f672b047f356cad01b6c409f88c327e6b174e7138f95bbbd python3 -c ' *)"
     ]
   }
 }

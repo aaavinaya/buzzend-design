@@ -245,3 +245,47 @@
 .cd-mine { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; flex:none;
   background:color-mix(in srgb, #f59e0b 15%, transparent); color:#d98a10; }
 .cd-mine svg { width:13px; height:13px; }
+
+/* ── v7 Poster · Prizes (while running) + Winners (ended) ── */
+.cd7-rk { width:26px; height:26px; border-radius:50%; flex:none; display:grid; place-items:center; font:900 13px var(--font); color:#fff; }
+.cd7-rk.gold   { background:linear-gradient(135deg,#f6c651,#dd992a); color:#5a3d00; }
+.cd7-rk.silver { background:linear-gradient(135deg,#d3d8de,#a4abb6); color:#3a4048; }
+.cd7-rk.bronze { background:linear-gradient(135deg,#d99a68,#b0703f); color:#4a2d10; }
+
+/* Prizes card (running) — prize text can be long, so it wraps under the tier label */
+.cd7-prizes { margin:14px 16px 0; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px 6px; box-shadow:var(--shadow-card); }
+.cd7-sec { display:flex; align-items:center; justify-content:space-between; font:900 13px var(--font); color:var(--text-primary); margin-bottom:4px; }
+.cd7-sec span:first-child { display:inline-flex; align-items:center; gap:7px; }
+.cd7-sec .bz-ico { width:15px; height:15px; color:var(--primary); }
+.cd7-sec .r { font:800 11px var(--font); letter-spacing:.3px; text-transform:uppercase; color:var(--text-tertiary); }
+.cd7-prow { display:flex; align-items:flex-start; gap:11px; padding:10px 0; }
+.cd7-prow + .cd7-prow { border-top:1px solid var(--divider); }
+.cd7-prow .cd7-rk { margin-top:1px; }
+.cd7-ptx { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.cd7-tier { font:800 10.5px var(--font); letter-spacing:.3px; text-transform:uppercase; color:var(--text-tertiary); }
+.cd7-prize { font:800 14px var(--font); color:var(--text-primary); line-height:1.4; }
+
+/* Winners (ended) — champion spotlight + runner-up rows; all prize text wraps */
+.cd7-winners { margin:12px 16px 2px; background:color-mix(in srgb,var(--primary) 6%,var(--surface)); border:1px solid color-mix(in srgb,var(--primary) 20%,transparent); border-radius:var(--r-lg); padding:13px 13px 7px; box-shadow:var(--shadow-card); }
+.cd7-win-top { display:flex; align-items:center; gap:8px; font:900 14px var(--font); color:var(--text-primary); margin:2px 2px 12px; }
+.cd7-win-top .bz-ico { width:16px; height:16px; color:#dd992a; }
+.cd7-win-top span { margin-left:auto; font:800 10px var(--font); letter-spacing:.4px; text-transform:uppercase; color:var(--text-tertiary); }
+
+.cd7-champ { text-align:center; background:linear-gradient(180deg,color-mix(in srgb,#f6c651 16%,var(--surface)),var(--surface)); border:1px solid color-mix(in srgb,#dd992a 40%,transparent); border-radius:var(--r-md); padding:16px 14px 15px; margin-bottom:9px; }
+.cd7-champ-av { width:64px; height:64px; border-radius:50%; margin:0 auto; position:relative; background-size:cover; background-position:center; box-shadow:0 0 0 3px var(--surface), 0 0 0 5px #e8b23e; }
+.cd7-champ-badge { position:absolute; right:-3px; bottom:-3px; width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#f6c651,#dd992a); border:2.5px solid var(--surface); display:grid; place-items:center; }
+.cd7-champ-badge .bz-ico { width:14px; height:14px; color:#5a3d00; }
+.cd7-champ-nm { font:900 18px var(--font); color:var(--text-primary); margin-top:11px; }
+.cd7-champ-meta { font:800 12px var(--font); color:var(--text-secondary); margin-top:2px; }
+.cd7-champ-prize { display:flex; align-items:flex-start; gap:7px; max-width:94%; margin:12px auto 0; text-align:left; background:color-mix(in srgb,#f6c651 22%,transparent); border-radius:var(--r-md); padding:9px 13px; font:800 13px var(--font); color:#7a5410; line-height:1.4; }
+.cd7-champ-prize .bz-ico { width:14px; height:14px; margin-top:2px; flex:none; color:#c88a1a; }
+
+.cd7-ru { display:flex; align-items:flex-start; gap:10px; padding:10px; border-radius:var(--r-md); background:var(--surface); border:1px solid var(--border); margin-bottom:7px; }
+.cd7-ru .cd7-rk { margin-top:3px; }
+.cd7-wav { width:38px; height:38px; border-radius:50%; flex:none; background-size:cover; background-position:center; margin-top:1px; }
+.cd7-ru-tx { flex:1; min-width:0; }
+.cd7-ru-tx .top { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+.cd7-ru-tx .top b { font:800 14px var(--font); color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cd7-ru-tx .rp { font:700 11.5px var(--font); color:var(--text-tertiary); flex:none; }
+.cd7-ru-prize { display:flex; align-items:flex-start; gap:5px; margin-top:4px; font:800 11.5px var(--font); color:var(--primary); line-height:1.4; }
+.cd7-ru-prize .bz-ico { width:12px; height:12px; margin-top:1px; flex:none; }

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="energyorange" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buzzend · Chat PIN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+<style>
+  body{ padding:26px 22px 60px; }
+  .wrap{ max-width:1160px; margin:0 auto; }
+  a.back{ color:var(--text-secondary); font:700 14px var(--font); text-decoration:none; }
+  h1{ font:900 26px var(--font); letter-spacing:-.4px; margin:6px 0 3px; }
+  .lede{ font:600 14px var(--font); color:var(--text-secondary); margin:0 0 18px; max-width:86ch; line-height:1.6; }
+  .lede code{ font-size:12.5px; background:var(--surface-alt); padding:1px 5px; border-radius:5px; }
+  .bar{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 16px; box-shadow:var(--shadow-card); margin:0 0 24px; }
+  .blab{ font:800 11px var(--font); letter-spacing:.6px; text-transform:uppercase; color:var(--text-tertiary); margin-right:9px; }
+  .seg{ display:inline-flex; background:var(--surface-alt); border-radius:11px; padding:3px; gap:2px; flex-wrap:wrap; }
+  .seg button{ border:0; background:transparent; font:800 12.5px var(--font); font-family:var(--font); color:var(--text-secondary); padding:7px 12px; border-radius:8px; cursor:pointer; }
+  .seg button.on{ background:var(--surface); color:var(--primary); box-shadow:0 1px 3px rgba(0,0,0,.16); }
+
+  .screen-box{ box-shadow:0 14px 44px rgba(0,0,0,.17); height:788px; min-height:0; position:relative; overflow:hidden; }
+  /* dimmed chat-list backdrop */
+  .cl{ position:absolute; inset:0; background:var(--bg-canvas); padding:0 16px; }
+  .cl-h{ display:flex; align-items:center; justify-content:space-between; padding:12px 2px 10px; }
+  .cl-h b{ font:900 24px var(--font); color:var(--text-primary); }
+  .cl-h i{ width:22px; height:22px; border-radius:6px; background:var(--surface-alt); }
+  .cl-row{ display:flex; align-items:center; gap:12px; padding:11px 2px; }
+  .cl-av{ width:46px; height:46px; border-radius:50%; flex:none; background:var(--surface-alt); }
+  .cl-tx{ flex:1; } .cl-tx b{ display:block; height:12px; width:40%; border-radius:6px; background:var(--surface-alt); }
+  .cl-tx span{ display:block; height:9px; width:72%; border-radius:6px; background:var(--surface-alt); opacity:.55; margin-top:9px; }
+
+  .scrim{ position:absolute; inset:0; background:rgba(10,12,14,.5); backdrop-filter:blur(2px); }
+
+  /* ── the custom PIN sheet ── */
+  .sheet{ position:absolute; left:0; right:0; bottom:0; background:var(--surface); border-radius:var(--r-lg) var(--r-lg) 0 0;
+    box-shadow:var(--shadow-sheet); padding:10px 22px 24px; text-align:center; }
+  .grip{ width:44px; height:5px; border-radius:999px; background:var(--divider); margin:0 auto 6px; }
+  .sh-close{ position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--surface-alt); color:var(--text-tertiary); display:grid; place-items:center; }
+  .sh-close .bz-ico{ width:15px; height:15px; }
+  .pin-ic{ width:56px; height:56px; border-radius:var(--r-md); margin:8px auto 14px; display:grid; place-items:center;
+    color:var(--primary); background:color-mix(in srgb,var(--primary) 14%,transparent); }
+  .pin-ic .bz-ico{ width:26px; height:26px; }
+  .pin-ic.ok{ color:var(--success); background:color-mix(in srgb,var(--success) 14%,transparent); }
+  .pin-t{ font:900 20px var(--font); color:var(--text-primary); }
+  .pin-s{ font:600 13px var(--font); color:var(--text-secondary); margin:7px auto 0; line-height:1.5; max-width:290px; }
+
+  .dots{ display:flex; gap:13px; justify-content:center; margin:22px 0 6px; min-height:16px; }
+  .dot{ width:14px; height:14px; border-radius:50%; background:transparent; box-shadow:inset 0 0 0 2px var(--border); transition:background .12s, box-shadow .12s, transform .12s; }
+  .dot.on{ background:var(--primary); box-shadow:none; }
+  .dots.err .dot{ box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--danger) 55%,transparent); }
+  .dots.err .dot.on{ background:var(--danger); }
+  .dots.shake{ animation:shake .38s; }
+  @keyframes shake{ 10%,90%{transform:translateX(-2px)} 30%,70%{transform:translateX(5px)} 50%{transform:translateX(-7px)} }
+  .pin-hint{ font:700 11.5px var(--font); color:var(--text-tertiary); min-height:16px; }
+  .pin-hint.err{ color:var(--danger); font-weight:800; }
+  .pin-hint.good{ color:var(--success); }
+
+  .kp{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:280px; margin:16px auto 6px; }
+  .kp button{ height:58px; border-radius:var(--r-md); border:none; cursor:pointer; background:var(--surface-alt);
+    font:800 24px var(--font); color:var(--text-primary); display:grid; place-items:center; transition:background .1s, transform .06s; }
+  .kp button:active{ background:color-mix(in srgb,var(--primary) 16%,transparent); transform:scale(.96); }
+  .kp button.blank{ background:transparent; pointer-events:none; }
+  .kp button.act{ background:transparent; color:var(--text-secondary); }
+  .kp button.act svg{ width:26px; height:26px; }
+
+  .pin-btn{ width:100%; height:54px; border-radius:var(--r-btn); border:none; cursor:pointer; margin-top:10px;
+    font:800 15.5px var(--font); background:var(--primary); color:var(--on-primary); box-shadow:var(--shadow-btn);
+    display:inline-flex; align-items:center; justify-content:center; gap:9px; transition:opacity .15s; }
+  .pin-btn:disabled{ opacity:.45; box-shadow:none; cursor:default; }
+  .pin-btn .bz-ico{ width:19px; height:19px; }
+  .pin-link{ display:block; width:100%; border:none; background:transparent; cursor:pointer; margin-top:12px;
+    font:800 13.5px var(--font); color:var(--primary); }
+  .pin-note{ font:700 11px var(--font); color:var(--text-tertiary); margin-top:12px; line-height:1.5; }
+
+  /* success actions reuse primary */
+  .pin-actions{ margin-top:20px; }
+  body.bare{ padding:20px; } body.bare .wrap>*:not(.screen-box){ display:none; } body.bare .theme-toggle{ display:none; }
+  body.bare .wrap{ max-width:none; display:grid; place-items:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← Home launcher</a>
+  <h1>Chat PIN — custom UI</h1>
+  <p class="lede">A custom PIN pad (dots + keypad) replacing the default text-field sheet, for the E2EE chat-key
+    backup that restores chats across devices. Covers every case, and the title reads <b>“Update chat PIN”</b>
+    when a PIN already exists — not “Set” again. <b>4–8 digits</b>; the keypad is live, and the state switch jumps
+    to any case.</p>
+  <div class="bar">
+    <div><span class="blab">Case</span>
+      <div class="seg" id="segState">
+        <button data-s="set" class="on">Set (new)</button>
+        <button data-s="update">Update (PIN exists)</button>
+        <button data-s="enter">Enter / Unlock</button>
+        <button data-s="wrong">Wrong PIN</button>
+        <button data-s="mismatch">PINs don’t match</button>
+        <button data-s="done">Success</button>
+      </div></div>
+    <div><span class="blab">Color</span>
+      <div class="seg" id="segPal">
+        <button data-swatch="energyorange" class="on">Orange</button>
+        <button data-swatch="teal">Teal</button>
+        <button data-swatch="electricblue">Blue</button>
+        <button data-swatch="aipurple">Purple</button>
+      </div></div>
+  </div>
+
+  <div class="screen-box">
+    <div class="cl">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="cl-h"><b>Chats</b><i></i></div>
+      <div class="cl-row"><div class="cl-av"></div><div class="cl-tx"><b></b><span></span></div></div>
+      <div class="cl-row"><div class="cl-av"></div><div class="cl-tx"><b></b><span></span></div></div>
+      <div class="cl-row"><div class="cl-av"></div><div class="cl-tx"><b></b><span></span></div></div>
+    </div>
+    <div class="scrim"></div>
+    <div id="sheet"></div>
+  </div>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+
+<script src="../../js/components/icons.js"></script>
+<script>
+const I=(n,s)=>window.Icons.svg(n,s);
+const BKSP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H8.5L2 12l6.5 7H21a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="m18 9-6 6"/><path d="m12 9 6 6"/></svg>';
+const CORRECT='1234';   // demo: the "existing" PIN for verify
+let S={ mode:'set', stage:'enter', pin:'', first:'', err:'', shake:false, done:'' };
+
+function head(){
+  if(S.mode==='enter') return ['Enter your chat PIN','Enter your PIN to restore your messages on this device.'];
+  const upd=S.mode==='update';
+  if(S.stage==='confirm') return [upd?'Confirm new PIN':'Confirm your PIN','Re-enter the same PIN to confirm.'];
+  return upd ? ['Update chat PIN','Choose a new PIN — it replaces your current one.']
+             : ['Set a chat PIN','Create a PIN to back up and restore your chats when you switch or reinstall.'];
+}
+function btnLabel(){ if(S.mode==='enter') return ['Unlock','lock']; if(S.stage==='confirm') return [S.mode==='update'?'Update PIN':'Set PIN','check']; return ['Continue','chevron']; }
+
+function dotsHtml(){ const n=Math.min(8,Math.max(4,S.pin.length));
+  let d=''; for(let i=0;i<n;i++) d+=`<span class="dot${i<S.pin.length?' on':''}"></span>`;
+  return `<div class="dots${S.err?' err':''}${S.shake?' shake':''}">${d}</div>`; }
+function hintHtml(){ if(S.err) return `<div class="pin-hint err">${S.err}</div>`;
+  if(S.mode==='enter') return `<div class="pin-hint"></div>`;
+  const ok=S.pin.length>=4; return `<div class="pin-hint${ok?' good':''}">${ok?'✓ ':''}4–8 digits</div>`; }
+
+function keypad(){ const keys=['1','2','3','4','5','6','7','8','9'];
+  let k=keys.map(n=>`<button onclick="type('${n}')">${n}</button>`).join('');
+  k+=`<button class="blank"></button><button onclick="type('0')">0</button><button class="act" onclick="back()" aria-label="Delete">${BKSP}</button>`;
+  return `<div class="kp">${k}</div>`; }
+
+function sheet(){
+  if(S.done){ const map={set:['Chat PIN set','Your chats are now backed up. You can restore them on any device with this PIN.'],
+      update:['Chat PIN updated','Your new PIN is saved. Use it next time you restore your chats.'],
+      enter:['Chats unlocked','Your older messages are being restored on this device.']}[S.done];
+    return `<div class="sheet"><div class="grip"></div>
+      <div class="pin-ic ok">${I('check',26)}</div>
+      <div class="pin-t">${map[0]}</div><div class="pin-s">${map[1]}</div>
+      <div class="pin-actions"><button class="pin-btn" onclick="reset()">Done</button></div></div>`;
+  }
+  const [t,sub]=head(), [bl,bic]=btnLabel(), can=S.pin.length>=4;
+  return `<div class="sheet">
+    <div class="grip"></div>
+    <button class="sh-close" onclick="reset()">${I('x',15)}</button>
+    <div class="pin-ic">${I('lock',26)}</div>
+    <div class="pin-t">${t}</div><div class="pin-s">${sub}</div>
+    ${dotsHtml()}
+    ${hintHtml()}
+    ${keypad()}
+    <button class="pin-btn" ${can?'':'disabled'} onclick="submit()">${I(bic,19)} ${bl}</button>
+    ${S.mode==='enter'?`<button class="pin-link" onclick="forgot()">Forgot PIN?</button>`:''}
+  </div>`;
+}
+function render(){ document.getElementById('sheet').innerHTML=sheet();
+  document.querySelectorAll('#segState button').forEach(b=>b.classList.toggle('on', b.dataset.s===cur())); }
+function cur(){ if(S.done) return 'done'; if(S.err.includes("don")) return 'mismatch'; if(S.err.includes('Wrong')) return 'wrong';
+  return S.mode==='enter'?'enter':(S.mode==='update'?'update':'set'); }
+
+function type(n){ if(S.pin.length>=8) return; S.pin+=n; S.err=''; render(); }
+function back(){ S.pin=S.pin.slice(0,-1); S.err=''; render(); }
+function submit(){
+  if(S.pin.length<4){ fail('Use at least 4 digits.'); return; }
+  if(S.mode==='enter'){ if(S.pin===CORRECT){ finish('enter'); } else { fail('Wrong PIN. Try again.'); } return; }
+  if(S.stage==='enter'){ S.first=S.pin; S.stage='confirm'; S.pin=''; S.err=''; render(); return; }
+  // confirm
+  if(S.pin===S.first){ finish(S.mode); } else { fail("PINs don’t match."); }
+}
+function fail(msg){ S.err=msg; S.shake=true; render(); setTimeout(()=>{ S.shake=false; S.pin=''; render(); }, 420); }
+function finish(mode){ S.done=mode; render(); }
+function forgot(){ S={mode:'set',stage:'enter',pin:'',first:'',err:'',shake:false,done:''}; render(); }
+function reset(){ go('set'); }
+
+function preset(s){
+  const base={mode:'set',stage:'enter',pin:'',first:'',err:'',shake:false,done:''};
+  if(s==='set') S={...base};
+  else if(s==='update') S={...base,mode:'update'};
+  else if(s==='enter') S={...base,mode:'enter',stage:'verify'};
+  else if(s==='wrong') S={...base,mode:'enter',stage:'verify',pin:'1299',err:'Wrong PIN. Try again.'};
+  else if(s==='mismatch') S={...base,mode:'set',stage:'confirm',first:'1234',pin:'1299',err:'PINs don’t match.'};
+  else if(s==='done') S={...base,done:'set'};
+}
+function go(s){ preset(s); render(); }
+function setPalette(p){ document.documentElement.setAttribute('data-palette',p); try{localStorage.setItem('buzzend-palette',p)}catch(e){} }
+function seg(id,key,fn){ document.getElementById(id).addEventListener('click',e=>{ const x=e.target.closest('button'); if(!x)return;
+  fn(x.dataset[key]); document.querySelectorAll(`#${id} button`).forEach(y=>y.classList.toggle('on',y===x)); }); }
+seg('segState','s',v=>go(v)); seg('segPal','swatch',v=>setPalette(v));
+const _p=new URLSearchParams(location.search); if(_p.get('s')) preset(_p.get('s'));
+if(_p.get('bare')) document.body.classList.add('bare');
+render();
+</script>
+<script src="../../js/app.js"></script>
+<script>(function(){var b=document.querySelector('#segPal button.on'); if(b) document.documentElement.setAttribute('data-palette', b.dataset.swatch);})();</script>
+</body>
+</html>

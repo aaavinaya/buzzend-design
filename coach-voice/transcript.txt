@@ -92,4 +92,42 @@ insufficient_space.mp3      | Give yourself a bit more room [pause] so you can m
 countdown_go.mp3            | Three [pause] Two [pause] One [pause] Go!
                               (Countdown before a set — ~0.8s beat between numbers, energetic "Go!")
 
-Total: 32 clips (generic 11 · pushups 7 · squats 6 · jumping_jacks 3 · situps 3 · lunges 2)
+============================================================
+BURPEES  (coach-voice/burpees/)
+============================================================
+finish_with_a_jump.mp3  | Finish with a jump! [pause] Even a small one off the floor counts.
+                          (Finish with a jump — even a small hop counts.)
+feet_off_the_floor.mp3  | Almost! [pause] Get both feet right off the floor to finish.
+                          (Feet didn't leave the floor on the jump.)
+lower_the_chest.mp3     | Take your chest all the way down [pause] before you come back up.
+                          (Chest didn't reach the floor on the push-up phase.)
+not_deep_enough.mp3     | Full range on that one [pause] — all the way down, all the way up.
+                          (Partial range of motion.)
+too_fast.mp3            | Steady it up a little [pause] — control beats speed here.
+                          (Moving too fast / losing control.)
+keep_your_hands_in_frame.mp3 | Keep your hands in the picture [pause] — I need to see them to count.
+                          (Hands out of the camera frame; needs them visible to count.)
+stand_up_tall_to_start_again.mp3 | Stand up tall to start again [pause] — we'll pick that one up fresh.
+                          (Didn't stand fully upright before the next rep.)
+
+============================================================
+HIGH KNEES  (coach-voice/high_knees/)
+============================================================
+turn_to_face_camera.mp3    | Turn and face the camera [pause] — I need a front view to count these.
+                             (Side-on to camera; needs a front view to count.)
+drive_the_knee_up.mp3      | Drive that knee up [pause] — lift it, don't kick it out.
+                             (Kicking out instead of driving the knee up.)
+stay_on_one_spot.mp3       | Stay on the spot [pause] — keep those knees driving in one place.
+                             (Drifting / travelling instead of staying in place.)
+stand_tall_chest_up.mp3    | Stand tall [pause] — chest up and core tight.
+                             (Hunching / leaning; stand tall.)
+knees_not_high_enough.mp3  | Higher with those knees [pause] — aim to bring them up to hip height.
+                             (Knees not reaching hip height.)
+too_fast.mp3               | Ease off the pace a touch [pause] — keep every knee drive clean.
+                             (Too fast / sloppy form.)
+alternate_your_legs.mp3    | Alternate your legs [pause] — the same leg twice won't count.
+                             (Same leg repeated instead of alternating.)
+
+Total: 46 clips (generic 11 · pushups 7 · squats 6 · high_knees 7 · burpees 7 · jumping_jacks 3 · situps 3 · lunges 2)
+Note: new clips generated with generate_coach_voice.py (premade voice "Laura" FGY2WhTYpPnrIDTdsKH5).
+For the app, map each archive file to res/raw as voice_<exercise>_<cue>.mp3 (e.g. burpees/too_fast.mp3 → voice_burpees_too_fast.mp3).
