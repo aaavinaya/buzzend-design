@@ -1,6 +1,6 @@
-/* Challenge Detail — V1 faithful (Flutter user_challenge_detail_screen) + V2 progress-
-   first, V3 immersive, V4 dashboard. Shared sub-views Leaderboard/Members/Posts, plus
-   role-based ⋯ menu, report, chat, leave/delete, join/record. Reads window.Social. */
+/* Challenge Detail — the Poster layout (hero + meta grid), in two states: running (Prizes)
+   and ended (Winners). Members / Posts sub-views, role-based ⋯ menu, report, chat,
+   leave/delete, join/record. Reads window.Social. */
 window.CDetail = (function () {
   const I = (n, s) => window.Icons.svg(n, s);
   const S = window.Social, fmt = S.fmt, grad = S.grad;
@@ -8,7 +8,7 @@ window.CDetail = (function () {
   const EXI = { squat: "squat", pushup: "pushup", situp: "situp", lunge: "lunge", jumping: "jumping", steps: "walk" };
 
   const C = { title: "Squats Challenge", ex: "squat", by: "Adesh Pokhrel", byAv: "#9bb7c9,#5e7d99",
-    range: "1–30 Jun", freq: "Daily", vis: "Public", status: "active", members: 245, day: 12, days: 30,
+    range: "1–30 Jun", freq: "Daily", vis: "Public", approval: true, status: "active", members: 245, day: 12, days: 30,
     myReps: 240, goal: 600, cover: "linear-gradient(135deg,#1f6e5f,#2a9d8f)",
     prizes: ["Rs. 5,000 cash", "Buzzend hoodie", "1-month Pro"],   // firstPrize/secondPrize/thirdPrize (free-text; any set are shown)
     desc: "Do squats every day for 30 days. Camera verification counts every rep automatically — climb the board and win." };
@@ -24,40 +24,9 @@ window.CDetail = (function () {
   ];
 
   function board() { return S.challengeBoard(C); }
-  const meEntry = () => board().find((b) => b.p.me);
+  let cur = { tab: "members", role: "viewer" }, _ov = null, _reason = null;
 
-  let cur = { v: 1, tab: "members", role: "viewer", sub: null }, _ov = null, _reason = null;
-
-  // ── rings ──
-  function ring(pct, size, track, prog, center) {
-    const r = size / 2 - 8, c = 2 * Math.PI * r, off = c * (1 - pct / 100);
-    return `<div style="position:relative;width:${size}px;height:${size}px;flex:none"><svg width="${size}" height="${size}">
-      <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${track}" stroke-width="8"/>
-      <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${prog}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 ${size / 2} ${size / 2})"/></svg>
-      ${center ? `<div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center">${center}</div>` : ""}</div>`;
-  }
-
-  // ── shared leaderboard / members / posts ──
-  function podium(top3) {
-    const order = [top3[1], top3[0], top3[2]].filter(Boolean), hts = [60, 84, 48];
-    return `<div class="lb-podium">${order.map((b, i) => { const first = b.rank === 1;
-      return `<div class="lb-pod ${first ? "first" : ""}"><div class="crown">${first ? "👑" : ""}</div><div class="pa" style="background-image:${grad(b.p.av)}"></div>
-        <div class="pn">${b.p.me ? "You" : b.p.name.split(" ")[0]}</div><div class="pv">${fmt(b.v)} reps</div>
-        <div class="bar" style="height:${hts[i]}px;background:${first ? "linear-gradient(180deg,#ffd66b,#ffb020)" : b.rank === 2 ? "var(--surface-alt)" : "color-mix(in srgb,var(--primary) 35%,transparent)"}"></div></div>`; }).join("")}</div>`;
-  }
-  function lbRow(b) {
-    const m = b.rank === 1 ? "🥇" : b.rank === 2 ? "🥈" : b.rank === 3 ? "🥉" : "";
-    return `<div class="lb-row ${b.p.me ? "me" : ""}"><span class="rk">${b.rank}</span><div class="lb-av" style="background-image:${grad(b.p.av)}">${m ? `<span class="m">${m}</span>` : ""}</div>
-      <span class="nm">${b.p.me ? "You" : b.p.name}</span><span class="v">${fmt(b.v)} <small>reps</small></span></div>`;
-  }
-  function leaderboardView() {
-    const B = board(), me = B.find((x) => x.p.me), ref = B[0], top3 = B.slice(0, 3), rest = B.slice(3, 9);
-    return `<div class="cd-lbwrap">
-      ${me ? `<div class="lb-you"><span class="rk">#${me.rank}</span><div class="tx"><b>YOUR RANK</b><span>${me.rank > 1 ? (B[me.rank - 2].v - me.v) + " reps behind #" + (me.rank - 1) : "You're leading!"}</span></div><div class="v">${fmt(me.v)}</div></div>` : ""}
-      <div class="lb-ref"><span class="pl">${I("play", 16)}</span><div class="tx"><b>REFERENCE ATTEMPT</b><span>${ref.p.me ? "You" : ref.p.name}</span></div><div class="v">${fmt(ref.v)}</div></div>
-      ${podium(top3)}<div style="font:800 12px var(--font);color:var(--text-tertiary);margin:16px 0 2px">OTHERS</div>
-      ${rest.map(lbRow).join("")}<div style="height:14px"></div></div>`;
-  }
+  // ── members / posts sub-views ──
   function membersView() {
     const B = board();
     const row = (b) => { const m = b.rank <= 3 ? ["🥇", "🥈", "🥉"][b.rank - 1] : "";
@@ -78,7 +47,7 @@ window.CDetail = (function () {
           <span class="cd-a" onclick="CDetail.viewers(${pIdx})">${I("eye", 17)} ${fmt(p.views)}</span>
           <span class="cd-a" onclick="CDetail.postMenu()">${I("share", 17)} Share</span></div></div>`; }).join("");
   }
-  function subview(t) { return t === "members" ? membersView() : t === "posts" ? postsView() : leaderboardView(); }
+  function subview(t) { return t === "posts" ? postsView() : membersView(); }
   function tabbar() {
     const tab = (id, label) => `<div class="cd-tab ${cur.tab === id ? "on" : ""}" onclick="CDetail.setTab('${id}')">${label}</div>`;
     return `<div class="cd-tabs">${tab("members", fmt(C.members) + " Members") + tab("posts", "Posts")}</div>`;
@@ -94,99 +63,9 @@ window.CDetail = (function () {
 
   // ── headers ──
   function badge() { return `<span class="cd-badge ${C.status}">${statusLabel()}</span>`; }
-  // creator identity, role-aware: when it's YOUR challenge, show "You" + a clear "Created by you"
-  // badge and your own avatar — so you never have to read the name to know you own it.
-  const isMine = () => cur.role === "creator";
-  const byName = () => isMine() ? "You" : C.by;
-  const byGrad = () => grad(isMine() ? S.ME.av : C.byAv);
-  const roleLbl = () => isMine() ? "Creator · You" : "Creator";
-  const byLine = () => isMine() ? "Created by you" : "by " + C.by;
-  const mineBadge = () => isMine() ? `<span class="cd-mine" title="Created by you">${I("star", 14)}</span>` : "";
   const mchip = (ic, t) => `<span>${I(ic, 13)} ${t}</span>`;
-  /* The cover chip's exercise mark (.extag): 13 -> 24 -> 28 -> 34px, now on v1 / v3 / v5 ONLY.
-
-     v7 (Poster) HAS NO CHIP as of 2026-08-12 — removed in the app first, then here. On that layout the chip
-     was the third statement of the same fact: the hero draws the illustration at 120px above it, and the
-     meta grid's first cell right below reads "EXERCISE / Lunge" with the same artwork. Growing this glyph
-     three times chasing legibility was the tell that the mark wanted a slot with room, not another 4px.
-     The other three variants KEEP it because it is their only exercise mark — none of them has an
-     exercise row in its meta (v1/v5 show date/frequency/visibility, v3 members/days/rank).
-
-     The illustrations are equalised by AREA, so a landscape asset draws its full slot WIDTH but only ~16px
-     of height even at a 34 slot — which is why a 17px stroke glyph never needed the same treatment. The
-     chip pads 6px vertically, so the figure alone sets the pill's height: 46px.
-
-     NOTE: keep notes like this OUT of the template literals below. A backtick in an HTML comment inside a
-     template literal silently ends the string — and with an even number of them it still PARSES, so
-     node --check passes and the screen throws at runtime instead. That is what broke v1 here once. */
   function about(extraMeta) { return `<div class="cd-about">${extraMeta ? `<div class="cd-about-meta">${extraMeta}</div>` : ""}<div class="cd-desc2">${C.desc}</div></div>`; }
-  function v1() {
-    return `<div class="cd1-cover"><div class="img" style="background:${C.cover}"></div>
-        <button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button>
-        <span class="extag">${I(exIcon(), 34)} ${exName()}</span></div>
-      <div class="cd1-body"><div class="cd1-crow"><div class="cd1-av" style="background-image:${grad(C.byAv)}"></div>
-        <div class="who"><div class="nm">${C.by}</div><div class="role">Creator</div></div>${badge()}</div>
-        <div class="cd1-meta"><span>${I("calendar", 13)} ${C.range}</span><span>${I("activity", 13)} ${C.freq}</span><span>${I(C.vis === "Public" ? "users" : "lock", 13)} ${C.vis}</span></div>
-        <div class="cd1-title">${C.title}</div><div class="cd1-desc">${C.desc}</div>
-        <div class="cd1-cta">${cta()}</div></div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
-  }
-  function v2() {
-    const me = meEntry(), pct = Math.round((C.day / C.days) * 100);
-    return `<div class="cd2-top"><div class="cd2-topbar"><button class="bk" onclick="CDetail.back()">${I("back", 20)}</button><div class="tt">${C.title}</div><button class="mm" onclick="CDetail.menu()">⋯</button></div>
-        <div class="cd2-hero">${ring(pct, 104, "rgba(255,255,255,.25)", "#fff", `<div style="color:#fff"><b>Day ${C.day}</b><span>of ${C.days}</span></div>`)}
-        <div class="r"><b>${C.title}</b><div class="s">${C.freq} · ${C.vis} · ${daysLeft()} days left</div>
-          <div class="chips"><span class="chip">${I("trophy", 12)} #${me.rank} of ${fmt(C.members)}</span><span class="chip">${I("zap", 12)} ${fmt(me.v)} reps</span></div></div></div></div>
-      ${cur.role === "viewer" ? `<button class="cd2-rec" onclick="CDetail.join()">Join Challenge</button>` : `<button class="cd2-rec" onclick="CDetail.record()">${I("camera", 18)} Record today's ${exName().toLowerCase()}</button>`}
-      ${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
-  }
-  function v3() {
-    const me = meEntry();
-    return `<div class="cd3-hero"><div class="img" style="background:${C.cover}"></div><div class="scrim"></div>
-        <div class="cd3-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
-        <span class="extag">${I(exIcon(), 34)} ${exName()}</span>
-        <div class="h1">${C.title}</div>
-        <div class="cd3-crow"><div class="av" style="background-image:${byGrad()}"></div><div class="nm">${byName()}</div>${mineBadge()}${badge()}</div></div>
-      <div class="cd3-glass"><div class="st"><b>${fmt(C.members)}</b><span>MEMBERS</span></div><div class="st"><b>${daysLeft()}</b><span>DAYS LEFT</span></div><div class="st"><b>#${me.rank}</b><span>YOUR RANK</span></div></div>
-      ${about(mchip("calendar", C.range) + mchip("activity", C.freq) + mchip(C.vis === "Public" ? "users" : "lock", C.vis))}
-      <div class="cd3-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
-  }
-  function v4() {
-    if (cur.sub) return `<div class="cd4-head"><button class="bk" onclick="CDetail.drill(null)">${I("back", 20)}</button><div class="tt">${cur.sub === "leaderboard" ? "Leaderboard" : cur.sub === "members" ? "Members" : "Posts"}</div><span style="width:40px"></span></div><div class="cd-sub">${subview(cur.sub)}</div>`;
-    const me = meEntry(), pct = Math.round((C.day / C.days) * 100), B = board(), top3 = B.slice(0, 3);
-    const mini = (b) => `<div class="cd4-mini-row"><div class="av" style="background-image:${grad(b.p.av)}"></div><span class="n">${b.p.me ? "You" : b.p.name}</span><span class="v">${fmt(b.v)} reps</span></div>`;
-    const pe = S.PEOPLE[POSTS[0].pi];
-    return `<div class="cd4-head"><button class="bk" onclick="CDetail.back()">${I("back", 20)}</button><div class="tt">${C.title}</div><button class="mm" onclick="CDetail.menu()">⋯</button></div>
-      <div class="cd4-grid">
-        <div class="cd4-card cd4-hero span2"><div class="badge2">${I(exIcon(), 26)}</div><div style="min-width:0"><div class="lbl">${statusLabel()} · ${C.freq} · ${C.vis}</div><div class="t">${C.title}</div><div class="m">${byLine()} · ${C.range}</div></div></div>
-        <div class="cd4-card"><div class="lbl">${I("zap", 12)} Your reps</div><div class="cd4-big">${fmt(me.v)}</div><div class="cd4-sub">rank #${me.rank} of ${fmt(C.members)}</div></div>
-        <div class="cd4-card"><div class="lbl">${I("calendar", 12)} Progress</div><div class="cd4-ringmini">${ring(pct, 54, "var(--surface-alt)", "var(--primary)", "")}<div><div class="cd4-big" style="font-size:19px">Day ${C.day}</div><div class="cd4-sub">${daysLeft()} left</div></div></div></div>
-        <div class="cd4-card span2"><div class="lbl">${I("trophy", 12)} Leaderboard <span class="seeall" onclick="CDetail.drill('leaderboard')">See all</span></div>${podium(top3)}</div>
-        ${cur.role === "viewer" ? `<button class="cd4-rec" onclick="CDetail.join()">Join Challenge</button>` : `<button class="cd4-rec" onclick="CDetail.record()">${I("camera", 18)} Record today's ${exName().toLowerCase()}</button>`}
-        <div class="cd4-card span2"><div class="lbl">${I("users", 12)} Members <span class="seeall" onclick="CDetail.drill('members')">See all ${fmt(C.members)}</span></div>${B.slice(0, 3).map(mini).join("")}</div>
-        <div class="cd4-card span2"><div class="lbl">${I("play", 12)} Recent posts <span class="seeall" onclick="CDetail.drill('posts')">See all</span></div>
-          <div class="cd4-mini-row"><div class="av" style="background-image:${grad(pe.av)}"></div><span class="n">${pe.name}</span><span class="v">${fmt(POSTS[0].views)} views</span></div></div>
-      </div><div style="height:20px"></div>`;
-  }
-
-  // ═══════ C — floating card ═══════
-  function v5() {
-    return `<div class="cd5-cover"><div class="img" style="background:${C.cover}"></div>
-        <button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button>
-        <span class="extag">${I(exIcon(), 34)} ${exName()}</span></div>
-      <div class="cd5-card"><div class="cd5-titrow"><div class="cd5-title">${C.title}</div>${badge()}</div>
-        <div class="cd5-crow"><div class="cd5-av" style="background-image:${byGrad()}"></div><div><div class="nm">${byName()}</div><div class="role">${roleLbl()}</div></div>${mineBadge()}</div>
-        <div class="cd5-meta"><span>${I("calendar", 13)} ${C.range}</span><span>${I("activity", 13)} ${C.freq}</span><span>${I(C.vis === "Public" ? "users" : "lock", 13)} ${C.vis}</span><span>${I("users", 13)} ${fmt(C.members)}</span></div>
-        <div class="cd5-desc">${C.desc}</div></div>
-      <div class="cd5-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
-  }
-  // ═══════ D — compact icon-led ═══════
-  function v6() {
-    return `<div class="cd6-top"><div class="cd6-bar"><button class="bk" onclick="CDetail.back()">${I("back", 20)}</button><button class="mm" onclick="CDetail.menu()">⋯</button></div>
-        <div class="cd6-row"><div class="cd6-badge">${I(exIcon(), 30)}</div><div style="min-width:0"><div class="t">${C.title}</div><div class="by">${byLine()} ${badge()}</div></div></div>
-        <div class="cd6-pills"><span class="cd6-pill">${I("calendar", 12)} ${C.range}</span><span class="cd6-pill">${I("users", 12)} ${fmt(C.members)} members</span><span class="cd6-pill">${I("clock", 12)} ${daysLeft()} days left</span><span class="cd6-pill">${I("activity", 12)} ${C.freq}</span><span class="cd6-pill">${I(C.vis === "Public" ? "users" : "lock", 12)} ${C.vis}</span></div></div>
-      ${about()}<div class="cd6-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
-  }
-  // ═══════ E — poster + meta grid ═══════
+  // ═══════ Poster + meta grid ═══════
   // Prizes (what the top 3 win) — shown WHILE the challenge runs. firstPrize/secondPrize/thirdPrize are
   // free-text on the wire; render whichever are set.
   // prize text is free-text and may be long → tier label + prize stacked, prize wraps.
@@ -225,22 +104,21 @@ window.CDetail = (function () {
     const cell = (ic, k, v, s) => `<div class="cd7-cell"><div class="ic">${I(ic, s || 17)}</div><div style="min-width:0"><div class="k">${k}</div><div class="val">${v}</div></div></div>`;
     const ended = C.status === "ended", hasPrizes = C.prizes && C.prizes.length;
     return `<div class="cd7-hero"><div class="img" style="background:${C.cover}"></div><div class="scrim"></div>
-        <div class="cd3-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
+        <div class="cd7-fabs"><button class="cd-fab back" onclick="CDetail.back()">${I("back", 20)}</button><button class="cd-fab more" onclick="CDetail.menu()">⋯</button></div>
         <div class="h1">${C.title}</div>
         <div class="cr"><div class="av" style="background-image:${grad(C.byAv)}"></div>by ${C.by} ${badge()}</div></div>
       ${ended ? winnersBlock() : ""}
       <div class="cd7-grid">${cell(exIcon(), "Exercise", exName(), 28)}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", fmt(C.members))}${cell("clock", ended ? "Ran for" : "Days left", ended ? C.days + "d" : daysLeft())}</div>
-      ${about(mchip("calendar", C.range) + mchip(C.vis === "Public" ? "users" : "lock", C.vis))}
+      ${about(mchip("calendar", C.range) + mchip(C.vis === "Public" ? "users" : "lock", C.vis) + mchip("shield", C.approval ? "Approval required" : "Open to join"))}
       ${!ended && hasPrizes ? prizesBlock() : ""}
       <div class="cd7-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
   }
 
-  function render() { root.innerHTML = ({ 1: v1, 3: v3, 5: v5, 6: v6, 7: v7 }[cur.v] || v1)(); window.Icons.init(root); root.scrollTop = 0; }
+  function render() { root.innerHTML = v7(); window.Icons.init(root); root.scrollTop = 0; }
 
   // ── nav / actions ──
   let root;
   function setTab(t) { cur.tab = t; render(); }
-  function drill(s) { cur.sub = s; render(); }
   function back() { location.href = "challenges.html"; }
   function join() { cur.role = "member"; render(); Buzzend.alert({ icon: "trophy", title: "You're in!", message: "You joined “" + C.title + "”. Record a set to climb the board." }); }
   function record() { location.href = "../workout/moment.html"; }
@@ -302,12 +180,14 @@ window.CDetail = (function () {
       <div class="cd-chat-input"><input placeholder="Message the group…"><button onclick="CDetail.close()">${I("send", 18)}</button></div></div>`);
   }
 
-  function start(mountEl, v, role, tab, status) {
-    root = mountEl; cur.v = +v || 1; cur.role = (role === "owner" ? "creator" : role) || "viewer"; cur.tab = tab || "members"; cur.sub = null;
+  function start(mountEl, role, tab, status) {
+    root = mountEl; cur.role = (role === "owner" ? "creator" : role) || "viewer"; cur.tab = tab === "posts" ? "posts" : "members";
     C.status = status || "active";   // preview: ?status=ended shows the Winners state
-    const pc = new URLSearchParams(location.search).get("prizes");   // preview: ?prizes=0|1|2|3
+    const q = new URLSearchParams(location.search);
+    const pc = q.get("prizes");   // preview: ?prizes=0|1|2|3
     C.prizes = PRIZES_ALL.slice(0, pc == null ? PRIZES_ALL.length : +pc);
+    if (q.get("approval") != null) C.approval = q.get("approval") !== "0";   // preview: ?approval=0 → open to join
     render();
   }
-  return { start, render, setTab, drill, back, join, record, menu, postMenu, likers, viewers, act, report, pickReason, submitReport, renderReport, confirmLeave, doLeave, confirmDelete, doDelete, chat, close };
+  return { start, render, setTab, back, join, record, menu, postMenu, likers, viewers, act, report, pickReason, submitReport, renderReport, confirmLeave, doLeave, confirmDelete, doDelete, chat, close };
 })();

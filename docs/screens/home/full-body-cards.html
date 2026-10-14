@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="teal" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buzzend · Full Body cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/home-pro.css" />
+  <link rel="stylesheet" href="../../css/screens/my-workouts.css" />
+  <link rel="stylesheet" href="../../css/screens/community.css" />
+  <link rel="stylesheet" href="../../css/screens/community-feed.css" />
+  <link rel="stylesheet" href="../../css/screens/community-variants.css" />
+  <link rel="stylesheet" href="../../css/screens/community-mixed.css" />
+  <link rel="stylesheet" href="../../css/components/share-card.css" />
+  <link rel="stylesheet" href="../../css/screens/full-body-cards.css" />
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" style="top:16px">🌙</button>
+  <div id="content"></div>
+
+  <script src="../../js/components/dialog.js"></script>
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/full-body-data.js"></script>
+  <script src="../../js/screens/full-body-cards.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    FBCards.start(document.getElementById("content"));
+    // deep link to the My Activity detail sheet, e.g. full-body-cards.html#detail=tb1
+    const _d = location.hash.match(/detail=(\w+)/);
+    if (_d) FBCards.detail(_d[1]);
+    // …and to My Activity's "Share your day" sheet, e.g. #share=mixed (steps|singles|routine|mixed|two|same)
+    const _s = location.hash.match(/share=(\w+)/);
+    if (_s) FBCards.shareDay(_s[1]);
+  </script>
+</body>
+</html>

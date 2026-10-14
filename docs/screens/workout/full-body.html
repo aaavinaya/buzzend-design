@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-palette="teal" data-font="nunito">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Buzzend · Full Body Workout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/palettes.css" />
+  <link rel="stylesheet" href="../../css/fonts.css" />
+  <link rel="stylesheet" href="../../css/app.css" />
+  <link rel="stylesheet" href="../../css/screens/full-body.css" />
+  <style>
+    /* the workout session is immersive — let the frame fill the whole viewport so the
+       camera stage reaches every edge with no gap. */
+    .screen-box, .screen-box > .screen { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" style="top:18px">🌙</button>
+  <div class="screen-box">
+    <div class="screen">
+      <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;·&nbsp;&nbsp;100%</span></div>
+      <div class="scroll" id="app" style="padding-bottom:20px"></div>
+    </div>
+  </div>
+
+  <script src="../../js/components/dialog.js"></script>
+  <script src="../../js/components/icons.js"></script>
+  <script src="../../js/screens/full-body-data.js"></script>
+  <script src="../../js/screens/full-body.js"></script>
+  <script src="../../js/app.js"></script>
+  <script>
+    const _p = new URLSearchParams(location.search);
+    FBWorkout.start(document.getElementById("app"), { routine: _p.get("routine"), level: _p.get("level") });
+    const v = _p.get("view");
+    if (v === "preview") FBWorkout.go("preview");
+    else if (v === "session") FBWorkout.begin();
+  </script>
+</body>
+</html>

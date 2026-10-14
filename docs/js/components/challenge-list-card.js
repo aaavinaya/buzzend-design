@@ -23,6 +23,11 @@ window.ChallengeListCard = (function () {
 
   /* The app's default meta: `formatMembers(memberCount) · Frequency` → "3 members · Daily". */
   function metaOf(c) {
+    if (c.type === "elimination") {   // elimination: where the knockout stands, not member count
+      if (c.status === "ended") return c.winner === "You" ? "You won · last of " + c.members : "Winner: " + c.winner;
+      if (c.status === "open") return `${c.left} in · join closes in ${c.joinClosesIn}`;
+      return `Day ${c.day}/${c.days} · ${c.left} still in`;
+    }
     const n = c.members || 0;
     const members = n === 1 ? "1 member" : `${window.Social.fmt(n)} members`;
     return c.freq ? `${members} · ${c.freq}` : members;
@@ -43,7 +48,7 @@ window.ChallengeListCard = (function () {
         <span class="clc-top">
           <span class="clc-name">${c.n}</span>
           ${owner ? `<span class="clc-tag">OWNER</span>` : ""}
-          ${opts.chip ? `<span class="clc-tag">${opts.chip}</span>` : ""}
+          ${opts.chip ? `<span class="clc-tag">${opts.chip}</span>` : c.type === "elimination" ? `<span class="clc-tag">ELIMINATION</span>` : ""}
         </span>
         ${meta ? `<span class="clc-meta">${meta}</span>` : ""}
         ${fill == null ? "" : `<span class="clc-bar"><i style="width:${fill}%;background:${opts.barColor || a.c}"></i></span>`}

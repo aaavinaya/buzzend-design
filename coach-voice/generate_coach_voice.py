@@ -66,6 +66,29 @@ LINES = {
         f"Stand up tall to start again {BRK} — we'll pick that one up fresh.",
     "voice_burpees_keep_your_hands_in_frame.mp3":
         f"Keep your hands in the picture {BRK} — I need to see them to count.",
+    # ── FULL BODY WORKOUT session cues (added 2026-10-14; plan §2.6) ──
+    # iOS ships them without the "voice_" prefix (Resources/CoachVoice/routine_*.mp3).
+    # Rest starts → "Rest. Next up: {exercise}" (one per exercise in a routine)
+    "voice_routine_next_up_squats.mp3":        f"Rest. {BRK} Next up: squats.",
+    "voice_routine_next_up_pushups.mp3":       f"Rest. {BRK} Next up: push-ups.",
+    "voice_routine_next_up_burpees.mp3":       f"Rest. {BRK} Next up: burpees.",
+    "voice_routine_next_up_jumping_jacks.mp3": f"Rest. {BRK} Next up: jumping jacks.",
+    "voice_routine_next_up_high_knees.mp3":    f"Rest. {BRK} Next up: high knees.",
+    # Rest before a framing change → "Turn your phone: {framing}" (one per framing key)
+    "voice_routine_framing_side_knee.mp3":  f"Turn your phone: {BRK} side-on, phone at knee height.",
+    "voice_routine_framing_side_floor.mp3": f"Turn your phone: {BRK} side-on, phone on the floor.",
+    "voice_routine_framing_side_low.mp3":   f"Turn your phone: {BRK} side-on, phone low and angled up.",
+    "voice_routine_framing_front.mp3":      f"Turn your phone: {BRK} front-on, phone propped up.",
+    # Time ran out before the target
+    "voice_routine_times_up.mp3":           f"Time's up. {BRK} Moving on.",
+    # Set reached its target
+    "voice_routine_nice_set.mp3":           "Nice set!",
+    # 3-2-1 beats — the prep countdown and the last three seconds of every rest (one clip per number)
+    "voice_routine_countdown_3.mp3":        "Three!",
+    "voice_routine_countdown_2.mp3":        "Two!",
+    "voice_routine_countdown_1.mp3":        "One!",
+    # Routine ran to the end
+    "voice_routine_complete.mp3":           f"Routine complete. {BRK} Great work!",
 }
 
 # ONLY="a.mp3,b.mp3" generates just those (leaves the rest untouched)

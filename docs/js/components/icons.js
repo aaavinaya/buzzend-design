@@ -26,6 +26,7 @@ window.Icons = (function () {
     share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
     download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
     play: '<polygon points="6 3 20 12 6 21 6 3"/>',
+    pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
     eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
     target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
     locate: '<line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.4"/>',
@@ -128,13 +129,15 @@ window.Icons = (function () {
     situp:          { real: [1120, 531], outlined: [290, 189], plain: [403, 180] },
     'jumping-jack': { real: [286, 367], outlined: [237, 297], plain: [308, 364] },
     lunge:          { real: [803, 800], outlined: [291, 289], plain: [349, 324] },
+    burpee:         { real: [292, 265], outlined: [198, 166], plain: [285, 279] },
+    'high-knee':    { real: [254, 365], outlined: [166, 198], plain: [321, 314] },
     // Converted and shipped but unmapped in the app: there is no yoga WorkoutType, so wiring it would
     // mean inventing a workout the backend cannot store. Here for the day one exists.
     yoga:           { real: [255, 264], outlined: [220, 220], plain: [283, 270] },
   };
   /* The keys the screens already pass. `footprints` is the steps mark and `jumping` the shorter name
      the data tables use, so both alias onto the real asset rather than forcing 20 files to rename. */
-  const ART_ALIAS = { footprints: 'walk', steps: 'walk', jumping: 'jumping-jack', jumpingjack: 'jumping-jack', pushUp: 'pushup', squats: 'squat', situps: 'situp', lunges: 'lunge' };
+  const ART_ALIAS = { footprints: 'walk', steps: 'walk', jumping: 'jumping-jack', jumpingjack: 'jumping-jack', pushUp: 'pushup', squats: 'squat', situps: 'situp', lunges: 'lunge', highknee: 'high-knee', high_knee: 'high-knee', 'high-knees': 'high-knee', highknees: 'high-knee', burpees: 'burpee' };
 
   /* Resolved from THIS script's own URL, so it is correct from docs/index.html, from the screen pages
      two levels down, and from the icon gallery alike — pages sit at three different depths. */

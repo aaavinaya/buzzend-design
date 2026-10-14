@@ -64,17 +64,18 @@ body {
 /* buttons, fields, dialogs now live in css/components/ (imported above) */
 
 /* Create menu (Plus FAB sheet) — AI Workout / Record or Upload */
-.cm-menu { display: flex; flex-direction: column; gap: 9px; }
-.cm-mtitle { font: 900 17px var(--font); color: var(--text-primary); padding: 2px 2px 8px; }
-.cm-opt { display: flex; align-items: center; gap: 14px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; cursor: pointer; text-align: left; }
-.cm-opt:active { transform: scale(.995); }
-.cm-oi { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; flex: none; color: #fff; }
-.cm-oi.ai { background: var(--hero-grad); }
-.cm-oi.rec { background: linear-gradient(135deg, #3a3a5b, #5e60ce); }
+.cm-menu { display: flex; flex-direction: column; gap: 10px; }
+.cm-mhead { padding: 2px 2px 4px; }
+.cm-mtitle { font: 900 19px var(--font); color: var(--text-primary); }
+.cm-msub { font: 600 13px var(--font); color: var(--text-secondary); margin-top: 2px; }
+.cm-opt { display: flex; align-items: center; gap: 14px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; cursor: pointer; text-align: left; transition: transform .1s; }
+.cm-opt:active { transform: scale(.99); }
+.cm-oi { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; flex: none; color: var(--primary); background: color-mix(in srgb, var(--primary) 13%, transparent); }
 .cm-otx { flex: 1; min-width: 0; }
-.cm-otx b { display: block; font: 900 15px var(--font); color: var(--text-primary); }
-.cm-otx span { font: 700 12px var(--font); color: var(--text-tertiary); }
-.cm-go { color: var(--text-tertiary); flex: none; transform: scaleX(1); }
+.cm-otx b { display: flex; align-items: center; gap: 8px; font: 800 16px var(--font); color: var(--text-primary); }
+.cm-otx span { display: block; font: 600 12.5px var(--font); color: var(--text-secondary); margin-top: 3px; line-height: 1.4; }
+.cm-new { font-style: normal; font: 800 9px var(--font); letter-spacing: .4px; color: #fff; background: #e5524a; padding: 3px 7px; border-radius: 999px; }
+.cm-go { color: var(--text-tertiary); flex: none; }
 
 /* Background "Posting…" bar (survives tab changes; sits at the top of the frame) */
 .ub-banner { position: relative; z-index: 5; margin: 8px 10px 2px; display: flex; align-items: center; gap: 12px; background: var(--surface);

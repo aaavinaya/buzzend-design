@@ -9,6 +9,16 @@ window.Challenges = (function () {
   const av = (a, cls) => `<div class="${cls}" style="background-image:${grad(a)}"></div>`;
   const bdgBg = (m) => `background-image:linear-gradient(135deg,${m.c},color-mix(in srgb,${m.c} 58%,#000))`;
   const memberAvs = (n) => `<div class="ch-avs">${S.PEOPLE.slice(1, 5).map((p) => `<span class="a" style="background-image:${grad(p.av)}"></span>`).join("")}<span class="more">+${fmt(Math.max(0, n - 4))}</span></div>`;
+  // Elimination: a small type tag, and one status line instead of a rep goal (there is no goal — you
+  // just have to stay above tonight's cutoff). Always icon + words, never colour alone.
+  const isKO = (c) => c.type === "elimination";
+  const koTag = `<span class="ch-ko">${I("target", 11)} Elimination</span>`;
+  function koStatus(c) {
+    if (c.status === "ended") return c.winner === "You" ? `<span class="ch-kos win">${I("trophy", 12)} You won · last of ${c.members}</span>` : `<span class="ch-kos">${I("trophy", 12)} Winner: ${c.winner}</span>`;
+    if (c.myPlace == null) return "";
+    return c.myPlace <= c.cutoff ? `<span class="ch-kos safe">${I("shield", 12)} Safe · #${c.myPlace}, cutoff #${c.cutoff}</span>`
+      : `<span class="ch-kos risk">${I("alert", 12)} At risk · #${c.myPlace}, cutoff #${c.cutoff}</span>`;
+  }
   function myStanding(c) { const b = S.challengeBoard(c), me = b.find((x) => x.p.me); if (!me) return null; const ahead = me.rank > 1 ? b[me.rank - 2] : null; return { rank: me.rank, total: b.length, gap: ahead ? ahead.v - me.v : 0 }; }
 
   function ring(pct, c) {
@@ -27,12 +37,17 @@ window.Challenges = (function () {
 
   function dueRow(c) {
     const m = exMeta(c.ex), dl = S.daysLeft(c), urgent = dl <= 2;
+    if (isKO(c)) return `<div class="ch-due" onclick="Challenges.openDetail('${c.id}')">
+      <div class="bdg" style="${bdgBg(m)}">${I(m.i, 22)}</div>
+      <div class="mid"><div class="nm">${c.n}</div><div class="m">Day ${c.day}/${c.days} · stay in the top ${c.cutoff} tonight</div></div>
+      <button class="ch-rec" onclick="event.stopPropagation();Challenges.record('${c.id}')">${I("camera", 15)} Record</button></div>`;
     return `<div class="ch-due ${urgent ? "urgent" : ""}" onclick="Challenges.openDetail('${c.id}')">
       <div class="bdg" style="${bdgBg(m)}">${I(m.i, 22)}</div>
       <div class="mid"><div class="nm">${c.n}</div><div class="m">${urgent ? `<span class="due">${dl === 0 ? "Ends today" : "Ends in " + dl + "d"}</span> · ` : ""}Target ${S.todayTarget(c)} ${m.n.toLowerCase()} today</div></div>
       <button class="ch-rec" onclick="event.stopPropagation();Challenges.record('${c.id}')">${I("camera", 15)} Record</button></div>`;
   }
   function activeCard2(c) {
+    if (isKO(c)) return koActiveCard(c);
     const m = exMeta(c.ex), pct = Math.min(100, Math.round((c.myReps / c.goal) * 100)), dl = S.daysLeft(c), soon = dl <= 2, st = myStanding(c);
     const pill = soon ? `<span class="ch-pill soon">${dl === 0 ? "Last day" : "Ends in " + dl + "d"}</span>` : `<span class="ch-pill day">Day ${c.day}/${c.days}</span>`;
     return `<div class="ch-c2" onclick="Challenges.openDetail('${c.id}')">
@@ -43,6 +58,15 @@ window.Challenges = (function () {
       <div class="ch-c2-f">${memberAvs(c.members)}
         ${c.loggedToday ? `<span class="ch-pill logged">${I("check", 11)} Logged today</span>` : `<button class="ch-rec" onclick="event.stopPropagation();Challenges.record('${c.id}')">${I("camera", 14)} Record</button>`}</div></div>`;
   }
+  function koActiveCard(c) {
+    const m = exMeta(c.ex);
+    return `<div class="ch-c2" onclick="Challenges.openDetail('${c.id}')">
+      <div class="ch-c2-h"><div class="bdg" style="${bdgBg(m)}">${I(m.i, 24)}</div>
+        <div style="flex:1;min-width:0"><div class="nm">${c.n}</div><div class="by">${koTag}</div></div><span class="ch-pill day">Day ${c.day}/${c.days}</span></div>
+      <div class="ch-ko-line"><span>${I("users", 13)} <b>${c.left}</b> still in</span>${koStatus(c)}</div>
+      <div class="ch-c2-f">${memberAvs(c.members)}
+        ${c.loggedToday ? `<span class="ch-pill logged">${I("check", 11)} Logged today</span>` : `<button class="ch-rec" onclick="event.stopPropagation();Challenges.record('${c.id}')">${I("camera", 14)} Record</button>`}</div></div>`;
+  }
   function upcomingCard(c) {
     const m = exMeta(c.ex);
     return `<div class="ch-up" onclick="Challenges.openDetail('${c.id}')"><div class="bdg" style="${bdgBg(m)}">${I(m.i, 22)}</div>
@@ -50,6 +74,9 @@ window.Challenges = (function () {
       <button class="lv" onclick="event.stopPropagation();Buzzend.alert({icon:'bell',title:'Reminder set',message:'We will nudge you when ${c.n} starts.'})">Remind me</button></div>`;
   }
   function endedCard(c) {
+    if (isKO(c)) { const m = exMeta(c.ex);
+      return `<div class="ch-ended" onclick="Challenges.openDetail('${c.id}')"><div class="bdg" style="${bdgBg(m)}">${I(m.i, 20)}</div>
+        <div style="flex:1;min-width:0"><div class="nm">${c.n}</div><div class="res">${koStatus(c)}</div></div>${c.winner === "You" ? `<span class="medal">🥇</span>` : `<span class="ch-pill day">Ended</span>`}</div>`; }
     const m = exMeta(c.ex), st = myStanding(c), medal = st && st.rank <= 3 ? (st.rank === 1 ? "🥇" : st.rank === 2 ? "🥈" : "🥉") : "";
     return `<div class="ch-ended" onclick="Challenges.openDetail('${c.id}')"><div class="bdg" style="${bdgBg(m)}">${I(m.i, 20)}</div>
       <div style="flex:1;min-width:0"><div class="nm">${c.n}</div><div class="res">Finished ${st ? "#" + st.rank + " of " + fmt(st.total) : ""} · ${fmt(c.myReps)} reps</div></div>
@@ -97,6 +124,11 @@ window.Challenges = (function () {
   // ════════ DISCOVER (browse) — kept for next increment ════════
   function discCard(c) {
     const m = exMeta(c.ex), can = !c.full;
+    if (isKO(c)) return `<div class="ch-disc" onclick="Challenges.openDetail('${c.id}')">
+      <div class="ch-thumb" style="${bdgBg(m)}">${I(m.i, 26)}</div>
+      <div style="flex:1;min-width:0"><div class="nm">${c.n}</div>
+        <div class="mt">${koTag}<span class="ch-meta-chip">${I("users", 12)} ${c.left} in</span><span class="ch-meta-chip ch-closes">${I("clock", 12)} Join closes in ${c.joinClosesIn}</span></div></div>
+      <button class="btn btn-primary btn-sm ch-join" onclick="event.stopPropagation();Challenges.join('${c.id}',this)">Join</button></div>`;
     return `<div class="ch-disc" onclick="Challenges.openDetail('${c.id}')">
       <div class="ch-thumb" style="${bdgBg(m)}">${I(m.i, 26)}</div>
       <div style="flex:1;min-width:0"><div class="nm">${c.n}</div>
@@ -192,7 +224,11 @@ window.Challenges = (function () {
   let cur = { state: "today", view: "hub", detailId: null };
   function render(state) { cur.state = state || "today"; cur.view = "hub"; cur.detailId = null; return hub(cur.state); }
   function rerender() { const h = document.getElementById("content"); h.innerHTML = cur.view === "detail" ? detail(cur.detailId) : cur.view === "discover" ? discoverView() : hub(cur.state); window.Icons.init(h); h.scrollTop = 0; }
-  function openDetail(id) { cur.view = "detail"; cur.detailId = id; rerender(); }
+  function openDetail(id) {
+    const c = S.CHALLENGES.find((x) => x.id === id);
+    if (c && isKO(c)) { location.href = "challenge-detail.html?v=" + c.elim; return; }   // the elimination hub
+    cur.view = "detail"; cur.detailId = id; rerender();
+  }
   function openDiscover() { cur.view = "discover"; rerender(); }
   function back() { cur.view = "hub"; cur.detailId = null; rerender(); }
   function retry() { cur.view = "hub"; cur.state = "today"; rerender(); }

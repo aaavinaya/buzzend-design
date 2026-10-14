@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "restColor": "#0EA5C6",
+  "levels": [
+    {
+      "id": "beginner",
+      "name": "Beginner",
+      "description": "Accessible reps · longer rest"
+    },
+    {
+      "id": "intermediate",
+      "name": "Intermediate",
+      "description": "Moderate reps · balanced pace"
+    },
+    {
+      "id": "expert",
+      "name": "Expert",
+      "description": "High reps · short rest · more rounds"
+    }
+  ],
+  "framings": {
+    "side_knee": "Side-on · phone at knee height",
+    "side_low": "Side-on · phone low, angled up",
+    "side_floor": "Side-on · phone on the floor",
+    "front": "Front-on · phone propped up"
+  },
+  "exercises": {
+    "squat": {
+      "name": "Squats",
+      "color": "#FF7A1A",
+      "kcalPerRep": 0.45,
+      "framing": "side_knee"
+    },
+    "burpee": {
+      "name": "Burpees",
+      "color": "#EF4444",
+      "kcalPerRep": 0.75,
+      "framing": "side_low"
+    },
+    "pushup": {
+      "name": "Push-ups",
+      "color": "#7C3AED",
+      "kcalPerRep": 0.35,
+      "framing": "side_floor"
+    },
+    "jumping": {
+      "name": "Jumping Jacks",
+      "color": "#00B37E",
+      "kcalPerRep": 0.25,
+      "framing": "front"
+    },
+    "highknee": {
+      "name": "High Knees",
+      "color": "#3B6EFF",
+      "kcalPerRep": 0.22,
+      "framing": "front"
+    }
+  },
+  "routines": [
+    {
+      "id": "total-body",
+      "name": "Total Body",
+      "focus": "Full body",
+      "description": "Every move in one circuit — legs, push, power and cardio, back to back.",
+      "frame": "Side-on + front-on",
+      "setup": "mixed",
+      "mixedFraming": true,
+      "gradient": {
+        "angle": 135,
+        "stops": [
+          {
+            "color": "#EF4444",
+            "location": 0
+          },
+          {
+            "color": "#7C3AED",
+            "location": 0.55
+          },
+          {
+            "color": "#3B6EFF",
+            "location": 1
+          }
+        ]
+      },
+      "steps": [
+        "squat",
+        "pushup",
+        "burpee",
+        "jumping",
+        "highknee"
+      ],
+      "levels": {
+        "beginner": {
+          "reps": {
+            "squat": 12,
+            "pushup": 8,
+            "burpee": 6,
+            "jumping": 20,
+            "highknee": 24
+          },
+          "rest": 25,
+          "rounds": 1,
+          "sec": {
+            "squat": 30,
+            "pushup": 24,
+            "burpee": 24,
+            "jumping": 30,
+            "highknee": 28
+          }
+        },
+        "intermediate": {
+          "reps": {
+            "squat": 18,
+            "pushup": 12,
+            "burpee": 10,
+            "jumping": 30,
+            "highknee": 40
+          },
+          "rest": 18,
+          "rounds": 1,
+          "sec": {
+            "squat": 40,
+            "pushup": 34,
+            "burpee": 36,
+            "jumping": 40,
+            "highknee": 40
+          }
+        },
+        "expert": {
+          "reps": {
+            "squat": 25,
+            "pushup": 18,
+            "burpee": 15,
+            "jumping": 45,
+            "highknee": 60
+          },
+          "rest": 12,
+          "rounds": 1,
+          "sec": {
+            "squat": 50,
+            "pushup": 46,
+            "burpee": 50,
+            "jumping": 55,
+            "highknee": 55
+          }
+        }
+      }
+    },
+    {
+      "id": "lower-power",
+      "name": "Lower Power",
+      "focus": "Legs + explosive",
+      "description": "A standing lower-body circuit: squats, then a burst of burpees.",
+      "frame": "Side-on · knee height",
+      "setup": "side",
+      "mixedFraming": false,
+      "gradient": {
+        "angle": 135,
+        "stops": [
+          {
+            "color": "#FF6B00",
+            "location": 0
+          },
+          {
+            "color": "#FF9F43",
+            "location": 1
+          }
+        ]
+      },
+      "steps": [
+        "squat",
+        "burpee"
+      ],
+      "levels": {
+        "beginner": {
+          "reps": {
+            "squat": 12,
+            "burpee": 6
+          },
+          "rest": 25,
+          "rounds": 1,
+          "sec": {
+            "squat": 30,
+            "burpee": 24
+          }
+        },
+        "intermediate": {
+          "reps": {
+            "squat": 18,
+            "burpee": 10
+          },
+          "rest": 18,
+          "rounds": 1,
+          "sec": {
+            "squat": 40,
+            "burpee": 36
+          }
+        },
+        "expert": {
+          "reps": {
+            "squat": 25,
+            "burpee": 15
+          },
+          "rest": 12,
+          "rounds": 1,
+          "sec": {
+            "squat": 50,
+            "burpee": 50
+          }
+        }
+      }
+    },
+    {
+      "id": "cardio-blast",
+      "name": "Cardio Blast",
+      "focus": "Cardio",
+      "description": "Face-on cardio intervals to spike your heart rate and keep it there.",
+      "frame": "Front-on",
+      "setup": "front",
+      "mixedFraming": false,
+      "gradient": {
+        "angle": 135,
+        "stops": [
+          {
+            "color": "#00C98D",
+            "location": 0
+          },
+          {
+            "color": "#3B6EFF",
+            "location": 1
+          }
+        ]
+      },
+      "steps": [
+        "jumping",
+        "highknee"
+      ],
+      "levels": {
+        "beginner": {
+          "reps": {
+            "jumping": 20,
+            "highknee": 24
+          },
+          "rest": 20,
+          "rounds": 1,
+          "sec": {
+            "jumping": 30,
+            "highknee": 28
+          }
+        },
+        "intermediate": {
+          "reps": {
+            "jumping": 30,
+            "highknee": 40
+          },
+          "rest": 15,
+          "rounds": 1,
+          "sec": {
+            "jumping": 40,
+            "highknee": 40
+          }
+        },
+        "expert": {
+          "reps": {
+            "jumping": 45,
+            "highknee": 60
+          },
+          "rest": 10,
+          "rounds": 1,
+          "sec": {
+            "jumping": 55,
+            "highknee": 55
+          }
+        }
+      }
+    }
+  ]
+}

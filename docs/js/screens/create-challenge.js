@@ -64,11 +64,26 @@ window.CC = (function () {
   const today = iso(new Date());
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const fmtDate = (s) => { const p = s.split("-"); return `${MON[+p[1] - 1]} ${+p[2]}, ${p[0]}`; };
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / 86400000);
   const esc = (s) => ("" + s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-  let S = { step: 0, template: null, exercise: null, name: "", desc: "", frequency: "DAILY", isPublic: true,
-    start: today, dur: 30, durCustom: false, winner: "NO_WINNER", prizes: [], err: {} };
+  let S = { step: 0, type: "CLASSIC", template: null, exercise: null, name: "", desc: "", frequency: "DAILY", isPublic: true,
+    start: today, dur: 30, durCustom: false, winner: "NO_WINNER", prizes: [], winners: 1, expected: 50, err: {} };
+  const isKO = () => S.type === "ELIMINATION";
+  /* Elimination cut plan — the SAME formula the server uses (ELIMINATION_CHALLENGE_APP_GUIDE §4). Shown only as
+     a preview here; the device never decides real eliminations. 100 people · 7 days · 1 winner →
+     100 → 52 → 27 → 14 → 8 → 4 → 2 → 1. */
+  function cutPlan(n, days, w) {
+    const out = [n];
+    for (let d = 1; d <= days; d++) {
+      const left = days - d + 1;
+      n = n <= w ? n : left === 1 ? w : Math.max(w, Math.ceil(n * Math.pow(w / n, 1 / left)));
+      out.push(n);
+    }
+    return out;
+  }
+  const KO_DURS = [3, 5, 7, 14];
   const endISO = () => iso(addDays(new Date(S.start), S.dur));
   const isToday = (s) => s === today;
   const isTomorrow = (s) => s === iso(addDays(new Date(), 1));
@@ -108,7 +123,11 @@ window.CC = (function () {
     // `.cc-ex-c` in create-challenge.css.
     const exc = (e) => `<button class="cc-ex-c ${S.exercise === e.key ? "on" : ""}" onclick="CC.pickEx('${e.key}')"><span class="ic">${EXA(e.i, 58)}</span><span class="n">${e.n}</span></button>`;
     return `<div class="cc-body">
-      <div class="cc-h1">What's the challenge?</div><div class="cc-sub">Pick an exercise and give it a name</div>
+      <div class="cc-h1">What's the challenge?</div><div class="cc-sub">Pick a format and an exercise, then name it</div>
+      <div class="cc-lbl">Format</div>
+      <div class="cc-two cc-type">
+        <div class="cc-pick ${!isKO() ? "on" : ""}" onclick="CC.setType('CLASSIC')"><span class="pic">${I("trophy", 24)}</span><div class="pt">Classic</div><div class="pd">Most reps over the dates wins</div></div>
+        <div class="cc-pick ${isKO() ? "on" : ""}" onclick="CC.setType('ELIMINATION')"><span class="pic">${I("target", 24)}</span><div class="pt">Elimination</div><div class="pd">Lowest totals knocked out daily. Last one standing wins.</div></div></div>
       <div class="cc-lbl">Quick start</div><div class="cc-quick">${QUICK.map(chip).join("")}</div>
       <div class="cc-lbl">Exercise type</div><div class="cc-ex">${EX.map(exc).join("")}</div>
       ${S.err.exercise ? `<div class="cc-err" style="margin-top:9px">${S.err.exercise}</div>` : ""}
@@ -121,6 +140,7 @@ window.CC = (function () {
   }
 
   function step2() {
+    if (isKO()) return step2KO();
     const win = (w) => `<button class="cc-win ${S.winner === w.v ? "on" : ""}" onclick="CC.setWinner('${w.v}')">
       <span class="wic" style="color:${S.winner === w.v ? "var(--primary)" : "var(--text-secondary)"}">${I(w.ic, 22)}</span><div class="wt">${w.t}</div><div class="ws">${w.s}</div></button>`;
     return `<div class="cc-body">
@@ -143,6 +163,38 @@ window.CC = (function () {
       <div class="cc-lbl">Winner selection</div><div class="cc-three">${WIN.map(win).join("")}</div>
       ${S.winner !== "NO_WINNER" ? prizes() : ""}</div>`;
   }
+  /* Elimination: no frequency (always daily) and no winner-type picker; 2–30 days; 1/2/3 winners with exactly
+     that many prize fields; date-only start ("starts at midnight"); and a live preview of the daily cuts. */
+  function step2KO() {
+    const plan = cutPlan(S.expected, S.dur, S.winners);
+    const prize = (i) => `<div class="cc-prize-row"><span class="medal" style="color:${["#f5a623", "#b8c0c8", "#c8894a"][i]}">${I("medal", 18)}</span>
+      <input value="${esc(S.prizes[i] || "")}" maxlength="40" placeholder="${["1st", "2nd", "3rd"][i]} place prize (optional)" oninput="CC.setPrize(${i},this.value)"></div>`;
+    return `<div class="cc-body">
+      <div class="cc-h1">When &amp; who can join?</div><div class="cc-sub">A new round every day, from midnight to midnight</div>
+      <div class="cc-lbl">Who can join?</div>
+      <div class="cc-two">
+        <div class="cc-pick ${S.isPublic ? "on" : ""}" onclick="CC.setPublic(true)"><span class="pic">${I("users", 26)}</span><div class="pt">Public</div><div class="pd">Anyone can join</div></div>
+        <div class="cc-pick ${!S.isPublic ? "on" : ""}" onclick="CC.setPublic(false)"><span class="pic">${I("lock", 24)}</span><div class="pt">Private</div><div class="pd">Invite only</div></div></div>
+      <div class="cc-lbl">Start date</div>
+      <div class="cc-startquick">
+        <button class="${isToday(S.start) ? "on" : ""}" onclick="CC.setStartQuick(0)">Today</button>
+        <button class="${isTomorrow(S.start) ? "on" : ""}" onclick="CC.setStartQuick(1)">Tomorrow</button></div>
+      <div class="cc-startfield"><input type="date" value="${S.start}" min="${today}" onchange="CC.setStart(this.value)"></div>
+      <div class="cc-ends"><span class="ic">${I("clock", 15)}</span><span>Starts at midnight on <b>${fmtDate(S.start)}</b> · joining closes when day 1 ends</span></div>
+      <div class="cc-lbl">Length <span class="cc-lbl-n">2–30 days</span></div>
+      <div class="cc-chips">${KO_DURS.map((d) => `<button class="cc-chip ${!S.durCustom && S.dur === d ? "on" : ""}" onclick="CC.setDur(${d})">${d} days</button>`).join("")}
+        <button class="cc-chip ${S.durCustom ? "on" : ""}" onclick="CC.setCustomDur()">Custom</button></div>
+      ${S.durCustom ? `<div class="cc-customdur"><button onclick="CC.durStep(-1)">${I("chevron-down", 18)}</button><input type="number" min="2" max="30" value="${S.dur}" oninput="CC.setDurInput(this.value)"><button onclick="CC.durStep(1)">${I("chevron-up", 18)}</button><span class="u">days</span></div>` : ""}
+      <div class="cc-lbl">Winners</div>
+      <div class="cc-seg">${[1, 2, 3].map((n) => `<button class="${S.winners === n ? "on" : ""}" onclick="CC.setWinners(${n})">${n}</button>`).join("")}</div>
+      <div class="cc-lbl">Prizes</div>${Array.from({ length: S.winners }, (_, i) => prize(i)).join("")}
+      <div class="cc-ko-prev">
+        <div class="h">${I("target", 16)} How the cuts could go</div>
+        <div class="q">If <span class="cc-ko-n"><button onclick="CC.setExpected(-10)" aria-label="Fewer">−</button><b>${S.expected}</b><button onclick="CC.setExpected(10)" aria-label="More">+</button></span> people join</div>
+        <div class="cc-ko-flow">${plan.map((n, i) => `<span class="${i === plan.length - 1 ? "w" : ""}">${n}</span>`).join(`<i>${I("chevron", 12)}</i>`)}</div>
+        <div class="f">Lowest totals go each night. Ties at the cutoff all advance.</div></div>
+    </div>`;
+  }
   function prizes() {
     const rows = S.prizes.map((p, i) => `<div class="cc-prize-row"><span class="medal" style="color:${["#f5a623", "#b8c0c8", "#c8894a"][i]}">${I("medal", 18)}</span>
       <input value="${esc(p)}" maxlength="40" placeholder="${["1st", "2nd", "3rd"][i]} place prize" oninput="CC.setPrize(${i},this.value)">
@@ -160,6 +212,7 @@ window.CC = (function () {
      (flame = streaks, target = the 10k quick-start chip, medal = the Winner row's trophy). */
   function step3() {
     const e = exMeta(S.exercise), days = S.dur, name = S.name.trim() || "Your challenge";
+    if (isKO()) return step3KO(e, days, name);
     const row = (ic, k, v) => `<div class="cc-sum-row"><span class="sic">${I(ic, 16)}</span><span class="sk">${k}</span><span class="sv">${v}</span></div>`;
     const noteIc = S.exercise === "steps" ? "walk" : "camera";
     const noteTx = S.exercise === "steps" ? "Steps are tracked automatically from your phone — no camera needed." : "Camera verification required. AI auto-counts every rep.";
@@ -177,6 +230,24 @@ window.CC = (function () {
       <div class="cc-note"><span class="nic">${I(noteIc, 18)}</span><span class="nt">${noteTx}</span></div></div>`;
   }
 
+  function step3KO(e, days, name) {
+    const row = (ic, k, v) => `<div class="cc-sum-row"><span class="sic">${I(ic, 16)}</span><span class="sk">${k}</span><span class="sv">${v}</span></div>`;
+    const plan = cutPlan(S.expected, days, S.winners), prizes = S.prizes.filter((p) => p && p.trim());
+    return `<div class="cc-body">
+      <div class="cc-h1">Review your challenge</div><div class="cc-sub">Looks good? Launch it!</div>
+      <div class="cc-lbl">Preview</div>
+      <div class="cc-preview"><div class="art">${EXA(e.i, 56)}</div><div style="min-width:0">
+        <div class="pt">${esc(name)}</div><div class="tag">${I("target", 11)} Elimination · ${e.n}</div>
+        <div class="meta">${S.isPublic ? "Public" : "Private"} · ${days} days · ${S.winners} winner${S.winners > 1 ? "s" : ""}</div></div></div>
+      <div class="cc-lbl">Summary</div>
+      <div class="cc-sum">
+        ${row("target", "Format", "Elimination")}${row("dumbbell", "Exercise", e.n)}
+        ${row("calendar", "Starts", "Midnight, " + fmtDate(S.start))}${row("flag", "Length", days + " days")}
+        ${row("users", "Visibility", S.isPublic ? "Public" : "Private")}${row("trophy", "Winners", S.winners)}
+        ${row("star", "Prizes", prizes.length ? prizes.length + " prize(s)" : "None")}</div>
+      <div class="cc-note"><span class="nic">${I("target", 18)}</span><span class="nt">If ${S.expected} join: ${plan.join(" → ")}. Joining closes when day 1 ends.</span></div></div>`;
+  }
+
   function footer() {
     const primary = S.step === 0 ? "Next: When &amp; who" : S.step === 1 ? "Next: Review" : I("rocket", 18) + " Launch Challenge";
     return `<div class="cc-foot"><button class="cc-cancel" onclick="CC.cancel()">${S.step === 0 ? "Cancel" : "Back"}</button>
@@ -192,16 +263,25 @@ window.CC = (function () {
     S.template = id; S.err = {};
     if (id === "custom") { S.exercise = null; S.name = ""; S.desc = ""; S.winner = "NO_WINNER"; S.isPublic = true; S.prizes = []; S.frequency = "DAILY"; S.dur = 30; S.durCustom = false; }
     else { S.exercise = q.ex; S.name = q.name; S.desc = q.desc; S.winner = q.winner; S.isPublic = true; S.dur = q.dur; S.durCustom = false; }
+    if (isKO()) { S.frequency = "DAILY"; S.dur = clamp(S.dur, 2, 30); }   // elimination runs 2–30 days, always daily
     render();
   }
   function setFreq(v) { S.frequency = v; render(); }
+  function setType(v) {
+    S.type = v;
+    if (v === "ELIMINATION") { S.frequency = "DAILY"; if (S.dur < 2 || S.dur > 30) { S.dur = 7; S.durCustom = false; } S.prizes = S.prizes.slice(0, S.winners); }
+    render();
+  }
+  function setTypeSilent() { S.type = "ELIMINATION"; S.frequency = "DAILY"; S.dur = 7; S.durCustom = false; }
+  function setWinners(n) { S.winners = n; S.prizes = S.prizes.slice(0, n); render(); }
+  function setExpected(d) { S.expected = clamp(S.expected + d, 2, 1000); render(); }
   function setPublic(v) { S.isPublic = v; render(); }
   function setStart(v) { S.start = v || today; render(); }
   function setStartQuick(n) { S.start = iso(addDays(new Date(), n)); render(); }
   function setDur(d) { S.dur = d; S.durCustom = false; render(); }
   function setCustomDur() { S.durCustom = true; render(); }
-  function durStep(delta) { S.dur = clamp(S.dur + delta, 1, 365); render(); }
-  function setDurInput(v) { S.dur = clamp(parseInt(v) || 1, 1, 365); }
+  function durStep(delta) { S.dur = isKO() ? clamp(S.dur + delta, 2, 30) : clamp(S.dur + delta, 1, 365); render(); }
+  function setDurInput(v) { S.dur = isKO() ? clamp(parseInt(v) || 2, 2, 30) : clamp(parseInt(v) || 1, 1, 365); }
   function setWinner(v) { S.winner = v; if (v === "NO_WINNER") S.prizes = []; else if (!S.prizes.length) S.prizes = [""]; render(); }
   function addPrize() { if (S.prizes.length < 3) { S.prizes.push(""); render(); } }
   function removePrize(i) { S.prizes.splice(i, 1); render(); }
@@ -251,9 +331,10 @@ window.CC = (function () {
       S.template = "squat_30day"; S.exercise = "squat"; S.name = "30-Day Squat Challenge";
       S.desc = "Do squats every day for 30 days. Camera verification required."; S.winner = "NORMAL_WINNER"; S.prizes = ["Gold medal + shoutout"];
     }
+    if (new URLSearchParams(location.search).get("type") === "elimination") setTypeSilent();   // ?type=elimination
     S.step = Math.max(0, Math.min(2, step));
     if (new URLSearchParams(location.search).get("err")) validate1();   // QA: show step-1 validation state
     render();
   }
-  return { start, render, setName, setDesc, pickEx, applyTemplate, setFreq, setPublic, setStart, setStartQuick, setDur, setCustomDur, durStep, setDurInput, setWinner, addPrize, removePrize, setPrize, next, cancel, tryExit, exit, discard, closeDiscard };
+  return { start, render, setName, setDesc, pickEx, applyTemplate, setFreq, setType, setWinners, setExpected, setPublic, setStart, setStartQuick, setDur, setCustomDur, durStep, setDurInput, setWinner, addPrize, removePrize, setPrize, next, cancel, tryExit, exit, discard, closeDiscard };
 })();

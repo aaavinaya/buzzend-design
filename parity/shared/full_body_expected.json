@@ -1,0 +1,841 @@
+{
+  "generatedFrom": "docs/js/screens/full-body-data.js",
+  "plans": [
+    {
+      "routine": "total-body",
+      "level": "beginner",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 12,
+          "sec": 30,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "pushup",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 8,
+          "sec": 24,
+          "idx": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "burpee",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 6,
+          "sec": 24,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "jumping",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 20,
+          "sec": 30,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "highknee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 24,
+          "sec": 28,
+          "idx": 5,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 5,
+      "totalReps": 70,
+      "estSeconds": 236,
+      "estMinutes": 4
+    },
+    {
+      "routine": "total-body",
+      "level": "intermediate",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 18,
+          "sec": 40,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 18,
+          "nextEx": "pushup",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 12,
+          "sec": 34,
+          "idx": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 18,
+          "nextEx": "burpee",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 10,
+          "sec": 36,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 18,
+          "nextEx": "jumping",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 30,
+          "sec": 40,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 18,
+          "nextEx": "highknee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 40,
+          "sec": 40,
+          "idx": 5,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 5,
+      "totalReps": 110,
+      "estSeconds": 262,
+      "estMinutes": 4
+    },
+    {
+      "routine": "total-body",
+      "level": "expert",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 25,
+          "sec": 50,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 12,
+          "nextEx": "pushup",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 18,
+          "sec": 46,
+          "idx": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 12,
+          "nextEx": "burpee",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 15,
+          "sec": 50,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 12,
+          "nextEx": "jumping",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 45,
+          "sec": 55,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 12,
+          "nextEx": "highknee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 60,
+          "sec": 55,
+          "idx": 5,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 5,
+      "totalReps": 163,
+      "estSeconds": 304,
+      "estMinutes": 5
+    },
+    {
+      "routine": "lower-power",
+      "level": "beginner",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 12,
+          "sec": 30,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "burpee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 6,
+          "sec": 24,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 18,
+      "estSeconds": 79,
+      "estMinutes": 1
+    },
+    {
+      "routine": "lower-power",
+      "level": "intermediate",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 18,
+          "sec": 40,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 18,
+          "nextEx": "burpee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 10,
+          "sec": 36,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 28,
+      "estSeconds": 94,
+      "estMinutes": 2
+    },
+    {
+      "routine": "lower-power",
+      "level": "expert",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 25,
+          "sec": 50,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 12,
+          "nextEx": "burpee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 15,
+          "sec": 50,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 40,
+      "estSeconds": 112,
+      "estMinutes": 2
+    },
+    {
+      "routine": "cardio-blast",
+      "level": "beginner",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 20,
+          "sec": 30,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 24,
+          "sec": 28,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 44,
+      "estSeconds": 78,
+      "estMinutes": 1
+    },
+    {
+      "routine": "cardio-blast",
+      "level": "intermediate",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 30,
+          "sec": 40,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 40,
+          "sec": 40,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 70,
+      "estSeconds": 95,
+      "estMinutes": 2
+    },
+    {
+      "routine": "cardio-blast",
+      "level": "expert",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 45,
+          "sec": 55,
+          "idx": 1,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 10,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 60,
+          "sec": 55,
+          "idx": 2,
+          "total": 2,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 2,
+      "totalReps": 105,
+      "estSeconds": 120,
+      "estMinutes": 2
+    }
+  ],
+  "scoring": [
+    {
+      "name": "empty",
+      "results": [],
+      "planned": 5,
+      "ended": true,
+      "expected": {
+        "total": 0,
+        "repScore": 0,
+        "exScore": 0,
+        "paceScore": 0,
+        "exFull": 0,
+        "repsDone": 0,
+        "repsTarget": 0,
+        "stars": 1,
+        "band": "Good start",
+        "status": "interrupted",
+        "statusLabel": "Interrupted",
+        "kcal": 0
+      }
+    },
+    {
+      "name": "zero reps",
+      "results": [
+        {
+          "ex": "squat",
+          "target": 12,
+          "done": 0,
+          "sec": 30,
+          "targetSec": 30
+        }
+      ],
+      "planned": 5,
+      "ended": true,
+      "expected": {
+        "total": 0,
+        "repScore": 0,
+        "exScore": 0,
+        "paceScore": 0,
+        "exFull": 0,
+        "repsDone": 0,
+        "repsTarget": 12,
+        "stars": 1,
+        "band": "Good start",
+        "status": "interrupted",
+        "statusLabel": "Interrupted",
+        "kcal": 0
+      }
+    },
+    {
+      "name": "perfect total body beginner",
+      "results": [
+        {
+          "ex": "squat",
+          "target": 12,
+          "done": 12,
+          "sec": 25,
+          "targetSec": 30
+        },
+        {
+          "ex": "pushup",
+          "target": 8,
+          "done": 8,
+          "sec": 20,
+          "targetSec": 24
+        },
+        {
+          "ex": "burpee",
+          "target": 6,
+          "done": 6,
+          "sec": 22,
+          "targetSec": 24
+        },
+        {
+          "ex": "jumping",
+          "target": 20,
+          "done": 20,
+          "sec": 28,
+          "targetSec": 30
+        },
+        {
+          "ex": "highknee",
+          "target": 24,
+          "done": 24,
+          "sec": 26,
+          "targetSec": 28
+        }
+      ],
+      "planned": 5,
+      "ended": false,
+      "expected": {
+        "total": 100,
+        "repScore": 1,
+        "exScore": 1,
+        "paceScore": 1,
+        "exFull": 5,
+        "repsDone": 70,
+        "repsTarget": 70,
+        "stars": 5,
+        "band": "Outstanding",
+        "status": "completed",
+        "statusLabel": "Completed",
+        "kcal": 23
+      }
+    },
+    {
+      "name": "overtime but complete",
+      "results": [
+        {
+          "ex": "squat",
+          "target": 12,
+          "done": 12,
+          "sec": 40,
+          "targetSec": 30
+        },
+        {
+          "ex": "burpee",
+          "target": 6,
+          "done": 6,
+          "sec": 27,
+          "targetSec": 24
+        }
+      ],
+      "planned": 2,
+      "ended": false,
+      "expected": {
+        "total": 90,
+        "repScore": 1,
+        "exScore": 1,
+        "paceScore": 0.5,
+        "exFull": 2,
+        "repsDone": 18,
+        "repsTarget": 18,
+        "stars": 5,
+        "band": "Outstanding",
+        "status": "completed",
+        "statusLabel": "Completed",
+        "kcal": 10
+      }
+    },
+    {
+      "name": "pace boundary 115%",
+      "results": [
+        {
+          "ex": "pushup",
+          "target": 12,
+          "done": 12,
+          "sec": 39,
+          "targetSec": 34
+        },
+        {
+          "ex": "pushup",
+          "target": 12,
+          "done": 12,
+          "sec": 40,
+          "targetSec": 34
+        }
+      ],
+      "planned": 2,
+      "ended": false,
+      "expected": {
+        "total": 90,
+        "repScore": 1,
+        "exScore": 1,
+        "paceScore": 0.5,
+        "exFull": 2,
+        "repsDone": 24,
+        "repsTarget": 24,
+        "stars": 5,
+        "band": "Outstanding",
+        "status": "completed",
+        "statusLabel": "Completed",
+        "kcal": 8
+      }
+    },
+    {
+      "name": "skipped set",
+      "results": [
+        {
+          "ex": "squat",
+          "target": 18,
+          "done": 18,
+          "sec": 35,
+          "targetSec": 40
+        },
+        {
+          "ex": "pushup",
+          "target": 12,
+          "done": 5,
+          "sec": 34,
+          "targetSec": 34
+        },
+        {
+          "ex": "burpee",
+          "target": 10,
+          "done": 10,
+          "sec": 30,
+          "targetSec": 36
+        }
+      ],
+      "planned": 5,
+      "ended": false,
+      "expected": {
+        "total": 75,
+        "repScore": 0.825,
+        "exScore": 0.6666666666666666,
+        "paceScore": 0.6666666666666666,
+        "exFull": 2,
+        "repsDone": 33,
+        "repsTarget": 40,
+        "stars": 4,
+        "band": "Strong effort",
+        "status": "partial",
+        "statusLabel": "Partially completed",
+        "kcal": 17
+      }
+    },
+    {
+      "name": "over target is capped",
+      "results": [
+        {
+          "ex": "jumping",
+          "target": 20,
+          "done": 26,
+          "sec": 29,
+          "targetSec": 30
+        }
+      ],
+      "planned": 2,
+      "ended": false,
+      "expected": {
+        "total": 100,
+        "repScore": 1,
+        "exScore": 1,
+        "paceScore": 1,
+        "exFull": 1,
+        "repsDone": 26,
+        "repsTarget": 20,
+        "stars": 5,
+        "band": "Outstanding",
+        "status": "partial",
+        "statusLabel": "Partially completed",
+        "kcal": 7
+      }
+    },
+    {
+      "name": "ended early",
+      "results": [
+        {
+          "ex": "squat",
+          "target": 25,
+          "done": 25,
+          "sec": 48,
+          "targetSec": 50
+        },
+        {
+          "ex": "pushup",
+          "target": 18,
+          "done": 9,
+          "sec": 30,
+          "targetSec": 46
+        }
+      ],
+      "planned": 5,
+      "ended": true,
+      "expected": {
+        "total": 66,
+        "repScore": 0.7906976744186046,
+        "exScore": 0.5,
+        "paceScore": 0.5,
+        "exFull": 1,
+        "repsDone": 34,
+        "repsTarget": 43,
+        "stars": 3,
+        "band": "Solid work",
+        "status": "interrupted",
+        "statusLabel": "Interrupted",
+        "kcal": 14
+      }
+    },
+    {
+      "name": "all sets but one short",
+      "results": [
+        {
+          "ex": "jumping",
+          "target": 45,
+          "done": 45,
+          "sec": 50,
+          "targetSec": 55
+        },
+        {
+          "ex": "highknee",
+          "target": 60,
+          "done": 59,
+          "sec": 55,
+          "targetSec": 55
+        }
+      ],
+      "planned": 2,
+      "ended": false,
+      "expected": {
+        "total": 77,
+        "repScore": 0.9904761904761905,
+        "exScore": 0.5,
+        "paceScore": 0.5,
+        "exFull": 1,
+        "repsDone": 104,
+        "repsTarget": 105,
+        "stars": 4,
+        "band": "Strong effort",
+        "status": "partial",
+        "statusLabel": "Partially completed",
+        "kcal": 24
+      }
+    }
+  ],
+  "thresholds": [
+    {
+      "score": 0,
+      "stars": 1,
+      "band": "Good start"
+    },
+    {
+      "score": 39,
+      "stars": 1,
+      "band": "Good start"
+    },
+    {
+      "score": 40,
+      "stars": 2,
+      "band": "Keep building"
+    },
+    {
+      "score": 59,
+      "stars": 2,
+      "band": "Keep building"
+    },
+    {
+      "score": 60,
+      "stars": 3,
+      "band": "Solid work"
+    },
+    {
+      "score": 74,
+      "stars": 3,
+      "band": "Solid work"
+    },
+    {
+      "score": 75,
+      "stars": 4,
+      "band": "Strong effort"
+    },
+    {
+      "score": 89,
+      "stars": 4,
+      "band": "Strong effort"
+    },
+    {
+      "score": 90,
+      "stars": 5,
+      "band": "Outstanding"
+    },
+    {
+      "score": 100,
+      "stars": 5,
+      "band": "Outstanding"
+    }
+  ]
+}

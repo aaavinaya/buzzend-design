@@ -1,0 +1,337 @@
+/* Buzzend · Full Body — activity & post cards (exploration canvas).
+   Builds on .vb-card / .cf-card / .pa / .xa / .wl-card / .xt-card; only .fbc-* is new. */
+
+/* body is a centred flex row in app.css — let the canvas take the viewport width so
+   the narrow-screen column layout applies instead of sizing to the widest card */
+body > #content { width: 100%; min-width: 0; }
+.fbc-panel { padding: 14px 13px 16px; }
+.mx-feed.boxed.fbc-panel { padding: 14px 13px 6px; }
+.fbc-desc { text-align: left !important; }
+.fbc-lbl { font: 900 11px var(--font); letter-spacing: .6px; text-transform: uppercase; color: var(--text-tertiary); padding: 2px 4px 9px; }
+.fbc-lbl:not(:first-child) { margin-top: 6px; }
+
+/* ── the routine ring ── */
+.fbc-ring { position: relative; display: inline-grid; place-items: center; flex: none; }
+.fbc-ring svg { display: block; }
+.fbc-ring-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.fbc-ring-in b { font: 900 20px var(--font); color: var(--text-primary); }
+.fbc-ring-in small { font: 800 8.5px var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--text-tertiary); margin-top: 2px; }
+.fbc-stars { display: inline-flex; gap: 1px; }
+.fbc-stars span { color: color-mix(in srgb, var(--text-tertiary) 45%, transparent); display: inline-grid; }
+.fbc-stars span.on { color: #f2b230; }
+.fbc-stars .bz-ico { fill: currentColor; }
+
+/* ── chips / pills ── */
+.fbc-pill { display: inline-flex; align-items: center; gap: 5px; border-radius: var(--r-pill); padding: 4px 9px; font: 800 11px var(--font);
+  color: var(--text-secondary); background: var(--surface-alt); white-space: nowrap; }
+.fbc-pill .bz-ico { width: 12px; height: 12px; }
+.fbc-pill.ok { color: #15803d; background: color-mix(in srgb, #16a34a 13%, transparent); }
+.fbc-pill.ai { color: var(--primary); background: color-mix(in srgb, var(--primary) 11%, transparent); }
+.fbc-pill.lvl { color: var(--text-primary); background: color-mix(in srgb, var(--text-primary) 7%, transparent); }
+
+/* ── 1 · feed session card ── */
+.fbc-card .vb-top { align-items: flex-start; }
+.fbc-card .vb-who .s { color: var(--text-secondary); }
+.fbc-rname { color: var(--text-primary); font-weight: 900; }
+.fbc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.fbc-hero { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: none; }
+.fbc-stats { display: flex; border-top: 1px solid var(--divider); padding: 11px 0 10px; }
+.fbc-stats > div { flex: 1; text-align: center; }
+.fbc-stats > div + div { border-left: 1px solid var(--divider); }
+.fbc-stats b { display: block; font: 900 18px var(--font); color: var(--text-primary); line-height: 1.1; }
+.fbc-stats b small { font: 800 12px var(--font); color: var(--text-tertiary); }
+.fbc-stats span { font: 800 10px var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--text-tertiary); }
+.fbc-allhit b { color: var(--success); display: flex; align-items: center; justify-content: center; gap: 3px; }
+.fbc-allhit b small { color: color-mix(in srgb, var(--success) 70%, transparent); }
+.fbc-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--divider); }
+.fbc-ei { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; background: color-mix(in srgb, var(--exc) 13%, transparent); }
+.fbc-row .en { width: 98px; flex: none; font: 800 14px var(--font); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fbc-bar { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--exc) 18%, transparent); overflow: hidden; }
+.fbc-bar i { display: block; height: 100%; border-radius: 3px; background: var(--exc); }
+.fbc-row .er { width: 46px; text-align: right; font: 900 14px var(--font); color: var(--text-primary); }
+.fbc-row .er small { font: 700 11px var(--font); color: var(--text-tertiary); }
+.fbc-ok { width: 14px; color: var(--success); display: grid; place-items: center; }
+.fbc-more { display: flex; align-items: center; gap: 6px; width: 100%; border: none; border-top: 1px solid var(--divider); background: none; cursor: pointer;
+  padding: 10px 2px 4px; font: 800 12.5px var(--font); color: var(--primary); }
+.fbc-more .bz-ico { transform: rotate(90deg); transition: transform .15s; }
+.fbc-more.open .bz-ico { transform: rotate(-90deg); }
+.fbc-try { display: flex; align-items: center; gap: 11px; width: 100%; margin-top: 10px; padding: 9px 10px; cursor: pointer; text-align: left;
+  border: 1px solid var(--border); border-radius: var(--r-md); background: color-mix(in srgb, var(--primary) 5%, var(--surface)); color: var(--text-tertiary); }
+.fbc-try:active { transform: scale(.99); }
+.fbc-try-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.fbc-try-tx b { font: 900 13.5px var(--font); color: var(--text-primary); }
+.fbc-try-tx span { font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 1px; }
+
+/* ── 2 · feed video post ── */
+.fbc-mbadge { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 4px; border-radius: var(--r-pill);
+  background: rgba(0,0,0,.45); color: #fff; font: 800 12px var(--font); }
+.fbc-mbadge b { font: 900 15px var(--font); }
+.fbc-mbadge .fbc-ring { background: rgba(255,255,255,.92); border-radius: 50%; }
+.fbc-strip { padding: 0 14px; }
+.fbc-seg { display: flex; gap: 4px; }
+.fbc-seg span { height: 7px; border-radius: 4px; background: color-mix(in srgb, var(--exc) 20%, transparent); overflow: hidden; }
+.fbc-seg i { display: block; height: 100%; background: var(--exc); }
+.fbc-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+.fbc-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px 3px 5px; border-radius: var(--r-pill); font: 900 12px var(--font);
+  color: var(--text-primary); background: color-mix(in srgb, var(--exc) 13%, transparent); }
+.fbc-strip-t { margin-left: auto; font: 800 11.5px var(--font); color: var(--text-tertiary); }
+
+/* ── 3 · My Activity tile ── */
+.fbc-xa { width: 104px; }
+.fbc-xa-ic { margin-bottom: 8px; }
+.fbc-xa-ic .fbc-ring-in b { font-size: 11px; }
+
+/* ── 4 · workout log card ── */
+.fbc-wl { display: block; }
+.fbc-wl-main { display: flex; align-items: center; gap: 13px; }
+.fbc-wl-ic { background: none !important; }
+.fbc-wl-ic .fbc-ring-in b { font-size: 14px; }
+.fbc-wl-lv { display: block; font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 1px; }
+.fbc-wl-x { display: none; margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--divider); }
+.fbc-wl.open .fbc-wl-x { display: block; }
+.fbc-lrows { display: grid; gap: 7px; }
+.fbc-lrow { display: flex; align-items: center; gap: 9px; font: 800 13px var(--font); color: var(--text-primary); }
+.fbc-lrow .d { width: 9px; height: 9px; border-radius: 50%; background: var(--exc); flex: none; }
+.fbc-lrow .n { flex: 1; }
+.fbc-lrow .r small { color: var(--text-tertiary); font-weight: 700; }
+.fbc-lrow .c { width: 14px; color: var(--success); display: grid; place-items: center; }
+.fbc-lfoot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 11px; }
+.fbc-again { display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: var(--r-pill); padding: 7px 12px; cursor: pointer;
+  background: var(--primary); color: var(--on-primary); font: 800 12px var(--font); }
+.fbc-again .bz-ico { color: var(--on-primary); }
+
+
+/* ── 6 · share story (always dark — it's an image) ── */
+.fbc-story { width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: 22px; padding: 20px 20px 16px; color: #fff;
+  background: radial-gradient(120% 70% at 50% 20%, #3a2a6a 0%, #161427 60%, #0e0d18 100%); display: flex; flex-direction: column; align-items: center;
+  box-shadow: 0 12px 34px rgba(20,16,40,.35); }
+.fbc-s-top { width: 100%; display: flex; justify-content: space-between; font: 800 11px var(--font); color: rgba(255,255,255,.6); }
+.fbc-s-brand { font: 900 14px var(--font); color: #fff; letter-spacing: -.2px; }
+.fbc-s-rt { margin-top: 16px; font: 900 11px var(--font); letter-spacing: 1.2px; color: rgba(255,255,255,.75); }
+.fbc-s-ring { margin: 12px 0 8px; }
+.fbc-story .fbc-ring-in b { color: #fff; font-size: 46px; }
+.fbc-story .fbc-ring-in small { color: rgba(255,255,255,.7); font-size: 10px; letter-spacing: .4px; text-transform: none; margin-top: 4px; }
+.fbc-story .fbc-stars span { color: rgba(255,255,255,.25); }
+.fbc-story .fbc-stars span.on { color: #ffd34d; }
+.fbc-s-bars { width: 100%; display: grid; gap: 8px; margin-top: 16px; }
+.fbc-sbar { display: flex; align-items: center; gap: 9px; font: 800 11.5px var(--font); }
+.fbc-sbar .n { width: 92px; color: rgba(255,255,255,.85); }
+.fbc-sbar .t { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
+.fbc-sbar .t i { display: block; height: 100%; background: var(--exc); border-radius: 3px; }
+.fbc-sbar .r { width: 24px; text-align: right; font-weight: 900; }
+.fbc-s-foot { width: 100%; display: flex; margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12); }
+.fbc-s-foot > div { flex: 1; text-align: center; }
+.fbc-s-foot b { display: block; font: 900 18px var(--font); }
+.fbc-s-foot span { font: 800 9.5px var(--font); letter-spacing: .5px; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.fbc-s-ai { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; font: 700 10px var(--font); color: rgba(255,255,255,.55); }
+
+/* ── notes ── */
+.fbc-notes { margin-top: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px 16px 6px; }
+.fbc-notes h3 { display: flex; align-items: center; gap: 7px; font: 900 15px var(--font); color: var(--text-primary); margin: 0 0 8px; }
+.fbc-notes h3 .bz-ico { color: var(--primary); }
+.fbc-notes h3:not(:first-child) { margin-top: 16px; }
+.fbc-notes ul { margin: 0; padding-left: 18px; }
+.fbc-notes li, .fbc-notes p { font: 600 12.5px var(--font); color: var(--text-secondary); line-height: 1.5; margin: 0 0 7px; }
+.fbc-notes b { color: var(--text-primary); }
+.fbc-notes pre { font: 600 11px/1.5 ui-monospace, Menlo, monospace; background: var(--surface-alt); color: var(--text-primary); border-radius: var(--r-sm); padding: 10px 11px; overflow-x: auto; margin: 4px 0 10px; }
+.fbc-notes code { font: 700 11px ui-monospace, Menlo, monospace; color: var(--text-primary); background: var(--surface-alt); padding: 1px 4px; border-radius: 4px; }
+
+/* ── 0 · daily card (one per user per day) ── */
+.fbc-daymeta { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 0 12px; border-top: 1px solid var(--divider);
+  font: 800 12px var(--font); color: var(--text-secondary); }
+.fbc-daymeta span { display: inline-flex; align-items: center; gap: 5px; }
+.fbc-daymeta .bz-ico { color: var(--text-tertiary); }
+/* a routine nested in the day: an inset tile so it reads as one unit, not five rows */
+.fbc-rb { border: 1px solid var(--border); border-radius: var(--r-md); padding: 11px 12px 4px; margin-bottom: 10px;
+  background: color-mix(in srgb, var(--text-primary) 2.5%, var(--surface)); }
+.fbc-rb-h { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
+.fbc-rb-h .fbc-ring-in b { font-size: 15px; }
+.fbc-rb-tx { flex: 1; min-width: 0; }
+.fbc-rb-n { display: flex; align-items: center; gap: 7px; font: 900 15px var(--font); color: var(--text-primary); }
+.fbc-rb-n .fbc-pill { padding: 2px 8px; font-size: 10.5px; }
+.fbc-rb-m { font: 700 11.5px var(--font); color: var(--text-tertiary); margin: 2px 0 3px; }
+.fbc-rb-m .ok { color: var(--success); display: inline-flex; align-items: center; gap: 2px; }
+.fbc-rb-r { text-align: right; flex: none; }
+.fbc-rb-r b { display: block; font: 900 18px var(--font); color: var(--text-primary); line-height: 1; }
+.fbc-rb-r span { font: 800 10px var(--font); letter-spacing: .4px; text-transform: uppercase; color: var(--text-tertiary); }
+.fbc-rb-rows { margin-top: 8px; }
+.fbc-rb-rows .fbc-row:first-child { border-top: none; }
+.fbc-rb-btn { display: flex; align-items: center; gap: 5px; border: none; background: none; cursor: pointer; padding: 8px 0 6px;
+  font: 800 12px var(--font); color: var(--primary); }
+.fbc-rb-btn .bz-ico { transform: rotate(90deg); transition: transform .15s; }
+.fbc-rb-btn.open .bz-ico { transform: rotate(-90deg); }
+.fbc-rb + .fbc-more-rows .fbc-rb, .fbc-more-rows .fbc-rb { margin-top: 0; }
+.fbc-day .fbc-more { border-top: none; padding-top: 2px; padding-bottom: 8px; }
+.fbc-sec { display: flex; align-items: center; gap: 6px; font: 900 11px var(--font); letter-spacing: .6px; text-transform: uppercase;
+  color: var(--text-tertiary); padding: 6px 2px 4px; }
+.fbc-srow { display: flex; align-items: center; gap: 11px; padding: 8px 0; border-top: 1px solid var(--divider); }
+.fbc-sec + .fbc-srow { border-top: none; }
+.fbc-s-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.fbc-s-tx .en { display: flex; align-items: center; gap: 7px; font: 800 14.5px var(--font); color: var(--text-primary); }
+.fbc-s-tx .at { font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 1px; }
+.fbc-srow .er { font: 900 15px var(--font); color: var(--text-primary); }
+.fbc-srow .er small { font: 700 11px var(--font); color: var(--text-tertiary); margin-left: 2px; }
+.fbc-new { font: 900 9.5px var(--font); letter-spacing: .4px; text-transform: uppercase; color: var(--on-primary); background: var(--primary);
+  padding: 2px 6px; border-radius: var(--r-pill); }
+.fbc-rules { margin-top: 18px; }
+.fbc-tbl { width: 100%; border-collapse: collapse; margin: 2px 0 12px; font: 700 12px var(--font); }
+.fbc-tbl th { text-align: left; font: 900 10.5px var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--text-tertiary); padding: 0 6px 6px 0; }
+.fbc-tbl td { padding: 7px 6px 7px 0; border-top: 1px solid var(--divider); color: var(--text-secondary); vertical-align: top; }
+.fbc-tbl td:first-child { color: var(--text-primary); font-weight: 800; width: 42%; }
+
+/* numbered state header above each daily-card example */
+.fbc-state { display: flex; gap: 10px; align-items: flex-start; padding: 4px 4px 11px; }
+.fbc-state:not(:first-child) { margin-top: 8px; padding-top: 14px; border-top: 1px dashed color-mix(in srgb, var(--text-primary) 14%, transparent); }
+.fbc-state-k { width: 24px; height: 24px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: var(--primary); color: var(--on-primary); font: 900 12px var(--font); }
+.fbc-state-t { font: 900 13px var(--font); color: var(--text-primary); }
+.fbc-state-w { font: 600 12px var(--font); color: var(--text-secondary); line-height: 1.45; margin-top: 2px; }
+
+/* My Activity: routine tiles are buttons (open the detail sheet) */
+button.fbc-xa { font: inherit; text-align: left; cursor: pointer; }
+button.fbc-xa:active { transform: scale(.97); }
+.fbc-xa-t { font: 700 10px var(--font); color: var(--text-tertiary); margin-top: 1px; }
+.fbc-hint { display: flex; gap: 8px; align-items: flex-start; margin: -4px 2px 14px; font: 600 12px var(--font); color: var(--text-secondary); line-height: 1.45; }
+.fbc-hint .bz-ico { color: var(--primary); flex: none; margin-top: 1px; }
+.fbc-hint b { color: var(--text-primary); }
+/* detail sheet — the expanded log card, static (no toggle) */
+.fbc-wl.fixed { cursor: default; margin-bottom: 0; }
+.fbc-wl.fixed:active { transform: none; }
+.fbc-sheet { padding: 4px 2px 8px; text-align: left; }
+.fbc-sheet .fbc-wl { box-shadow: none; }
+.fbc-sheet-prev { background: var(--surface); border-radius: 22px 22px 0 0; padding: 8px 12px 14px; box-shadow: 0 -6px 24px rgba(0,0,0,.08); }
+.fbc-sheet-prev .bz-grip { width: 38px; height: 5px; border-radius: 3px; background: var(--border); margin: 2px auto 10px; }
+.fbc-sheet-prev .fbc-wl { box-shadow: none; }
+
+/* ══ My Activity → Share your day (4:5 image, always dark) ═══════════════════════════════
+   Sized in --u (1cqw in the app = 1% of the card width) against a 300px reference width, like
+   the existing share card, so the preview at any width is the same composition as the export.
+   Layout: header · kicker · BODY (flex:1, vertically centred) · footer · AI line. One padding
+   (6u) on every side; one rhythm (4u) between blocks. Densities: roomy / normal / dense. */
+.fds-wrap { width: 100%; text-align: left; }
+.fds { --u: 1cqw; container-type: inline-size; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--r-lg); color: #fff;
+  padding: calc(6 * var(--u)) calc(6 * var(--u)) calc(5 * var(--u)); display: flex; flex-direction: column;
+  background: radial-gradient(120% 70% at 50% 18%, #33295f 0%, #161427 58%, #0e0d18 100%); }
+.fds-top { display: flex; justify-content: space-between; align-items: center; font: 800 calc(3.6 * var(--u)) var(--font); color: rgba(255,255,255,.6); }
+.fds-brand { display: inline-flex; align-items: center; gap: calc(1.8 * var(--u)); }
+.fds-brand svg { width: calc(6 * var(--u)); height: calc(6 * var(--u)); }
+.fds-brand b { font: 900 calc(4.6 * var(--u)) var(--font); color: #fff; letter-spacing: -.2px; }
+.fds-kick { margin-top: calc(4 * var(--u)); font: 900 calc(3.4 * var(--u)) var(--font); letter-spacing: calc(0.4 * var(--u)); color: rgba(255,255,255,.7); text-align: center; }
+/* the body takes all the room between kicker and footer and centres its content in it */
+.fds-body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: calc(4 * var(--u)); padding: calc(3 * var(--u)) 0; }
+
+/* hero (A / C): ring left, total reps right */
+.fds-hero { display: flex; align-items: center; justify-content: center; gap: calc(5 * var(--u)); }
+.fds-ring { position: relative; width: calc(32 * var(--u)); height: calc(32 * var(--u)); flex: none; display: grid; place-items: center; }
+.fds-ring > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fds-ring-in { position: relative; display: flex; flex-direction: column; align-items: center; line-height: 1; color: #fff; }
+.fds-ring-in b { font: 900 calc(8.5 * var(--u)) var(--font); }
+.fds-ring-in small { font: 800 calc(2.7 * var(--u)) var(--font); letter-spacing: calc(0.15 * var(--u)); text-transform: uppercase; color: rgba(255,255,255,.65); margin-top: calc(0.8 * var(--u)); }
+.fds-hv { min-width: 0; display: flex; flex-direction: column; }
+.fds-hv b { font: 900 calc(15 * var(--u)) var(--font); line-height: .95; letter-spacing: calc(-0.3 * var(--u)); }
+.fds-hv span { font: 800 calc(3.8 * var(--u)) var(--font); color: rgba(255,255,255,.7); margin-top: calc(1 * var(--u)); }
+
+/* hero (B): the routine's score ring, centred */
+.fds-center { display: flex; flex-direction: column; align-items: center; gap: calc(2 * var(--u)); }
+.fds .fbc-ring.fds-big { width: calc(38 * var(--u)) !important; height: calc(38 * var(--u)) !important; }
+.fds .fbc-ring.fds-big svg { width: 100%; height: 100%; }
+.fds .fds-big .fbc-ring-in b { color: #fff; font-size: calc(12.5 * var(--u)); }
+.fds .fds-big .fbc-ring-in small { color: rgba(255,255,255,.7); font-size: calc(3 * var(--u)); letter-spacing: 0; text-transform: none; margin-top: calc(1 * var(--u)); }
+.fds .fbc-stars span { color: rgba(255,255,255,.25); }
+.fds .fbc-stars span.on { color: #ffd34d; }
+.fds .fbc-stars .bz-ico { width: calc(4.4 * var(--u)); height: calc(4.4 * var(--u)); }
+
+/* list: routine panels, then one bar per single workout */
+.fds-list { display: grid; gap: calc(2.6 * var(--u)); }
+.fds-row { display: flex; align-items: center; gap: calc(3 * var(--u)); font: 800 calc(3.7 * var(--u)) var(--font); line-height: 1.25; }
+.fds-row .n { width: calc(30 * var(--u)); color: rgba(255,255,255,.88); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fds-row .t { flex: 1; height: calc(2 * var(--u)); border-radius: calc(1 * var(--u)); background: rgba(255,255,255,.12); overflow: hidden; }
+.fds-row .t i { display: block; height: 100%; border-radius: calc(1 * var(--u)); background: var(--exc); }
+.fds-row .r { width: calc(13 * var(--u)); text-align: right; font-weight: 900; }
+.fds-row .r s { text-decoration: none; color: rgba(255,255,255,.5); font-weight: 700; }
+.fds-rp { display: flex; align-items: center; gap: calc(3 * var(--u)); padding: calc(2 * var(--u)) calc(3 * var(--u)); border-radius: calc(3.4 * var(--u)); background: rgba(255,255,255,.07); }
+.fds .fbc-ring.fds-mini { width: calc(11 * var(--u)) !important; height: calc(11 * var(--u)) !important; }
+.fds .fbc-ring.fds-mini svg { width: 100%; height: 100%; }
+.fds .fds-mini .fbc-ring-in b { color: #fff; font-size: calc(3.6 * var(--u)); }
+.fds-rp-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.fds-rp-tx b { font: 900 calc(4 * var(--u)) var(--font); }
+.fds-rp-tx span { font: 700 calc(3 * var(--u)) var(--font); color: rgba(255,255,255,.55); }
+.fds-rp-r { font: 900 calc(4.4 * var(--u)) var(--font); white-space: nowrap; }
+.fds-rp-r s { text-decoration: none; font: 700 calc(2.9 * var(--u)) var(--font); color: rgba(255,255,255,.55); }
+/* dense: single workouts as a two-column grid of tiles */
+.fds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: calc(1.8 * var(--u)); }
+.fds-tile { display: flex; align-items: center; gap: calc(2 * var(--u)); padding: calc(1.8 * var(--u)) calc(2.6 * var(--u)); border-radius: calc(2.6 * var(--u)); background: rgba(255,255,255,.07); min-width: 0; }
+.fds-tile i { width: calc(2.4 * var(--u)); height: calc(2.4 * var(--u)); border-radius: 50%; background: var(--exc); flex: none; }
+.fds-tile .n { flex: 1; min-width: 0; font: 800 calc(3.3 * var(--u)) var(--font); color: rgba(255,255,255,.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fds-tile b { font: 900 calc(3.8 * var(--u)) var(--font); }
+
+.fds-foot { display: flex; padding-top: calc(3.4 * var(--u)); border-top: 1px solid rgba(255,255,255,.12); }
+.fds-foot > div { flex: 1; text-align: center; }
+.fds-foot b { display: block; font: 900 calc(5.6 * var(--u)) var(--font); line-height: 1.15; }
+.fds-foot span { font: 800 calc(2.9 * var(--u)) var(--font); letter-spacing: calc(0.15 * var(--u)); text-transform: uppercase; color: rgba(255,255,255,.55); }
+.fds-ai { display: flex; justify-content: center; align-items: center; gap: calc(1.4 * var(--u)); margin-top: calc(2.6 * var(--u)); font: 700 calc(3 * var(--u)) var(--font); color: rgba(255,255,255,.5); }
+.fds-ai .bz-ico { width: calc(3.4 * var(--u)); height: calc(3.4 * var(--u)); }
+
+/* ── roomy: little data → everything a size up, so the card is full, not empty ── */
+.fds-roomy .fds-body { gap: calc(6 * var(--u)); }
+.fds-roomy .fds-ring { width: calc(40 * var(--u)); height: calc(40 * var(--u)); }
+.fds-roomy .fds-ring-in b { font-size: calc(11 * var(--u)); }
+.fds-roomy .fds-hv b { font-size: calc(19 * var(--u)); }
+.fds-roomy .fds-hv span { font-size: calc(4.4 * var(--u)); }
+.fds-roomy .fds-list { gap: calc(4 * var(--u)); }
+.fds-roomy .fds-row { font-size: calc(4.6 * var(--u)); }
+.fds-roomy .fds-row .n { width: calc(34 * var(--u)); }
+.fds-roomy .fds-row .t { height: calc(3 * var(--u)); border-radius: calc(1.5 * var(--u)); }
+.fds-roomy .fds-row .r { width: calc(15 * var(--u)); }
+.fds-roomy .fbc-ring.fds-big { width: calc(46 * var(--u)) !important; height: calc(46 * var(--u)) !important; }
+.fds-roomy .fds-big .fbc-ring-in b { font-size: calc(15 * var(--u)); }
+/* ── dense: lots of data → compact hero and panels so everything still fits ── */
+.fds-dense .fds-body { gap: calc(3 * var(--u)); padding: calc(2 * var(--u)) 0; }
+.fds-dense .fds-ring { width: calc(24 * var(--u)); height: calc(24 * var(--u)); }
+.fds-dense .fds-ring-in b { font-size: calc(7 * var(--u)); }
+.fds-dense .fds-ring-in small { font-size: calc(2.3 * var(--u)); letter-spacing: 0; }
+.fds-dense .fds-hv b { font-size: calc(12 * var(--u)); }
+.fds-dense .fds-list { gap: calc(1.8 * var(--u)); }
+.fds-dense .fds-rp { padding: calc(1.4 * var(--u)) calc(2.6 * var(--u)); }
+.fds-dense .fbc-ring.fds-mini { width: calc(9 * var(--u)) !important; height: calc(9 * var(--u)) !important; }
+.fds-dense .fds-mini .fbc-ring-in b { font-size: calc(3.1 * var(--u)); }
+
+/* the inline sheet preview on the canvas */
+.fds-prev { border-radius: 22px; margin-bottom: 4px; }
+.fds-sheet-t { font: 900 16px var(--font); color: var(--text-primary); text-align: center; margin: 0 0 12px; }
+.fbc-share-btn { cursor: pointer; }
+/* the desktop canvas lays columns out at max-content width, where Chrome leaves the card's
+   container size unresolved and cqw collapses — pin the preview and give it a px unit instead. */
+@media (min-width: 901px) { .fds-prev .fds { width: 342px; --u: 3.42px; } }
+/* dense routine (B with 4-5 exercises): smaller score ring, tighter stars → all bars fit */
+.fds-dense .fds-center { gap: calc(1.4 * var(--u)); }
+.fds-dense .fbc-ring.fds-big { width: calc(30 * var(--u)) !important; height: calc(30 * var(--u)) !important; }
+.fds-dense .fds-big .fbc-ring-in b { font-size: calc(10 * var(--u)); }
+.fds-dense .fds-big .fbc-ring-in small { font-size: calc(2.6 * var(--u)); margin-top: calc(.6 * var(--u)); }
+.fds-dense .fbc-stars .bz-ico { width: calc(3.6 * var(--u)); height: calc(3.6 * var(--u)); }
+
+/* ── My Activities (matches the app): steps-goal tile + dashed Start tile ── */
+.fbc-myact .xa-h { min-height: 34px; }
+.fbc-steptile { position: relative; }
+.fbc-stepring { position: relative; width: 44px; height: 44px; display: grid; place-items: center; margin-bottom: 8px; color: var(--primary); }
+.fbc-stepring svg.rg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); fill: none; stroke-width: 4; }
+.fbc-stepring .tr { stroke: color-mix(in srgb, var(--primary) 16%, transparent); }
+.fbc-stepring .pr { stroke: var(--primary); stroke-linecap: round; }
+.fbc-goal { display: inline-flex; align-items: center; gap: 4px; }
+.fbc-goal .bz-ico { color: var(--text-tertiary); }
+.fbc-start-t { align-items: center !important; justify-content: center; text-align: center; cursor: pointer; font: inherit; box-shadow: none;
+  border: 1.5px dashed color-mix(in srgb, var(--primary) 35%, transparent) !important; background: color-mix(in srgb, var(--primary) 6%, transparent) !important; }
+.fbc-start-ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 7px;
+  background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+.fbc-start-t b { font: 900 15px var(--font); color: var(--primary); line-height: 1.1; }
+.fbc-start-t span:last-child { font: 800 11px var(--font); color: var(--primary); opacity: .8; }
+/* steps-only share image: goal bar under the hero */
+.fds-goal { display: flex; flex-direction: column; gap: calc(2.4 * var(--u)); }
+.fds-goal .t { height: calc(3 * var(--u)); border-radius: calc(1.5 * var(--u)); background: rgba(255,255,255,.12); overflow: hidden; }
+.fds-goal .t i { display: block; height: 100%; border-radius: calc(1.5 * var(--u)); background: #34D094; }
+.fds-goal .l { font: 800 calc(3.8 * var(--u)) var(--font); color: rgba(255,255,255,.72); text-align: center; }
+.fds-ring-in .bz-ico { width: calc(7 * var(--u)); height: calc(7 * var(--u)); color: #34D094; margin-bottom: calc(.8 * var(--u)); }
+/* 4+ digit hero numbers (e.g. 3,120 steps / 1,050 reps) step down so they never hit the edge */
+.fds .fds-hv b.long { font-size: calc(12 * var(--u)); }
+.fds-roomy .fds-hv b.long { font-size: calc(14 * var(--u)); }
+.fds-dense .fds-hv b.long { font-size: calc(10.5 * var(--u)); }

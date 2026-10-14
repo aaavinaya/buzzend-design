@@ -27,7 +27,7 @@ window.ChallengeCard = (function () {
       <span class="chc-ic">${I(a.i, 42)}</span>
       <span class="chc-main">
         <span class="chc-name">${c.n}</span>
-        <span class="chc-sub">by ${c.by}</span>
+        <span class="chc-sub">by ${c.by}${c.type === "elimination" ? " · Elimination" : ""}</span>
       </span>
       ${control(opts.control || "none", opts.selected)}
     </button>`;
