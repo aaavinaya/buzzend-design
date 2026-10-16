@@ -1,0 +1,906 @@
+[
+ {
+  "file": "ios/05-creative-assets-header-and-search/header-21x9-3840x1646.png",
+  "w": 3840,
+  "h": 1646,
+  "alpha": "no",
+  "mb": 2.9,
+  "ok": true
+ },
+ {
+  "file": "ios/05-creative-assets-header-and-search/search-results-3x2-3840x2560.png",
+  "w": 3840,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 4.31,
+  "ok": true
+ },
+ {
+  "file": "ios/05-creative-assets-header-and-search/universal-16x9-5244x2950.png",
+  "w": 5244,
+  "h": 2950,
+  "alpha": "no",
+  "mb": 5.83,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/01-your-camera-counts-your-reps-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.32,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/02-seven-exercises-one-app-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 1.81,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/03-challenge-your-friends-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.87,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/04-coaching-while-you-move-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.4,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/05-keep-your-streak-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.78,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/06-post-your-set-cheer-theirs-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.7,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/07-steps-count-too-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.72,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/08-join-with-a-code-or-link-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.61,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/09-push-ups-counted-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.4,
+  "ok": true
+ },
+ {
+  "file": "ios/01-iphone-dynamic-island-medium-display/10-see-your-progress-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 0.58,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/01-your-camera-counts-your-reps-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.67,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/02-seven-exercises-one-app-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.07,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/03-challenge-your-friends-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.97,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/04-coaching-while-you-move-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.77,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/05-keep-your-streak-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.87,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/06-post-your-set-cheer-theirs-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.78,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/07-steps-count-too-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.81,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/08-join-with-a-code-or-link-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.7,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/09-push-ups-counted-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.77,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/10-see-your-progress-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 0.66,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/burpees-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.71,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/high-knees-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.7,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/jumping-jacks-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.75,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/lunges-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.76,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/situps-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.65,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/01-your-camera-counts-your-reps-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.57,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/02-seven-exercises-one-app-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 1.99,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/03-challenge-your-friends-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.93,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/04-coaching-while-you-move-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.65,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/05-keep-your-streak-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.84,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/06-post-your-set-cheer-theirs-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.75,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/07-steps-count-too-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.78,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/08-join-with-a-code-or-link-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.67,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/09-push-ups-counted-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 2.65,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/10-see-your-progress-1284x2778.png",
+  "w": 1284,
+  "h": 2778,
+  "alpha": "no",
+  "mb": 0.63,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/01-your-camera-counts-your-reps-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 2.24,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/02-seven-exercises-one-app-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 1.73,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/03-challenge-your-friends-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.84,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/04-coaching-while-you-move-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 2.31,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/05-keep-your-streak-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.76,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/06-post-your-set-cheer-theirs-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.68,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/07-steps-count-too-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.7,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/08-join-with-a-code-or-link-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.6,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/09-push-ups-counted-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 2.31,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/10-see-your-progress-1179x2556.png",
+  "w": 1179,
+  "h": 2556,
+  "alpha": "no",
+  "mb": 0.56,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/burpees-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.83,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/high-knees-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.82,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/jumping-jacks-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.87,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/lunges-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.89,
+  "ok": true
+ },
+ {
+  "file": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/situps-1320x2868.png",
+  "w": 1320,
+  "h": 2868,
+  "alpha": "no",
+  "mb": 2.77,
+  "ok": true
+ },
+ {
+  "file": "ios/04-custom-product-pages-extras/burpees-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.45,
+  "ok": true
+ },
+ {
+  "file": "ios/04-custom-product-pages-extras/high-knees-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.45,
+  "ok": true
+ },
+ {
+  "file": "ios/04-custom-product-pages-extras/jumping-jacks-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.49,
+  "ok": true
+ },
+ {
+  "file": "ios/04-custom-product-pages-extras/lunges-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.5,
+  "ok": true
+ },
+ {
+  "file": "ios/04-custom-product-pages-extras/situps-1206x2622.png",
+  "w": 1206,
+  "h": 2622,
+  "alpha": "no",
+  "mb": 2.4,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/01-your-camera-counts-your-reps-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 1.53,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/02-seven-exercises-one-app-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 1.56,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/03-challenge-your-friends-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.78,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/04-coaching-while-you-move-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 1.57,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/05-keep-your-streak-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.77,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/06-post-your-set-cheer-theirs-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.72,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/07-steps-count-too-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.71,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/08-join-with-a-code-or-link-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.67,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/09-push-ups-counted-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 1.57,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/outer-1398x2034/10-see-your-progress-1398x2034.png",
+  "w": 1398,
+  "h": 2034,
+  "alpha": "no",
+  "mb": 0.65,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/01-your-camera-counts-your-reps-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 2.98,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/02-seven-exercises-one-app-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 3.01,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/03-challenge-your-friends-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.32,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/04-coaching-while-you-move-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 3.09,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/05-keep-your-streak-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.2,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/06-post-your-set-cheer-theirs-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.14,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/07-steps-count-too-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.15,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/08-join-with-a-code-or-link-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.05,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/09-push-ups-counted-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 3.06,
+  "ok": true
+ },
+ {
+  "file": "ios/02-iphone-duo/inner-2007x2853/10-see-your-progress-2007x2853.png",
+  "w": 2007,
+  "h": 2853,
+  "alpha": "no",
+  "mb": 1.01,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/01-your-camera-counts-your-reps-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 2.87,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/02-seven-exercises-one-app-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 2.94,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/03-challenge-your-friends-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.31,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/04-coaching-while-you-move-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 2.97,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/05-keep-your-streak-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.21,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/06-post-your-set-cheer-theirs-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.14,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/07-steps-count-too-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.15,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/08-join-with-a-code-or-link-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.05,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/09-push-ups-counted-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 2.95,
+  "ok": true
+ },
+ {
+  "file": "ios/03-ipad-13-inch/10-see-your-progress-2064x2752.png",
+  "w": 2064,
+  "h": 2752,
+  "alpha": "no",
+  "mb": 1.02,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/01-your-camera-counts-your-reps-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.51,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/02-seven-exercises-one-app-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.32,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/03-challenge-your-friends-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.68,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/04-coaching-while-you-move-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.56,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/05-keep-your-streak-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.6,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/06-post-your-set-cheer-theirs-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.52,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/07-steps-count-too-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.53,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-7-1080x1920/08-join-with-a-code-or-link-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.5,
+  "ok": true
+ },
+ {
+  "file": "android/feature-graphic-1024x500/feature-graphic-1024x500.png",
+  "w": 1024,
+  "h": 500,
+  "alpha": "no",
+  "mb": 0.34,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/01-your-camera-counts-your-reps-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.51,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/02-seven-exercises-one-app-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.32,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/03-challenge-your-friends-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.68,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/04-coaching-while-you-move-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 1.56,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/05-keep-your-streak-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.6,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/06-post-your-set-cheer-theirs-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.52,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/07-steps-count-too-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.53,
+  "ok": true
+ },
+ {
+  "file": "android/phone-1080x1920/08-join-with-a-code-or-link-1080x1920.png",
+  "w": 1080,
+  "h": 1920,
+  "alpha": "no",
+  "mb": 0.5,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/01-your-camera-counts-your-reps-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 2.44,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/02-seven-exercises-one-app-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 2.05,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/03-challenge-your-friends-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 1.0,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/04-coaching-while-you-move-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 2.51,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/05-keep-your-streak-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 0.88,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/06-post-your-set-cheer-theirs-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 0.78,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/07-steps-count-too-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 0.8,
+  "ok": true
+ },
+ {
+  "file": "android/tablet-10-1440x2560/08-join-with-a-code-or-link-1440x2560.png",
+  "w": 1440,
+  "h": 2560,
+  "alpha": "no",
+  "mb": 0.75,
+  "ok": true
+ }
+]

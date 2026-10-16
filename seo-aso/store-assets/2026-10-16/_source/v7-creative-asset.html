@@ -1,0 +1,48 @@
+<!-- @dsCard group="Store · App Store creative assets v7" -->
+<!--
+  Apple App Store creative asset (product page header 21:9 3840×1646 · search results 3:2 3840×2560 · universal 16:9 5244×2950).
+  Landmark photo on the right, headline left, focal point kept inside the centre band. Params: photo, title, sub, kicker,
+  safe (horizontal safe padding in vw, default 7), ph (photo panel width in vw, default 30), h1 (vw, default 5.2), shift (photo object-position Y %, default 30)
+-->
+<meta charset="utf-8">
+<title>Buzzend — App Store creative asset</title>
+<link rel="stylesheet" href="../../brand/brand.css">
+<style>
+  html, body { width: 100vw; height: 100vh; overflow: hidden; }
+  body { position: relative; display: flex; align-items: center; color: var(--white);
+    background: linear-gradient(165deg, #111111 0%, #2b1200 62%, #7a3300 100%); }
+  .glow.g1 { width: 44vw; height: 44vw; right: 4vw; top: -22vw; background: rgba(255,159,67,0.30); }
+  .glow.g2 { width: 36vw; height: 36vw; left: -14vw; bottom: -22vw; background: rgba(255,107,0,0.32); }
+  .copy { position: relative; z-index: 2; padding-left: var(--safe); width: calc(100vw - var(--ph) - var(--safe) * 2); }
+  .lockup { display: flex; align-items: center; gap: 1.1vw; margin-bottom: 2.2vw; }
+  .lockup img { width: 3.6vw; height: 3.6vw; border-radius: 24%; box-shadow: 0 .5vw 1.4vw rgba(0,0,0,.35); }
+  .lockup .word { font-size: 2.3vw; font-weight: 900; letter-spacing: -0.04vw; }
+  .kicker { display: inline-block; border-radius: 99vw; padding: .6vw 1.3vw; font-size: 1.05vw; font-weight: 800; letter-spacing: .22vw; text-transform: uppercase;
+    background: rgba(255,255,255,0.14); border: .12vw solid rgba(255,255,255,0.4); margin-bottom: 1.6vw; }
+  h1 { font-size: var(--h1); font-weight: 900; line-height: 1.02; letter-spacing: -0.14vw; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .sub { margin-top: 1.5vw; font-size: 1.55vw; font-weight: 700; line-height: 1.4; color: rgba(255,255,255,0.9); max-width: 46vw; }
+  .photo { position: absolute; right: var(--safe); top: 50%; transform: translateY(-50%); width: var(--ph); height: 84vh;
+    border-radius: 2.2vw; overflow: hidden; box-shadow: 0 2vw 5vw rgba(0,0,0,.5); background: #000; z-index: 2; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: center var(--shift); display: block; }
+</style>
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="copy">
+  <div class="lockup"><img src="../../assets/app-icon.png" alt=""><div class="word">Buzzend</div></div>
+  <div><span class="kicker" id="kicker"></span></div>
+  <h1 id="title"></h1>
+  <div class="sub" id="sub"></div>
+</div>
+<div class="photo"><img id="photo" src="" alt=""></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  document.documentElement.style.setProperty('--safe', (q.get('safe') || '7') + 'vw');
+  document.documentElement.style.setProperty('--ph', (q.get('ph') || '30') + 'vw');
+  document.documentElement.style.setProperty('--h1', (q.get('h1') || '5.2') + 'vw');
+  document.documentElement.style.setProperty('--shift', (q.get('shift') || '30') + '%');
+  if (q.get('lockup') === '0') { document.querySelector('.lockup').style.display = 'none'; }
+  document.getElementById('kicker').textContent = q.get('kicker') || 'AI REP COUNTER';
+  document.getElementById('title').innerHTML = (q.get('title') || 'Your camera counts *your reps.*').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  document.getElementById('sub').textContent = q.get('sub') || 'Squats, push-ups, sit-ups, lunges, jumping jacks, burpees and high knees, counted out loud. Challenge friends and keep your streak.';
+  document.getElementById('photo').src = q.get('photo') || '../../assets/workout-landmark/squats.jpg';
+</script>

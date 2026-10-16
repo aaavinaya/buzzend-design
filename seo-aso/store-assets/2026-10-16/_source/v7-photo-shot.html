@@ -1,0 +1,57 @@
+<!-- @dsCard group="Store · Screenshots v7" -->
+<!--
+  v7 photo screenshot: brand band on top + the camera view (landmark photo) in a phone frame.
+  Query params: theme (dark|orange|cream), kicker, title (*accent*), sub, photo (path relative to this file),
+  pw (phone width in vw, default 88), h1 (title size in vw, default 8.6), gap (top padding vw, default 8.5)
+-->
+<meta charset="utf-8">
+<title>Buzzend — store screenshot (photo)</title>
+<link rel="stylesheet" href="../../brand/brand.css">
+<style>
+  html, body { width: 100vw; height: 100vh; overflow: hidden; }
+  body { display: flex; flex-direction: column; position: relative; }
+  body.orange { background: var(--hero-grad); color: var(--white); }
+  body.dark   { background: linear-gradient(165deg, #111111 0%, #2b1200 78%, #5a2500 100%); color: var(--white); }
+  body.cream  { background: linear-gradient(160deg, #ffffff 0%, var(--canvas) 55%, #ffeede 100%); color: var(--ink); }
+  .glow.g1 { width: 55vw; height: 55vw; right: -16vw; top: -18vw; }
+  .glow.g2 { width: 48vw; height: 48vw; left: -18vw; bottom: -14vw; }
+  body.orange .glow.g1, body.dark .glow.g1 { background: rgba(255,255,255,0.16); }
+  body.orange .glow.g2 { background: rgba(178,60,0,0.45); }
+  body.dark .glow.g2   { background: rgba(255,107,0,0.28); }
+  body.cream .glow.g1  { background: rgba(255,107,0,0.15); }
+  body.cream .glow.g2  { background: rgba(255,159,67,0.18); }
+  .top { padding: var(--gap) 8vw 0; text-align: center; position: relative; z-index: 2; }
+  .kicker { display: inline-block; border-radius: 99vw; padding: 1.5vw 2.8vw; font-size: 2.3vw; font-weight: 800; letter-spacing: 0.42vw; text-transform: uppercase; }
+  body.orange .kicker, body.dark .kicker { background: rgba(255,255,255,0.15); border: 0.2vw solid rgba(255,255,255,0.4); color: var(--white); }
+  body.cream .kicker { background: var(--primary); color: var(--white); }
+  h1 { margin-top: 3.2vw; font-size: var(--h1); font-weight: 900; line-height: 1.06; letter-spacing: -0.24vw; }
+  h1 em { font-style: normal; }
+  body.orange h1 em { color: #ffe3c9; }
+  body.dark h1 em   { color: var(--accent); }
+  body.cream h1 em  { color: var(--primary); }
+  .sub { margin-top: 2.4vw; font-size: 3.1vw; font-weight: 600; line-height: 1.45; }
+  body.orange .sub, body.dark .sub { color: rgba(255,255,255,0.9); }
+  body.cream .sub { color: var(--text-secondary); }
+  .phonewrap { flex: 1; position: relative; margin-top: 4.5vw; }
+  .phone { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: var(--pw);
+    background: #101415; border-radius: calc(var(--pw) * 0.11); padding: calc(var(--pw) * 0.019);
+    box-shadow: 0 4vw 10vw rgba(0,0,0,0.4); }
+  .phone::after { content: ""; position: absolute; top: calc(var(--pw) * 0.019); left: 50%; transform: translateX(-50%);
+    width: calc(var(--pw) * 0.26); height: calc(var(--pw) * 0.036); background: #101415; border-radius: 0 0 3vw 3vw; z-index: 3; }
+  .phone .screen { border-radius: calc(var(--pw) * 0.095); overflow: hidden; background: #000; aspect-ratio: 1536 / 2752; }
+  .phone .screen img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top; }
+</style>
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="top"><span class="kicker" id="kicker"></span><h1 id="title"></h1><div class="sub" id="sub"></div></div>
+<div class="phonewrap"><div class="phone"><div class="screen"><img id="shot" src="" alt=""></div></div></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  document.body.classList.add(q.get('theme') || 'dark');
+  document.documentElement.style.setProperty('--pw', (q.get('pw') || '88') + 'vw');
+  document.documentElement.style.setProperty('--h1', (q.get('h1') || '8.6') + 'vw');
+  document.documentElement.style.setProperty('--gap', (q.get('gap') || '8.5') + 'vw');
+  document.getElementById('kicker').textContent = q.get('kicker') || 'AI REP COUNTER';
+  document.getElementById('title').innerHTML = (q.get('title') || 'Your camera counts *your reps.*').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  document.getElementById('sub').textContent = q.get('sub') || '';
+  document.getElementById('shot').src = q.get('photo') || '../../assets/workout-landmark/squats.jpg';
+</script>

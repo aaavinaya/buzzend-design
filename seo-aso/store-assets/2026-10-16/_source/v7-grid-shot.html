@@ -1,0 +1,60 @@
+<!-- @dsCard group="Store · Screenshots v7" -->
+<!-- v7 "seven exercises" grid: 3×3 tiles — six landmark photos, Burpees and Steps text tiles, app-icon tile.
+     Params: theme, kicker, title, sub, h1, gap, tile (tile width vw, default 26). -->
+<meta charset="utf-8">
+<title>Buzzend — store screenshot (grid)</title>
+<link rel="stylesheet" href="../../brand/brand.css">
+<style>
+  html, body { width: 100vw; height: 100vh; overflow: hidden; }
+  body { display: flex; flex-direction: column; position: relative; }
+  body.dark   { background: linear-gradient(165deg, #111111 0%, #2b1200 78%, #5a2500 100%); color: var(--white); }
+  body.orange { background: var(--hero-grad); color: var(--white); }
+  body.cream  { background: linear-gradient(160deg, #ffffff 0%, var(--canvas) 55%, #ffeede 100%); color: var(--ink); }
+  .glow.g1 { width: 55vw; height: 55vw; right: -16vw; top: -18vw; background: rgba(255,255,255,0.16); }
+  .glow.g2 { width: 48vw; height: 48vw; left: -18vw; bottom: -14vw; background: rgba(255,107,0,0.28); }
+  .top { padding: var(--gap) 8vw 0; text-align: center; position: relative; z-index: 2; }
+  .kicker { display: inline-block; border-radius: 99vw; padding: 1.5vw 2.8vw; font-size: 2.3vw; font-weight: 800; letter-spacing: 0.42vw; text-transform: uppercase;
+    background: rgba(255,255,255,0.15); border: 0.2vw solid rgba(255,255,255,0.4); }
+  body.cream .kicker { background: var(--primary); color: var(--white); border-color: var(--primary); }
+  h1 { margin-top: 3.2vw; font-size: var(--h1); font-weight: 900; line-height: 1.06; letter-spacing: -0.24vw; }
+  h1 em { font-style: normal; color: var(--accent); }
+  body.cream h1 em { color: var(--primary); }
+  .sub { margin-top: 2.4vw; font-size: 2.9vw; font-weight: 600; line-height: 1.45; color: rgba(255,255,255,0.9); }
+  body.cream .sub { color: var(--text-secondary); }
+  .gridwrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4vw 0 6vw; }
+  .grid { position: relative; z-index: 2; margin: 0 auto; display: grid; grid-template-columns: repeat(3, var(--tile)); gap: 2.4vw; justify-content: center; }
+  .tile { position: relative; width: var(--tile); aspect-ratio: 3 / 4; border-radius: 3.2vw; overflow: hidden; background: #1a1a1a; box-shadow: 0 2vw 5vw rgba(0,0,0,0.35); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; display: block; }
+  .tile .label { position: absolute; left: 0; right: 0; bottom: 0; padding: 4.5vw 1.6vw 1.6vw; font-size: 2.4vw; font-weight: 800; color: #fff; text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); }
+  .tile.text { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2vw; background: var(--hero-grad); color: #fff; text-align: center; padding: 2vw; }
+  .tile.text .big { font-size: 5.5vw; line-height: 1; }
+  .tile.text .name { font-size: 2.6vw; font-weight: 900; }
+  .tile.text .small { font-size: 1.9vw; font-weight: 600; opacity: 0.92; }
+  .tile.icon { background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .tile.icon img { width: 56%; height: auto; border-radius: 24%; box-shadow: 0 1vw 3vw rgba(0,0,0,0.25); object-fit: contain; }
+  .tile.icon .name { color: var(--ink); font-size: 2.4vw; font-weight: 900; margin-top: 1.2vw; }
+</style>
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="top"><span class="kicker" id="kicker"></span><h1 id="title"></h1><div class="sub" id="sub"></div></div>
+<div class="gridwrap"><div class="grid">
+  <div class="tile"><img src="../../assets/workout-landmark/squats.jpg" alt=""><div class="label">Squats</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/pushup.jpg" alt=""><div class="label">Push-ups</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/situp.jpg" alt=""><div class="label">Sit-ups</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/lunge.jpg" alt=""><div class="label">Lunges</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/jumping-jacks.jpg" alt=""><div class="label">Jumping jacks</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/high-knee.jpg" alt=""><div class="label">High knees</div></div>
+  <div class="tile"><img src="../../assets/workout-landmark/burpee.jpg" alt=""><div class="label">Burpees</div></div>
+  <div class="tile text"><div class="big">👟</div><div class="name">Steps</div><div class="small">from your phone</div></div>
+  <div class="tile icon"><img src="../../assets/app-icon.png" alt=""><div class="name">Buzzend</div></div>
+</div></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  document.body.classList.add(q.get('theme') || 'dark');
+  document.documentElement.style.setProperty('--h1', (q.get('h1') || '8.6') + 'vw');
+  document.documentElement.style.setProperty('--gap', (q.get('gap') || '8.5') + 'vw');
+  document.documentElement.style.setProperty('--tile', (q.get('tile') || '26') + 'vw');
+  document.getElementById('kicker').textContent = q.get('kicker') || 'CAMERA COUNTED';
+  document.getElementById('title').innerHTML = (q.get('title') || 'Seven exercises, *one app.*').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  document.getElementById('sub').textContent = q.get('sub') || '';
+</script>

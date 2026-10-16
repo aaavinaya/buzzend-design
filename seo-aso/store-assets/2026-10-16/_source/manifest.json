@@ -1,0 +1,812 @@
+[
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/01-your-camera-counts-your-reps-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/02-seven-exercises-one-app-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/03-challenge-your-friends-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/04-coaching-while-you-move-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/05-keep-your-streak-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/06-post-your-set-cheer-theirs-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/07-steps-count-too-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/08-join-with-a-code-or-link-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 9,
+  "kind": "photo",
+  "headline": "Push-ups, counted.",
+  "sub": "Phone on the floor, camera facing you",
+  "asset": "pushup.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/09-push-ups-counted-1206x2622.png"
+ },
+ {
+  "slot": "ios/01-iphone-dynamic-island-medium-display",
+  "order": 10,
+  "kind": "screen",
+  "headline": "See your progress.",
+  "sub": "Best day, pace and daily trend per challenge",
+  "asset": "v6-stats.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/01-iphone-dynamic-island-medium-display/10-see-your-progress-1206x2622.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/01-your-camera-counts-your-reps-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/02-seven-exercises-one-app-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/03-challenge-your-friends-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/04-coaching-while-you-move-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/05-keep-your-streak-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/06-post-your-set-cheer-theirs-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/07-steps-count-too-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/08-join-with-a-code-or-link-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 9,
+  "kind": "photo",
+  "headline": "Push-ups, counted.",
+  "sub": "Phone on the floor, camera facing you",
+  "asset": "pushup.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/09-push-ups-counted-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556",
+  "order": 10,
+  "kind": "screen",
+  "headline": "See your progress.",
+  "sub": "Best day, pace and daily trend per challenge",
+  "asset": "v6-stats.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-medium-1179x2556/10-see-your-progress-1179x2556.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/01-your-camera-counts-your-reps-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/02-seven-exercises-one-app-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/03-challenge-your-friends-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/04-coaching-while-you-move-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/05-keep-your-streak-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/06-post-your-set-cheer-theirs-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/07-steps-count-too-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/08-join-with-a-code-or-link-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 9,
+  "kind": "photo",
+  "headline": "Push-ups, counted.",
+  "sub": "Phone on the floor, camera facing you",
+  "asset": "pushup.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/09-push-ups-counted-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868",
+  "order": 10,
+  "kind": "screen",
+  "headline": "See your progress.",
+  "sub": "Best day, pace and daily trend per challenge",
+  "asset": "v6-stats.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.9-1320x2868/10-see-your-progress-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/01-your-camera-counts-your-reps-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/02-seven-exercises-one-app-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/03-challenge-your-friends-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/04-coaching-while-you-move-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/05-keep-your-streak-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/06-post-your-set-cheer-theirs-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/07-steps-count-too-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/08-join-with-a-code-or-link-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 9,
+  "kind": "photo",
+  "headline": "Push-ups, counted.",
+  "sub": "Phone on the floor, camera facing you",
+  "asset": "pushup.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/09-push-ups-counted-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778",
+  "order": 10,
+  "kind": "screen",
+  "headline": "See your progress.",
+  "sub": "Best day, pace and daily trend per challenge",
+  "asset": "v6-stats.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/iphone-6.5-1284x2778/10-see-your-progress-1284x2778.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/01-your-camera-counts-your-reps-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/02-seven-exercises-one-app-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/03-challenge-your-friends-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/04-coaching-while-you-move-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/05-keep-your-streak-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/06-post-your-set-cheer-theirs-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/07-steps-count-too-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/08-join-with-a-code-or-link-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 9,
+  "kind": "photo",
+  "headline": "Push-ups, counted.",
+  "sub": "Phone on the floor, camera facing you",
+  "asset": "pushup.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/09-push-ups-counted-2064x2752.png"
+ },
+ {
+  "slot": "ios/02-ipad-13-inch",
+  "order": 10,
+  "kind": "screen",
+  "headline": "See your progress.",
+  "sub": "Best day, pace and daily trend per challenge",
+  "asset": "v6-stats.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/02-ipad-13-inch/10-see-your-progress-2064x2752.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/01-your-camera-counts-your-reps-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/02-seven-exercises-one-app-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/03-challenge-your-friends-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/04-coaching-while-you-move-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/05-keep-your-streak-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/06-post-your-set-cheer-theirs-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/07-steps-count-too-1080x1920.png"
+ },
+ {
+  "slot": "android/phone-1080x1920",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/phone-1080x1920/08-join-with-a-code-or-link-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/01-your-camera-counts-your-reps-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/02-seven-exercises-one-app-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/03-challenge-your-friends-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/04-coaching-while-you-move-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/05-keep-your-streak-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/06-post-your-set-cheer-theirs-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/07-steps-count-too-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-7-1080x1920",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-7-1080x1920/08-join-with-a-code-or-link-1080x1920.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 1,
+  "kind": "photo",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats, push-ups, sit-ups and more, out loud",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/01-your-camera-counts-your-reps-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 2,
+  "kind": "grid",
+  "headline": "Seven exercises, one\u00a0app.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "grid",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/02-seven-exercises-one-app-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 3,
+  "kind": "screen",
+  "headline": "Challenge your friends.",
+  "sub": "Create or join with a code. Live leaderboard.",
+  "asset": "v6-challenge.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/03-challenge-your-friends-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 4,
+  "kind": "photo",
+  "headline": "Coaching while you move.",
+  "sub": "Hear why a rep didn't count",
+  "asset": "squat-side-wise.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/04-coaching-while-you-move-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 5,
+  "kind": "screen",
+  "headline": "Keep your streak.",
+  "sub": "One quick set a day. Restore it if you slip.",
+  "asset": "v6-streak.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/05-keep-your-streak-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 6,
+  "kind": "screen",
+  "headline": "Post your set. Cheer theirs.",
+  "sub": "Every counted set shows up for your friends",
+  "asset": "v6-community.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/06-post-your-set-cheer-theirs-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 7,
+  "kind": "screen",
+  "headline": "Steps count too.",
+  "sub": "Daily step goal, top activities, calories",
+  "asset": "v6-home.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/07-steps-count-too-1440x2560.png"
+ },
+ {
+  "slot": "android/tablet-10-1440x2560",
+  "order": 8,
+  "kind": "screen",
+  "headline": "Join with a code or link.",
+  "sub": "Public challenges, or private with approval",
+  "asset": "v6-discover.png",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/tablet-10-1440x2560/08-join-with-a-code-or-link-1440x2560.png"
+ },
+ {
+  "slot": "ios/03-custom-product-pages-extras",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Sit-ups, counted.",
+  "sub": "Side-on at floor level, two steps back",
+  "asset": "situp.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/03-custom-product-pages-extras/situps-1206x2622.png"
+ },
+ {
+  "slot": "ios/03-custom-product-pages-extras",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Lunges, counted.",
+  "sub": "Side-on, chest up, full body in frame",
+  "asset": "lunge.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/03-custom-product-pages-extras/lunges-1206x2622.png"
+ },
+ {
+  "slot": "ios/03-custom-product-pages-extras",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Jumping jacks, counted.",
+  "sub": "Arms overhead, feet apart, or it doesn't count",
+  "asset": "jumping-jacks.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/03-custom-product-pages-extras/jumping-jacks-1206x2622.png"
+ },
+ {
+  "slot": "ios/03-custom-product-pages-extras",
+  "order": 0,
+  "kind": "photo",
+  "headline": "High knees, counted.",
+  "sub": "Knee to hip height, every rep spoken",
+  "asset": "high-knee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/03-custom-product-pages-extras/high-knees-1206x2622.png"
+ },
+ {
+  "slot": "ios/03-custom-product-pages-extras",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Burpees, counted.",
+  "sub": "Facing the camera, whole body in frame",
+  "asset": "burpee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/03-custom-product-pages-extras/burpees-1206x2622.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Sit-ups, counted.",
+  "sub": "Side-on at floor level, two steps back",
+  "asset": "situp.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/situps-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Lunges, counted.",
+  "sub": "Side-on, chest up, full body in frame",
+  "asset": "lunge.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/lunges-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Jumping jacks, counted.",
+  "sub": "Arms overhead, feet apart, or it doesn't count",
+  "asset": "jumping-jacks.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/jumping-jacks-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868",
+  "order": 0,
+  "kind": "photo",
+  "headline": "High knees, counted.",
+  "sub": "Knee to hip height, every rep spoken",
+  "asset": "high-knee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/high-knees-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Burpees, counted.",
+  "sub": "Facing the camera, whole body in frame",
+  "asset": "burpee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.9-1320x2868/burpees-1320x2868.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Sit-ups, counted.",
+  "sub": "Side-on at floor level, two steps back",
+  "asset": "situp.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/situps-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Lunges, counted.",
+  "sub": "Side-on, chest up, full body in frame",
+  "asset": "lunge.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/lunges-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Jumping jacks, counted.",
+  "sub": "Arms overhead, feet apart, or it doesn't count",
+  "asset": "jumping-jacks.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/jumping-jacks-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778",
+  "order": 0,
+  "kind": "photo",
+  "headline": "High knees, counted.",
+  "sub": "Knee to hip height, every rep spoken",
+  "asset": "high-knee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/high-knees-1284x2778.png"
+ },
+ {
+  "slot": "ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778",
+  "order": 0,
+  "kind": "photo",
+  "headline": "Burpees, counted.",
+  "sub": "Facing the camera, whole body in frame",
+  "asset": "burpee.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/ios/_extra-sizes-not-offered-in-asc/cpp-extras-iphone-6.5-1284x2778/burpees-1284x2778.png"
+ },
+ {
+  "slot": "android/feature-graphic-1024x500",
+  "order": 1,
+  "kind": "feature",
+  "headline": "Your camera counts your reps.",
+  "sub": "Squats \u00b7 Push-ups \u00b7 Sit-ups \u00b7 Lunges \u00b7 Jumping jacks \u00b7 Burpees \u00b7 High knees",
+  "asset": "squats.jpg",
+  "file": "/Users/avinayaacharya/Development/Buzzend Design/seo-aso/store-assets/2026-10-16/android/feature-graphic-1024x500/feature-graphic-1024x500.png"
+ }
+]

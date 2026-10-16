@@ -1,0 +1,116 @@
+platform,field,kind,limit,count,content,target_keywords,policy_check,notes
+Apple,App name,final,30,23,Buzzend: AI Rep Counter,"ai rep counter, squat counter, rep counter, ai squat rep counter",ok,counter-first per decision Q1; brand first per Apple guidance
+Apple,App name,alternate,30,29,Buzzend: AI Squat Rep Counter,ai rep counter / camera rep counter / squat counter,ok,
+Apple,App name,alternate,30,27,Buzzend: Camera Rep Counter,ai rep counter / camera rep counter / squat counter,ok,
+Apple,App name,alternate,30,28,Buzzend: Squat & Rep Counter,ai rep counter / camera rep counter / squat counter,ok,
+Apple,Subtitle,final,30,29,Fitness Challenges w/ Friends,"fitness challenge with friends, fitness challenge, challenge friends, group fitness challenge (with 'group' in keywords)",ok,
+Apple,Subtitle,alternate,30,29,Workout Challenges w/ Friends,,ok,
+Apple,Subtitle,alternate,30,30,Count Reps. Challenge Friends.,,ok,
+Apple,Subtitle,alternate,30,26,Squat & Push Up Challenges,,ok,
+Apple,Promotional text,final,170,166,"Your phone camera counts your squats, push-ups, sit-ups, lunges, jumping jacks, burpees and high knees. Challenge friends, keep your streak and climb the leaderboard.",(not indexed) conversion copy: 7 exercises + social,ok,editable any time without a release; does not affect search
+Apple,Promotional text,alternate,170,144,"Prop your phone up and start moving. Buzzend counts your reps out loud, coaches your form and turns every workout into a challenge with friends.",,ok,
+Apple,Keywords,final,100,100,"squat,push up,sit up,jumping jack,lunge,burpee,high knees,workout,streak,leaderboard,camera,exercise","push up counter, sit up counter, jumping jack counter, lunge counter, burpee counter, high knees, workout streak, fitness leaderboard, camera workout, exercise counter, home workout, group fitness challenge",ok,100 bytes; no word repeats name/subtitle; no plurals; no 'app'/'free'
+Apple,Description,final,4000,1959,"Buzzend uses your phone camera to count your workout reps and coach you while you exercise. Prop your phone up, pick an exercise and start moving: the count goes up by itself, out loud, with no wearable and no tapping.
+
+COUNTS SEVEN BODYWEIGHT EXERCISES
+• Squats
+• Push-ups
+• Sit-ups
+• Lunges
+• Jumping jacks
+• Burpees
+• High knees
+Every exercise has a short how-to video, and the coach tells you when a rep did not count and what to change.
+
+HOW IT WORKS
+1. Prop your phone up two or three steps away.
+2. Pick an exercise and tap start.
+3. Move. Buzzend counts each rep and speaks the number.
+Counting happens on your phone. Your workout video is never uploaded unless you choose to post it.
+
+FITNESS CHALLENGES WITH FRIENDS
+• Create a challenge in seconds or join one with a code or an invite link
+• Pick the exercise, the length (7, 14, 30 or 60 days, or your own) and optional prizes
+• Reps are counted by the camera, not typed in, so the leaderboard reflects real sets
+• Live leaderboards and member statistics show who is putting in the work
+
+BEAT-IT
+Post your best set and friends get one shot to top it. Beat-It attempts rank by score, then by time.
+
+STREAKS AND DAILY GOALS
+• Keep your streak alive with one qualifying workout a day: 10 reps of most exercises, 20 jumping jacks or 3,000 steps
+• Missed a day? Restore your streak with a workout or by inviting friends
+• Daily step goal tracked from your phone's step data
+
+SHARE AND STAY CONNECTED
+• Post your set with the rep count burned into the clip
+• A community feed, follows, likes and chat with your training group
+• Reminders when a challenge is about to start
+
+A NOTE ON ACCURACY
+Counting works best with your whole body in frame and decent lighting. Side-on for squats, lunges and sit-ups; facing the camera for push-ups, jumping jacks, burpees and high knees. The coach tells you when it cannot see you.
+
+Buzzend is free to download. Works on iPhone and iPad.
+
+Questions? hello@buzzend.com",first sentence = positioning; exercise names; challenges with friends; streak; beat-it,ok,"no 'verified', no 'stories'; accuracy note; truthful privacy line"
+Apple,What's New (template),final,4000,263,"• [Headline change users will notice, in plain words]
+• [New exercise or challenge feature, if any]
+• [Counting or coaching improvement: say what changed for the user]
+• Fixes and performance improvements
+Keep your streak going — open Buzzend and log today's set.",,ok,
+Play,App name,final,30,23,Buzzend: AI Rep Counter,"ai rep counter, squat counter, rep counter",ok,identical to iOS for brand consistency
+Play,App name,alternate,30,29,Buzzend: AI Squat Rep Counter,,ok,
+Play,App name,alternate,30,27,Buzzend: Camera Rep Counter,,ok,
+Play,App name,alternate,30,28,Buzzend: Squat & Rep Counter,,ok,
+Play,Short description,final,80,79,"Your camera counts squats, push ups & sit ups. Fitness challenges with friends.","camera counts reps, squats, push ups, sit ups, challenge friends",ok,"no price/promo words, no CTA, no caps, no exclamation"
+Play,Short description,alternate,80,79,"Camera counts your squats, push ups & sit ups. Challenge friends, keep streaks.","camera counts reps, squats, push ups, sit ups, challenge friends",ok,"no price/promo words, no CTA, no caps, no exclamation"
+Play,Short description,alternate,80,75,"Count squats, push ups & sit ups with your camera. Challenges with friends.","camera counts reps, squats, push ups, sit ups, challenge friends",ok,"no price/promo words, no CTA, no caps, no exclamation"
+Play,Short description,alternate,80,74,Your camera counts every rep. Fitness challenges with friends and streaks.,"camera counts reps, squats, push ups, sit ups, challenge friends",ok,"no price/promo words, no CTA, no caps, no exclamation"
+Play,Full description,final,4000,2102,"Buzzend uses your phone camera to count your workout reps and coach you while you exercise. Prop your phone up, pick an exercise and start moving: the count goes up by itself, out loud, with no wearable and no tapping.
+
+AN AI REP COUNTER FOR SEVEN EXERCISES
+• Squat counter
+• Push up counter
+• Sit up counter
+• Lunge counter
+• Jumping jack counter
+• Burpee counter
+• High knees counter
+Every exercise has a short how-to video. When a rep does not count, the coach says why and what to change.
+
+HOW IT WORKS
+1. Prop your phone up two or three steps away.
+2. Pick an exercise and tap start.
+3. Move. Buzzend counts each rep and speaks the number.
+Counting happens on your phone. Your workout video is never uploaded unless you choose to post it.
+
+FITNESS CHALLENGES WITH FRIENDS
+• Create a challenge in seconds or join one with a code or an invite link
+• Choose the exercise, the length (7, 14, 30 or 60 days, or your own) and optional prizes
+• Reps are counted by the camera, not typed in, so the leaderboard reflects real sets
+• Live leaderboards and member statistics show who is putting in the work
+
+BEAT-IT
+Post your best set and friends get one shot to top it. Attempts rank by score, then by time.
+
+BUILD A WORKOUT STREAK
+• One qualifying workout a day keeps your streak alive: 10 reps of most exercises, 20 jumping jacks or 3,000 steps
+• Missed a day? Restore your streak with a workout or by inviting friends
+• Daily step goal tracked from your phone's step sensor
+
+SHARE AND STAY CONNECTED
+• Post your set with the rep count burned into the clip
+• Community feed, follows, likes and chat with your training group
+• Reminders when a challenge is about to start
+
+HOME WORKOUT, NO EQUIPMENT
+All you need is your phone and a little space. Works at home, in the park or at the gym.
+
+A NOTE ON ACCURACY
+Counting works best with your whole body in frame and decent lighting. Side-on for squats, lunges and sit-ups; facing the camera for push-ups, jumping jacks, burpees and high knees. The coach tells you when it cannot see you.
+
+Buzzend is free to download.
+
+Questions or feedback? hello@buzzend.com","squat counter, push up counter, sit up counter, lunge counter, jumping jack counter, burpee counter, high knees, workout challenges with friends, workout streak, home workout no equipment",ok,exercise list as 'X counter' lines; no 'verified'/'stories'
+Play,Feature graphic headline,final,60,29,Your camera counts your reps.,(graphic) camera counts reps,ok,
+Play,Feature graphic subline,final,120,75,Squats · Push-ups · Sit-ups · Lunges · Jumping jacks · Burpees · High knees,,ok,
