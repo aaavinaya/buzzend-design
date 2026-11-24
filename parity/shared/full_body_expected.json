@@ -2,64 +2,16 @@
   "generatedFrom": "docs/js/screens/full-body-data.js",
   "plans": [
     {
-      "routine": "total-body",
+      "routine": "basics",
       "level": "beginner",
       "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 12,
-          "sec": 30,
-          "idx": 1,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 25,
-          "nextEx": "pushup",
-          "nextIdx": 2
-        },
-        {
-          "type": "exercise",
-          "ex": "pushup",
-          "reps": 8,
-          "sec": 24,
-          "idx": 2,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 25,
-          "nextEx": "burpee",
-          "nextIdx": 3
-        },
-        {
-          "type": "exercise",
-          "ex": "burpee",
-          "reps": 6,
-          "sec": 24,
-          "idx": 3,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 25,
-          "nextEx": "jumping",
-          "nextIdx": 4
-        },
         {
           "type": "exercise",
           "ex": "jumping",
           "reps": 20,
           "sec": 30,
-          "idx": 4,
-          "total": 5,
+          "idx": 1,
+          "total": 3,
           "round": 1,
           "rounds": 1
         },
@@ -67,311 +19,51 @@
           "type": "rest",
           "sec": 25,
           "nextEx": "highknee",
-          "nextIdx": 5
-        },
-        {
-          "type": "exercise",
-          "ex": "highknee",
-          "reps": 24,
-          "sec": 28,
-          "idx": 5,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 5,
-      "totalReps": 70,
-      "estSeconds": 236,
-      "estMinutes": 4
-    },
-    {
-      "routine": "total-body",
-      "level": "intermediate",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 18,
-          "sec": 40,
-          "idx": 1,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 18,
-          "nextEx": "pushup",
           "nextIdx": 2
         },
         {
           "type": "exercise",
-          "ex": "pushup",
-          "reps": 12,
-          "sec": 34,
+          "ex": "highknee",
+          "reps": 20,
+          "sec": 35,
           "idx": 2,
-          "total": 5,
+          "total": 3,
           "round": 1,
           "rounds": 1
         },
         {
           "type": "rest",
-          "sec": 18,
-          "nextEx": "burpee",
+          "sec": 25,
+          "nextEx": "squat",
           "nextIdx": 3
         },
         {
           "type": "exercise",
-          "ex": "burpee",
-          "reps": 10,
-          "sec": 36,
+          "ex": "squat",
+          "reps": 15,
+          "sec": 40,
           "idx": 3,
-          "total": 5,
+          "total": 3,
           "round": 1,
           "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 18,
-          "nextEx": "jumping",
-          "nextIdx": 4
-        },
+        }
+      ],
+      "totalExercises": 3,
+      "totalReps": 55,
+      "estSeconds": 155,
+      "estMinutes": 3
+    },
+    {
+      "routine": "basics",
+      "level": "intermediate",
+      "sequence": [
         {
           "type": "exercise",
           "ex": "jumping",
           "reps": 30,
           "sec": 40,
-          "idx": 4,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 18,
-          "nextEx": "highknee",
-          "nextIdx": 5
-        },
-        {
-          "type": "exercise",
-          "ex": "highknee",
-          "reps": 40,
-          "sec": 40,
-          "idx": 5,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 5,
-      "totalReps": 110,
-      "estSeconds": 262,
-      "estMinutes": 4
-    },
-    {
-      "routine": "total-body",
-      "level": "expert",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 25,
-          "sec": 50,
           "idx": 1,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 12,
-          "nextEx": "pushup",
-          "nextIdx": 2
-        },
-        {
-          "type": "exercise",
-          "ex": "pushup",
-          "reps": 18,
-          "sec": 46,
-          "idx": 2,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 12,
-          "nextEx": "burpee",
-          "nextIdx": 3
-        },
-        {
-          "type": "exercise",
-          "ex": "burpee",
-          "reps": 15,
-          "sec": 50,
-          "idx": 3,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 12,
-          "nextEx": "jumping",
-          "nextIdx": 4
-        },
-        {
-          "type": "exercise",
-          "ex": "jumping",
-          "reps": 45,
-          "sec": 55,
-          "idx": 4,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 12,
-          "nextEx": "highknee",
-          "nextIdx": 5
-        },
-        {
-          "type": "exercise",
-          "ex": "highknee",
-          "reps": 60,
-          "sec": 55,
-          "idx": 5,
-          "total": 5,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 5,
-      "totalReps": 163,
-      "estSeconds": 304,
-      "estMinutes": 5
-    },
-    {
-      "routine": "lower-power",
-      "level": "beginner",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 12,
-          "sec": 30,
-          "idx": 1,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 25,
-          "nextEx": "burpee",
-          "nextIdx": 2
-        },
-        {
-          "type": "exercise",
-          "ex": "burpee",
-          "reps": 6,
-          "sec": 24,
-          "idx": 2,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 2,
-      "totalReps": 18,
-      "estSeconds": 79,
-      "estMinutes": 1
-    },
-    {
-      "routine": "lower-power",
-      "level": "intermediate",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 18,
-          "sec": 40,
-          "idx": 1,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 18,
-          "nextEx": "burpee",
-          "nextIdx": 2
-        },
-        {
-          "type": "exercise",
-          "ex": "burpee",
-          "reps": 10,
-          "sec": 36,
-          "idx": 2,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 2,
-      "totalReps": 28,
-      "estSeconds": 94,
-      "estMinutes": 2
-    },
-    {
-      "routine": "lower-power",
-      "level": "expert",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "squat",
-          "reps": 25,
-          "sec": 50,
-          "idx": 1,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        },
-        {
-          "type": "rest",
-          "sec": 12,
-          "nextEx": "burpee",
-          "nextIdx": 2
-        },
-        {
-          "type": "exercise",
-          "ex": "burpee",
-          "reps": 15,
-          "sec": 50,
-          "idx": 2,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 2,
-      "totalReps": 40,
-      "estSeconds": 112,
-      "estMinutes": 2
-    },
-    {
-      "routine": "cardio-blast",
-      "level": "beginner",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "jumping",
-          "reps": 20,
-          "sec": 30,
-          "idx": 1,
-          "total": 2,
+          "total": 3,
           "round": 1,
           "rounds": 1
         },
@@ -384,30 +76,46 @@
         {
           "type": "exercise",
           "ex": "highknee",
-          "reps": 24,
-          "sec": 28,
+          "reps": 35,
+          "sec": 50,
           "idx": 2,
-          "total": 2,
+          "total": 3,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 20,
+          "sec": 45,
+          "idx": 3,
+          "total": 3,
           "round": 1,
           "rounds": 1
         }
       ],
-      "totalExercises": 2,
-      "totalReps": 44,
-      "estSeconds": 78,
-      "estMinutes": 1
+      "totalExercises": 3,
+      "totalReps": 85,
+      "estSeconds": 175,
+      "estMinutes": 3
     },
     {
-      "routine": "cardio-blast",
-      "level": "intermediate",
+      "routine": "basics",
+      "level": "expert",
       "sequence": [
         {
           "type": "exercise",
           "ex": "jumping",
-          "reps": 30,
-          "sec": 40,
+          "reps": 50,
+          "sec": 65,
           "idx": 1,
-          "total": 2,
+          "total": 3,
           "round": 1,
           "rounds": 1
         },
@@ -420,36 +128,424 @@
         {
           "type": "exercise",
           "ex": "highknee",
-          "reps": 40,
-          "sec": 40,
+          "reps": 55,
+          "sec": 65,
           "idx": 2,
-          "total": 2,
-          "round": 1,
-          "rounds": 1
-        }
-      ],
-      "totalExercises": 2,
-      "totalReps": 70,
-      "estSeconds": 95,
-      "estMinutes": 2
-    },
-    {
-      "routine": "cardio-blast",
-      "level": "expert",
-      "sequence": [
-        {
-          "type": "exercise",
-          "ex": "jumping",
-          "reps": 45,
-          "sec": 55,
-          "idx": 1,
-          "total": 2,
+          "total": 3,
           "round": 1,
           "rounds": 1
         },
         {
           "type": "rest",
-          "sec": 10,
+          "sec": 15,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 40,
+          "sec": 80,
+          "idx": 3,
+          "total": 3,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 3,
+      "totalReps": 145,
+      "estSeconds": 240,
+      "estMinutes": 4
+    },
+    {
+      "routine": "power",
+      "level": "beginner",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 20,
+          "sec": 30,
+          "idx": 1,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 25,
+          "sec": 45,
+          "idx": 2,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 15,
+          "sec": 40,
+          "idx": 3,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 10,
+          "sec": 30,
+          "idx": 4,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 4,
+      "totalReps": 70,
+      "estSeconds": 220,
+      "estMinutes": 4
+    },
+    {
+      "routine": "power",
+      "level": "intermediate",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 40,
+          "sec": 55,
+          "idx": 1,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 40,
+          "sec": 55,
+          "idx": 2,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 30,
+          "sec": 70,
+          "idx": 3,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 15,
+          "sec": 45,
+          "idx": 4,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 4,
+      "totalReps": 125,
+      "estSeconds": 285,
+      "estMinutes": 5
+    },
+    {
+      "routine": "power",
+      "level": "expert",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 50,
+          "sec": 65,
+          "idx": 1,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 55,
+          "sec": 65,
+          "idx": 2,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 40,
+          "sec": 80,
+          "idx": 3,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 25,
+          "sec": 65,
+          "idx": 4,
+          "total": 4,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 4,
+      "totalReps": 170,
+      "estSeconds": 320,
+      "estMinutes": 5
+    },
+    {
+      "routine": "total-body",
+      "level": "beginner",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 20,
+          "sec": 30,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 25,
+          "sec": 45,
+          "idx": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 15,
+          "sec": 40,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 10,
+          "sec": 30,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 25,
+          "nextEx": "burpee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 10,
+          "sec": 40,
+          "idx": 5,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 5,
+      "totalReps": 80,
+      "estSeconds": 285,
+      "estMinutes": 5
+    },
+    {
+      "routine": "total-body",
+      "level": "intermediate",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 40,
+          "sec": 55,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "highknee",
+          "nextIdx": 2
+        },
+        {
+          "type": "exercise",
+          "ex": "highknee",
+          "reps": 40,
+          "sec": 55,
+          "idx": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 30,
+          "sec": 70,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 20,
+          "sec": 60,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 20,
+          "nextEx": "burpee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 15,
+          "sec": 55,
+          "idx": 5,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        }
+      ],
+      "totalExercises": 5,
+      "totalReps": 145,
+      "estSeconds": 375,
+      "estMinutes": 6
+    },
+    {
+      "routine": "total-body",
+      "level": "expert",
+      "sequence": [
+        {
+          "type": "exercise",
+          "ex": "jumping",
+          "reps": 60,
+          "sec": 75,
+          "idx": 1,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
           "nextEx": "highknee",
           "nextIdx": 2
         },
@@ -457,17 +553,65 @@
           "type": "exercise",
           "ex": "highknee",
           "reps": 60,
-          "sec": 55,
+          "sec": 70,
           "idx": 2,
-          "total": 2,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "squat",
+          "nextIdx": 3
+        },
+        {
+          "type": "exercise",
+          "ex": "squat",
+          "reps": 50,
+          "sec": 100,
+          "idx": 3,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "pushup",
+          "nextIdx": 4
+        },
+        {
+          "type": "exercise",
+          "ex": "pushup",
+          "reps": 30,
+          "sec": 80,
+          "idx": 4,
+          "total": 5,
+          "round": 1,
+          "rounds": 1
+        },
+        {
+          "type": "rest",
+          "sec": 15,
+          "nextEx": "burpee",
+          "nextIdx": 5
+        },
+        {
+          "type": "exercise",
+          "ex": "burpee",
+          "reps": 25,
+          "sec": 85,
+          "idx": 5,
+          "total": 5,
           "round": 1,
           "rounds": 1
         }
       ],
-      "totalExercises": 2,
-      "totalReps": 105,
-      "estSeconds": 120,
-      "estMinutes": 2
+      "totalExercises": 5,
+      "totalReps": 225,
+      "estSeconds": 470,
+      "estMinutes": 8
     }
   ],
   "scoring": [
@@ -486,8 +630,8 @@
         "repsTarget": 0,
         "stars": 1,
         "band": "Good start",
-        "status": "interrupted",
-        "statusLabel": "Interrupted",
+        "status": "ended",
+        "statusLabel": "Ended early",
         "kcal": 0
       }
     },
@@ -514,8 +658,8 @@
         "repsTarget": 12,
         "stars": 1,
         "band": "Good start",
-        "status": "interrupted",
-        "statusLabel": "Interrupted",
+        "status": "ended",
+        "statusLabel": "Ended early",
         "kcal": 0
       }
     },
@@ -745,8 +889,8 @@
         "repsTarget": 43,
         "stars": 3,
         "band": "Solid work",
-        "status": "interrupted",
-        "statusLabel": "Interrupted",
+        "status": "ended",
+        "statusLabel": "Ended early",
         "kcal": 14
       }
     },

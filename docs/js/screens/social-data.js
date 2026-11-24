@@ -73,21 +73,37 @@ window.Social = (function () {
       range: "14–16 Jun", freq: "Daily", vis: "Public", status: "open", joined: false,
       day: 0, days: 3, myReps: 0, goal: 300, members: 640, cover: "linear-gradient(135deg,#5a3a8a,#7c5ce0)",
       desc: "A quick weekend push-up sprint — jump in, no pressure." },
-    // ── ELIMINATION challenges (type: "elimination"): daily knockouts until 1–3 winners remain.
-    //    `left` = still in · `cutoff` = places that survive today · `myPlace` = my live place ·
-    //    `elim` = which state the elimination hub opens in (challenge-detail.html?v=…).
+    // ── ELIMINATION challenges (type: "elimination", target-based): every day has a target; all of
+    //    today's sessions add up; miss it once and you're out. `target` = today's target ·
+    //    `myToday` = my count today · `stillIn` / `joinedCount` · `elim` = which state the detail
+    //    page opens in (challenge-detail.html?v=…).
     { id: "ko",    n: "October Push-up Knockout", ex: "pushup", by: "Adesh Pokhrel", byAv: "#9bb7c9,#5e7d99", type: "elimination",
       range: "20–26 Oct", freq: "Daily", vis: "Public", status: "active", joined: true, loggedToday: false,
-      day: 3, days: 7, left: 27, cutoff: 14, myPlace: 9, winners: 1, elim: "safe", myReps: 496, goal: 0, members: 100,
-      cover: "linear-gradient(135deg,#3a2a6a,#c0436a)", desc: "Push-ups every day. Each night the lowest totals are knocked out." },
+      day: 3, days: 7, target: 30, myToday: 12, stillIn: 9, joinedCount: 12, winners: 3, elim: "under", myReps: 57, goal: 0, members: 12,
+      cover: "linear-gradient(135deg,#3a2a6a,#c0436a)", desc: "Push-ups every day. The target goes up by 5 each day. Hit it to stay in." },
     { id: "ko2",   n: "Squat Knockout Week", ex: "squat", by: "Kiran Shah", byAv: "#c9c19b,#9a8c5e", type: "elimination",
-      range: "24–30 Oct", freq: "Daily", vis: "Public", status: "open", joined: false, joinClosesIn: "5h",
-      day: 1, days: 7, left: 38, winners: 3, elim: "upcoming", myReps: 0, goal: 0, members: 38,
-      cover: "linear-gradient(135deg,#1f3a6a,#5e60ce)", desc: "Seven days, three winners. Lowest squat totals go home each night." },
+      range: "24–30 Oct", freq: "Daily", vis: "Public", status: "open", joined: false, joinClosesIn: "5h",   // = starts in 5h
+      day: 1, days: 7, target: 20, stillIn: 38, joinedCount: 38, winners: 3, elim: "viewer1", myReps: 0, goal: 0, members: 38,
+      cover: "linear-gradient(135deg,#1f3a6a,#5e60ce)", desc: "Seven days, three winners. Reach each day's squat target to stay in." },
+    // ── MULTI-WORKOUT and FULL BODY challenges (mode: "multi" | "fullbody"), Standard or Elimination.
+    //    `v` = which state challenge-detail.html opens in.
+    { id: "mx",  n: "14-Day Leg & Push Mix", ex: "squat", mode: "multi", workouts: ["squat", "pushup", "burpee"], by: "Adesh Pokhrel", byAv: "#9bb7c9,#5e7d99",
+      range: "1–14 Nov", freq: "Daily", vis: "Public", status: "active", joined: true, loggedToday: false, day: 5, days: 14,
+      myPlace: 7, myPoints: 18, joinedCount: 12, members: 12, myReps: 370, goal: 0, v: "mStd",
+      cover: "linear-gradient(135deg,#7a3a1a,#e0922a)", desc: "Squats, push-ups and burpees. Show up for all three." },
+    { id: "mx2", n: "Push & Burpee Knockout", ex: "pushup", mode: "multi", workouts: ["pushup", "burpee"], type: "elimination", by: "Ravi Thapa", byAv: "#c9a6a6,#a87766",
+      range: "10–16 Nov", freq: "Daily", vis: "Public", status: "open", joined: false, joinClosesIn: "2d", joinedCount: 9, members: 9, day: 0, days: 7,
+      myReps: 0, goal: 0, v: "mEl", cover: "linear-gradient(135deg,#5a3a8a,#7c5ce0)", desc: "15 push-ups and 10 burpees a day. Miss one and you're out." },
+    { id: "fb1", n: "Penta Week", ex: "burpee", mode: "fullbody", routine: "Penta · Ultimate", level: "Medium", type: "elimination", by: "Sita Rai", byAv: "#a6c9b5,#5e996f",
+      range: "3–9 Nov", freq: "Daily", vis: "Public", status: "active", joined: true, loggedToday: false, day: 3, days: 7, stillIn: 8, joinedCount: 12, members: 12,
+      session: "stopped", myReps: 435, goal: 0, v: "fElStop", cover: "linear-gradient(135deg,#3a2a6a,#2F80ED)", desc: "Finish the Penta routine every day for a week." },
+    { id: "fb2", n: "Trio Daily", ex: "jumping", mode: "fullbody", routine: "Trio · Dynamic", level: "Easy", by: "Maya Gurung", byAv: "#caa6c9,#9a5e96",
+      range: "12–25 Nov", freq: "Daily", vis: "Public", status: "open", joined: false, joinedCount: 21, members: 21, day: 0, days: 14,
+      myReps: 0, goal: 0, v: "fStdUp", cover: "linear-gradient(135deg,#F5A623,#166E7A)", desc: "Two weeks of the Trio routine. Every rep counts." },
     { id: "ko3",   n: "Lunge Last Stand", ex: "lunge", by: "Sita Rai", byAv: "#a6c9b5,#5e996f", type: "elimination",
       range: "1–5 Oct", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: true,
-      day: 5, days: 5, left: 1, winners: 1, winner: "You", elim: "won", myReps: 640, goal: 0, members: 40,
-      cover: "linear-gradient(135deg,#7a1f2a,#ef4444)", desc: "Five nights of lunges. Last one standing wins." },
+      day: 5, days: 5, target: 40, stillIn: 6, joinedCount: 40, winners: 1, winner: "You", elim: "won", myReps: 312, goal: 0, members: 40,
+      cover: "linear-gradient(135deg,#7a1f2a,#ef4444)", desc: "Five days of lunges. Hit the daily target to stay in." },
     { id: "lng",   n: "Leg Day Lunges",  ex: "lunge",  by: "Kiran Shah",    byAv: "#c9c19b,#9a8c5e",
       range: "20 May–20 Jun", freq: "Daily", vis: "Public", status: "ended", joined: true, loggedToday: true,
       day: 30, days: 30, myReps: 196, goal: 600, members: 167, cover: "linear-gradient(135deg,#7a1f2a,#ef4444)",

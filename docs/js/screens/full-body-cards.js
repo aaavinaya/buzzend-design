@@ -19,18 +19,18 @@ window.FBCards = (function () {
 
   /* ── sample sessions. ex: [key, done, target] in routine order ── */
   const SESS = {
-    complete: { id: "fb1", name: "Jordan Rivera", t: "8m ago", routine: "Total Body", level: "Intermediate", score: 94, dur: "4:12",
+    complete: { id: "fb1", name: "Jordan Rivera", t: "8m ago", routine: "Full Body Max", level: "Intermediate", score: 94, dur: "4:12",
       ex: [["squat", 18, 18], ["pushup", 12, 12], ["burpee", 10, 10], ["jumping", 30, 30], ["highknee", 40, 40]], likes: 21, views: 260 },
-    partial: { id: "fb2", name: "Maya Chen", t: "35m ago", routine: "Total Body", level: "Beginner", score: 72, dur: "5:05",
+    partial: { id: "fb2", name: "Maya Chen", t: "35m ago", routine: "Full Body Max", level: "Beginner", score: 72, dur: "5:05",
       ex: [["squat", 12, 12], ["pushup", 8, 8], ["burpee", 4, 6], ["jumping", 20, 20], ["highknee", 18, 24]], likes: 9, views: 120 },
-    short: { id: "fb3", name: "Sam Okafor", t: "1h ago", routine: "Lower Power", level: "Expert", score: 88, dur: "2:10",
+    short: { id: "fb3", name: "Sam Okafor", t: "1h ago", routine: "Full Body Strength", level: "Expert", score: 88, dur: "2:10",
       ex: [["squat", 25, 25], ["burpee", 13, 15]], likes: 6, views: 74 },
-    video: { id: "fb4", name: "Kriti Karki", t: "2h ago", routine: "Total Body", level: "Expert", score: 91, dur: "5:48",
+    video: { id: "fb4", name: "Kriti Karki", t: "2h ago", routine: "Full Body Max", level: "Expert", score: 91, dur: "5:48",
       ex: [["squat", 25, 25], ["pushup", 18, 18], ["burpee", 15, 15], ["jumping", 45, 45], ["highknee", 52, 60]],
-      cap: "Total Body on Expert. Burpees hurt.", g: "linear-gradient(150deg,#5a2a6a,#b0436a)", likes: 64, views: 2300 },
-    mine: { id: "fb5", name: "Avinaya Acharya", t: "7:40 AM", routine: "Total Body", level: "Intermediate", score: 94, dur: "4:12",
+      cap: "Full Body Max on Expert. Burpees hurt.", g: "linear-gradient(150deg,#5a2a6a,#b0436a)", likes: 64, views: 2300 },
+    mine: { id: "fb5", name: "Avinaya Acharya", t: "7:40 AM", routine: "Full Body Max", level: "Intermediate", score: 94, dur: "4:12",
       ex: [["squat", 18, 18], ["pushup", 12, 12], ["burpee", 10, 10], ["jumping", 30, 30], ["highknee", 40, 40]] },
-    ended: { id: "fb6", name: "Avinaya Acharya", t: "Yesterday · 6:15 PM", routine: "Cardio Blast", level: "Intermediate", score: 41, dur: "1:02", ended: true,
+    ended: { id: "fb6", name: "Avinaya Acharya", t: "Yesterday · 6:15 PM", routine: "Full Body Burn", level: "Intermediate", score: 41, dur: "1:02", ended: true,
       ex: [["jumping", 30, 30], ["highknee", 9, 40]] },
   };
   const reps = (s) => s.ex.reduce((a, x) => a + x[1], 0);
@@ -69,19 +69,6 @@ window.FBCards = (function () {
     if (st === "partial") return `<span class="fbc-pill">${I("flag", 12)} ${atTarget(s)} of ${s.ex.length} at target</span>`;
     return `<span class="fbc-pill">${I("clock", 12)} Ended early · ${s.dur}</span>`;
   }
-  const aiChip = `<span class="fbc-pill ai">${I("camera", 12)} AI-counted</span>`;
-  const levelChip = (s) => `<span class="fbc-pill lvl">${s.level}</span>`;
-
-  function exRow(x) {
-    const [k, d, t] = x, full = d >= t;
-    return `<div class="fbc-row" style="--exc:${FB.EX[k].c}">
-      <span class="fbc-ei">${W(k, 20)}</span>
-      <span class="en">${FB.EX[k].n}</span>
-      <span class="fbc-bar"><i style="width:${Math.round(Math.min(1, d / t) * 100)}%"></i></span>
-      <span class="er">${d}<small>/${t}</small></span>
-      <span class="fbc-ok">${full ? I("check", 14) : ""}</span></div>`;
-  }
-
   // like/view bar — same .pa markup as the V2 feed (static counts in this canvas).
   // Activity cards (the daily card and the session card) carry Love only: there's no
   // media to view or share, so they get no view count and no Share button. Media posts keep the full bar.
@@ -94,42 +81,15 @@ window.FBCards = (function () {
     <button class="pa-act pa-icon" aria-label="Share">${I("share", 20)}</button>
     <button class="pa-react" aria-label="See who loved">${I("heart", 14)}</button></div>`;
 
-  /* ── 1 · FEED — session card (routine edition of .vb-card) ── */
-  function feedCard(s) {
-    const SHOW = 3, rows = s.ex.map(exRow), hidden = rows.length - SHOW;
-    const list = hidden > 0
-      ? `${rows.slice(0, SHOW).join("")}<div class="fbc-more-rows" hidden>${rows.slice(SHOW).join("")}</div>
-         <button class="fbc-more" onclick="FBCards.more(this)">${I("chevron", 14)} <span>${hidden} more exercise${hidden > 1 ? "s" : ""}</span></button>`
-      : rows.join("");
-    const verb = status(s) === "done" ? "Completed" : "Did";
-    return `<div class="vb-card fbc-card">
-      <div class="vb-top">${av(s.name, 52)}
-        <div class="vb-who"><div class="n">${s.name}<span class="tm"> · ${s.t}</span></div>
-          <div class="s">${verb} <b class="fbc-rname">${s.routine}</b></div>
-          <div class="fbc-tags">${levelChip(s)}${aiChip}</div></div>
-        <div class="fbc-hero">${ring(s, 66, `<b>${s.score}</b><small>score</small>`)}${stars(s.score, 10)}</div></div>
-      <div class="fbc-stats">
-        <div><b>${reps(s)}</b><span>reps</span></div>
-        <div><b>${s.dur}</b><span>time</span></div>
-        <div class="${status(s) === "done" ? "fbc-allhit" : ""}"><b>${atTarget(s)}<small>/${s.ex.length}</small>${status(s) === "done" ? I("check", 14) : ""}</b><span>at target</span></div></div>
-      <div class="fbc-rows">${list}</div>
-      <button class="fbc-try" onclick="location.href='../workout/full-body.html?view=preview&routine=${s.routine === "Total Body" ? "total-body" : "lower-power"}'">
-        <span class="fbc-try-ic">${ring({ ex: s.ex.map(([k, , t]) => [k, t, t]) }, 30)}</span>
-        <span class="fbc-try-tx"><b>Try ${s.routine}</b><span>${s.ex.length} exercises · ~${Math.max(2, Math.round(target(s) / 25))} min · pick your level</span></span>
-        ${I("chevron", 18)}</button>
-      ${loveBar(s)}</div>`;
-  }
-
-
-  /* ══ 0 · FEED — ONE CARD PER USER PER DAY ══════════════════════════════
-     The day card adapts to what the day holds, so a feed never shows two cards
-     for one person on one day:
-       singles only  → today's V2 session card (unchanged)
-       routine only  → the Full Body session card (feedCard above)
-       mixed         → header with the day's TOTAL REPS, routine block(s) first,
-                       then the single AI workouts, newest first.
-     Reps are never counted twice: a routine's squats live in its block, and the
-     Squats row shows only squats done outside a routine. The header total is both. */
+  /* ══ 1 · FEED — ONE CARD PER USER PER DAY ══════════════════════════════
+     ONE card design for every day, the same as today's AI-workout card: avatar · name ·
+     subtitle · TOTAL REPS, then one row per exercise, then Love. A Full Body workout is a
+     group of those same rows under a small label (its name, e.g. "Full Body Max", with
+     "94 · Intermediate" on the right) — that label is the only differentiator. Every
+     exercise is always listed (nothing collapses). With a Full Body workout on the day, the
+     single AI workouts get their own "AI workouts" label so the two groups read apart.
+     Reps are never counted twice: a routine's squats sit in its group, the Squats row under
+     "AI workouts" only counts squats done outside a routine. TOTAL REPS is both. */
   // single AI workouts can be any exercise, including ones not in Full Body
   const EXTRA = { situp: { n: "Sit-ups", i: "situp", c: "#6466E3", kcal: 0.30 }, lunge: { n: "Lunges", i: "lunge", c: "#E74F5E", kcal: 0.40 } };
   const exi = (k) => FB.EX[k] || EXTRA[k];
@@ -138,101 +98,85 @@ window.FBCards = (function () {
   const DAYS = {
     mixed: { id: "d1", name: "Jordan Rivera", t: "8m ago", likes: 21, views: 260,
       routines: [R(SESS.complete, { at: "7:40 AM" })],
-      singles: [{ k: "pushup", reps: 25, at: "6:05 PM", dur: "1:10", isNew: true }, { k: "squat", reps: 40, at: "12:30 PM", dur: "1:45" }] },
-    routineOnly: R(SESS.partial, {}),
+      singles: [{ k: "pushup", reps: 25, at: "6:05 PM", dur: "1:10" }, { k: "squat", reps: 40, at: "12:30 PM", dur: "1:45" }] },
+    routineOnly: { id: "d2", name: "Maya Chen", t: "35m ago", likes: 9, views: 120, routines: [R(SESS.complete, {})], singles: [] },
     singlesOnly: { id: "d3", name: "Priya Nair", t: "40m ago", likes: 7, views: 96, routines: [],
       singles: [{ k: "situp", reps: 30, at: "9:10 AM", dur: "1:30" }, { k: "jumping", reps: 50, at: "8:20 AM", dur: "1:05" }] },
     heavy: { id: "d4", name: "Sam Okafor", t: "1h ago", likes: 33, views: 410,
-      routines: [R(SESS.complete, { at: "6:30 PM", score: 89 }), R(SESS.ended, { routine: "Cardio Blast", at: "7:10 AM", ended: false, score: 58, ex: [["jumping", 30, 30], ["highknee", 26, 40]] })],
+      routines: [R(SESS.complete, { at: "6:30 PM", score: 89 }), R(SESS.ended, { routine: "Full Body Burn", at: "7:10 AM", ended: false, score: 58, ex: [["jumping", 30, 30], ["highknee", 26, 40]] })],
       singles: [{ k: "squat", reps: 50, at: "8:15 PM", dur: "2:05" }, { k: "pushup", reps: 30, at: "1:20 PM", dur: "1:15" },
         { k: "situp", reps: 40, at: "11:00 AM", dur: "1:50" }, { k: "lunge", reps: 20, at: "9:30 AM", dur: "1:20" }] },
+    sameTwice: { id: "d5", name: "Taylor Kim", t: "20m ago", likes: 14, views: 150,
+      routines: [R(SESS.complete, { at: "7:40 AM" }), R(SESS.partial, { at: "6:30 PM", level: "Intermediate", score: 81 })],
+      singles: [{ k: "squat", reps: 40, at: "12:30 PM", dur: "1:45" }] },
   };
-  const secs = (d) => { const [m, x] = d.split(":").map(Number); return m * 60 + x; };
-  const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
   const dayReps = (d) => d.routines.reduce((a, r) => a + reps(r), 0) + d.singles.reduce((a, x) => a + x.reps, 0);
-  const dayTime = (d) => mmss(d.routines.reduce((a, r) => a + secs(r.dur), 0) + d.singles.reduce((a, x) => a + secs(x.dur), 0));
-  const dayKcal = (d) => d.routines.reduce((a, r) => a + kcal(r), 0) + Math.round(d.singles.reduce((a, x) => a + x.reps * exi(x.k).kcal, 0));
 
   function daySubtitle(d) {
-    const nR = d.routines.length, nS = d.singles.length;
-    const r = nR === 1 ? `<b class="fbc-rname">${d.routines[0].routine}</b>` : `<b class="fbc-rname">${nR} routines</b>`;
-    if (!nR) return nS > 1 ? `Completed a ${nS}-exercise session` : `Completed ${exi(d.singles[0].k).n}`;   // V2 wording
-    return nS ? `Did ${r} + ${nS} AI workout${nS > 1 ? "s" : ""}` : `Did ${r}`;
+    const n = d.routines.reduce((a, r) => a + r.ex.length, 0) + d.singles.length;
+    if (n === 1) return `Completed ${exi(d.singles[0].k).n}`;
+    return `Completed ${n === 8 || n === 11 || n === 18 ? "an" : "a"} ${n}-exercise session`;   // today's AI-workout wording
   }
+  // one exercise row — identical for Full Body exercises and single AI workouts
+  const dayRow = (k, n) => `<div class="vb-row" style="--exc:${exi(k).c}"><span class="fbc-ei">${WX(k, 20)}</span><span class="en">${exi(k).n}</span><span class="er">${n}<small>reps</small></span></div>`;
+  const fbTitle = (r) => `<span class="fbc-fbt-ic">${rIcon(r.routine, 16)}</span><span class="fbc-fbt-n">${r.routine}</span>`;
+  const fbPill = (r) => `<span class="fbc-fbt-p">${r.score} · ${r.level}</span>`;
+  const groupLabel = (left, right) => `<div class="fbc-grp"><span class="l">${left}</span>${right ? `<span class="r">${right}</span>` : ""}</div>`;
 
-  // a routine inside the day card: compact by default (ring · name · meta · colour strip),
-  // "Breakdown" opens the same bar rows the routine-only card shows.
-  function routineBlock(r) {
-    const segs = r.ex.map(([k, d, t]) => `<span style="--exc:${FB.EX[k].c};flex:${t}"><i style="width:${Math.round(Math.min(1, d / t) * 100)}%"></i></span>`).join("");
-    const hit = atTarget(r) === r.ex.length;
-    return `<div class="fbc-rb">
-      <div class="fbc-rb-h">
-        ${ring(r, 50, `<b>${r.score}</b>`, 5)}
-        <div class="fbc-rb-tx">
-          <div class="fbc-rb-n">${r.routine} <span class="fbc-pill lvl">${r.level}</span></div>
-          <div class="fbc-rb-m">${r.at} · ${r.dur} · <span class="${hit ? "ok" : ""}">${atTarget(r)}/${r.ex.length} at target${hit ? " " + I("check", 12) : ""}</span></div>
-          ${stars(r.score, 10)}</div>
-        <div class="fbc-rb-r"><b>${reps(r)}</b><span>reps</span></div></div>
-      <div class="fbc-seg">${segs}</div>
-      <div class="fbc-rb-rows" hidden>${r.ex.map(exRow).join("")}</div>
-      <button class="fbc-rb-btn" onclick="FBCards.breakdown(this)">${I("chevron", 13)} <span>Breakdown</span></button></div>`;
-  }
-  const singleRow = (x) => `<div class="fbc-srow${x.isNew ? " new" : ""}" style="--exc:${exi(x.k).c}">
-      <span class="fbc-ei">${WX(x.k, 20)}</span>
-      <span class="fbc-s-tx"><span class="en">${exi(x.k).n}${x.isNew ? `<span class="fbc-new">New</span>` : ""}</span><span class="at">${x.at} · ${x.dur}</span></span>
-      <span class="er">${x.reps}<small>reps</small></span></div>`;
-
-  function hiddenBox(items, noun) {
-    if (items.length <= 0) return "";
-    return `<div class="fbc-more-rows" hidden>${items.join("")}</div>
-      <button class="fbc-more" onclick="FBCards.more(this,'${noun}')">${I("chevron", 14)} <span>${items.length} more ${noun}${items.length > 1 ? "s" : ""}</span></button>`;
+  // Full Body exercise row: the normal row plus a progress bar and done/target (✓ when met)
+  const fbRow = ([k, done, target]) => `<div class="vb-row fbc-fbrow" style="--exc:${exi(k).c}"><span class="fbc-ei">${WX(k, 20)}</span>
+      <span class="en">${exi(k).n}</span><span class="fbc-pb"><i style="width:${Math.round(Math.min(1, done / target) * 100)}%"></i></span>
+      <span class="er">${done}<small>/${target}</small></span><span class="fbc-ck">${done >= target ? I("check", 14) : ""}</span></div>`;
+  // routine mark: the target icon for every routine for now. Per-routine marks (fb-basics / fb-burn /
+  // fb-strength / fb-max in icons.js, `icon` on each routine) are parked until a style is chosen.
+  const rIcon = (name, sz) => I("target", sz);
+  // "6:30 PM" → minutes since midnight, to order a day's Full Body workouts newest first
+  const minOf = (t) => { const [hm, ap] = t.split(" "), [h, m] = hm.split(":").map(Number); return (h % 12 + (ap === "PM" ? 12 : 0)) * 60 + m; };
+  /* One Full Body workout: always open, no toggle. Two or more: newest first; the newest
+     starts open, older ones show only their label until tapped; tapping a label opens or
+     closes that workout. */
+  function fbGroups(d) {
+    const list = d.routines.slice().sort((a, b) => minOf(b.at || "12:00 AM") - minOf(a.at || "12:00 AM"));
+    if (list.length === 1) { const r = list[0];
+      return `<div class="fbc-grp fbc-fbt"><span class="l">${fbTitle(r)}</span>${fbPill(r)}</div>` + r.ex.map(fbRow).join(""); }
+    return list.map((r, i) => `<div class="fbc-fbg${i === 0 ? " open" : ""}">
+        <button class="fbc-grp fbc-fbt fbc-grp-t" onclick="FBCards.fold(this)" aria-expanded="${i === 0}">
+          <span class="l">${fbTitle(r)}</span><span class="r">${fbPill(r)}<span class="fbc-fbt-chev">${I("chevron", 16)}</span></span></button>
+        <div class="fbc-fbg-rows">${r.ex.map(fbRow).join("")}</div></div>`).join("");
   }
 
   function dayCard(d) {
-    if (!d.routines) return feedCard(d);                       // routine-only day = the routine card
-    const RMAX = 1, SMAX = 3;
-    const rb = d.routines.map(routineBlock), sr = d.singles.map(singleRow);
-    const routines = rb.slice(0, RMAX).join("") + hiddenBox(rb.slice(RMAX), "routine");
-    const singles = !sr.length ? "" : `<div class="fbc-sec">${I("camera", 12)} AI workouts</div>${sr.slice(0, SMAX).join("")}${hiddenBox(sr.slice(SMAX), "workout")}`;
-    return `<div class="vb-card fbc-card fbc-day">
-      <div class="vb-top">${av(d.name, 52)}
-        <div class="vb-who"><div class="n">${d.name}<span class="tm"> · ${d.t}</span></div>
-          <div class="s">${daySubtitle(d)}</div></div>
-        <div class="vb-tot"><div class="v">${dayReps(d)}</div><div class="k">TOTAL REPS</div></div></div>
-      <div class="fbc-daymeta"><span>${I("clock", 12)} ${dayTime(d)} active</span><span>${I("flame", 12)} ${dayKcal(d)} kcal</span><span>${I("activity", 12)} ${d.routines.length + d.singles.length} workouts</span></div>
-      ${routines}${singles}
-      ${loveBar(d)}</div>`;
-  }
-  // a singles-only day is today's V2 card — rendered the V2 way so the canvas proves nothing changes
-  function v2Card(d) {
-    const rows = d.singles.map((x) => `<div class="vb-row" style="--exc:${exi(x.k).c}"><span class="fbc-ei">${WX(x.k, 20)}</span><span class="en">${exi(x.k).n}</span><span class="er">${x.reps}<small>reps</small></span></div>`).join("");
-    return `<div class="vb-card">
+    const fb = d.routines.length ? fbGroups(d) : "";
+    const ai = d.singles.length ? (d.routines.length ? groupLabel(`${I("camera", 12)} AI workouts`) : "") + d.singles.map((x) => dayRow(x.k, x.reps)).join("") : "";
+    return `<div class="vb-card fbc-card">
       <div class="vb-top">${av(d.name, 52)}
         <div class="vb-who"><div class="n">${d.name}<span class="tm"> · ${d.t}</span></div><div class="s">${daySubtitle(d)}</div></div>
         <div class="vb-tot"><div class="v">${dayReps(d)}</div><div class="k">TOTAL REPS</div></div></div>
-      ${rows}${loveBar(d)}</div>`;
+      ${fb}${ai}
+      ${loveBar(d)}</div>`;
   }
 
   function dayRules() {
     return `<div class="fbc-notes fbc-rules">
-      <h3>${I("check", 15)} Which state is used</h3>
+      <h3>${I("check", 15)} One card for every day</h3>
       <table class="fbc-tbl">
-        <tr><th>The day has</th><th>State</th></tr>
-        <tr><td>Only AI workouts</td><td><b>A</b> · total reps hero, one row per exercise</td></tr>
-        <tr><td>Exactly one routine, nothing else</td><td><b>B</b> · score ring hero, stats, exercise bars, "Try" link</td></tr>
-        <tr><td>A routine + any AI workout</td><td><b>C</b> · total reps hero, routine tile, then workouts</td></tr>
-        <tr><td>2+ routines (with or without workouts)</td><td><b>C</b> · one tile per routine</td></tr>
+        <tr><th>The day has</th><th>Card</th></tr>
+        <tr><td>Only AI workouts</td><td>Exercise rows (today's card)</td></tr>
+        <tr><td>Only a Full Body workout</td><td>Same rows under a "Full Body" label</td></tr>
+        <tr><td>Full Body + AI workouts</td><td>Full Body group, then an "AI workouts" group</td></tr>
+        <tr><td>2+ Full Body workouts</td><td>One labelled group per workout</td></tr>
       </table>
       <ul>
-        <li><b>States change during the day.</b> Someone who does Total Body at 7 AM shows state B. If they do squats at noon, the same card becomes state C (no new card). Each update moves the card back to the top of the feed. The newest row gets a <b>New</b> tag for an hour. Loves stay with the card. Activity cards have no view count and no Share button; only media posts do.</li>
-        <li><b>No double counting.</b> A routine's reps stay inside its block. A single-exercise row only counts reps done outside routines. The header total is both.</li>
-        <li><b>Order.</b> Routines come first because they carry the score, and the newest one is on top. AI workouts follow, newest first.</li>
-        <li><b>Length is capped.</b> The card shows 1 routine and 3 workouts. Anything more goes behind "+N more", so a busy day never takes over the feed.</li>
-        <li><b>The score belongs to the routine, never to the day.</b> A day has no score, so a strong routine isn't watered down by a quick set of squats.</li>
-        <li><b>Ended-early routines don't appear.</b> They stay in the user's log. The day's other workouts still show.</li>
+        <li><b>Same design everywhere.</b> Header, rows and Love bar never change. The only Full Body marker is its group label, with the score and level as text.</li>
+        <li><b>Full Body rows show progress.</b> Each exercise has a bar and done/target, with ✓ when met. AI-workout rows stay as they are.</li>
+        <li><b>Two or more Full Body workouts fold.</b> Newest first; the newest starts open, older ones show only their label until tapped. A single Full Body workout is always open.</li>
+        <li><b>The card grows through the day.</b> A new workout updates the same card and moves it back to the top of the feed. Loves stay with it.</li>
+        <li><b>No double counting.</b> A Full Body workout's reps stay in its group; the AI-workout rows only count reps done outside it. TOTAL REPS is both.</li>
+        <li><b>Order.</b> Full Body workouts first, newest on top (by the time each was done), then AI workouts.</li>
+        <li><b>Ended-early Full Body workouts don't get a group.</b> They stay in the user's own log.</li>
       </ul>
       <h3>${I("sliders", 15)} Data</h3>
-      <p>The per-day, per-exercise totals stay as they are. The day's activity summary adds <code>routines: [ … ]</code>, the routine record described in the notes below. The server works out the single-exercise rows as the day total minus routine reps, per exercise. When <code>routines</code> is empty, older app versions render exactly what they render today.</p>
+      <p>The per-day, per-exercise totals stay as they are. The day's activity summary adds <code>routines: [ … ]</code> (name, level, score, reps per exercise). The server works out the AI-workout rows as the day total minus Full Body reps, per exercise. When <code>routines</code> is empty, older app versions render exactly what they render today.</p>
     </div>`;
   }
 
@@ -259,7 +203,7 @@ window.FBCards = (function () {
   // the person's own routine runs today (My Activity examples + detail sheet)
   const MINE = {
     tb1: R(SESS.mine, { t: "7:40 AM", at: "7:40 AM" }),
-    cb1: { routine: "Cardio Blast", level: "Intermediate", score: 86, dur: "2:05", t: "6:15 PM", at: "6:15 PM",
+    cb1: { routine: "Full Body Burn", level: "Intermediate", score: 86, dur: "2:05", t: "6:15 PM", at: "6:15 PM",
       ex: [["jumping", 30, 30], ["highknee", 36, 40]] },
     tb2: R(SESS.partial, { t: "6:30 PM", at: "6:30 PM" }),
   };
@@ -492,13 +436,12 @@ window.FBCards = (function () {
         <li><b>3 exercises, then "+N more".</b> The collapsed list is the Hevy feed pattern. Long routines never take over the feed.</li>
         <li><b>Status never shames.</b> Green appears only when every target is hit. Partial reads "4 of 5 at target" in neutral grey. Ended-early sessions stay in your own log by default and are never posted automatically.</li>
         <li><b>"AI-counted", not "verified".</b> Users have learned not to fully trust auto-counted reps (see Garmin reviews). The chip says how the reps were counted without overclaiming.</li>
-        <li><b>"Try Total Body".</b> Every routine post links to the routine, which turns the feed into a way to discover routines (Hevy's save-as-routine).</li>
         <li><b>Colour is never the only signal.</b> Every arc and bar sits next to the exercise name, icon and rep count.</li>
       </ul>
       <h3>${I("sliders", 15)} What the apps need</h3>
       <p>Today both apps store <b>one total per user, day and exercise type</b>. An ACTIVITY post is a per-day summary the server builds ("Completed a 5-exercise session"), with no routine, level or score. These cards need a routine record next to it:</p>
       <pre>routine: {
-  id: "total-body", name: "Total Body",
+  id: "total-body", name: "Full Body Max",
   level: "intermediate", score: 94,
   status: "completed" | "partial" | "ended",
   durationSeconds: 252, sessionId: "…",
@@ -514,13 +457,13 @@ window.FBCards = (function () {
       <div class="cv-head"><h1>Full Body · Activity &amp; Post cards</h1>
         <p>How a routine appears in the feed, My Activity and shared stories. One signature: the routine ring.</p></div>
       <div class="cv-scroll"><div class="cv-wrap">
-        ${col("FEED", "Daily card", "One feed card per person per day. It's the same card all day; its layout changes with what the person has done so far.",
+        ${col("FEED", "Daily card", "One feed card per person per day, in one design. A Full Body workout is a labelled group of the same exercise rows.",
           `<div class="cv-panel mx-feed boxed fbc-panel">
-            ${state("A", "AI workouts only", "Shown when the person did only normal AI workouts today (no routine). Same as today's community card.")}${v2Card(DAYS.singlesOnly)}
-            ${state("B", "One routine only: completed", "Shown when the only thing done today is one Full Body routine. The score ring is the hero.")}${feedCard(SESS.complete)}
-            ${state("B", "One routine only: partial", "Same state when some targets were missed. Neutral grey, never red.")}${feedCard(SESS.partial)}
-            ${state("C", "Routine + AI workouts", "Shown as soon as a day has a routine plus any other workout, or more than one routine. The header switches to the day's total reps; the routine becomes a tile with its own ring.")}${dayCard(DAYS.mixed)}
-            ${state("C", "Busy day: capped", "State C with lots of activity: 1 routine and 3 workouts are shown, the rest go behind \"+N more\".")}${dayCard(DAYS.heavy)}
+            ${state("A", "AI workouts only", "Only normal AI workouts today. Today's community card.")}${dayCard(DAYS.singlesOnly)}
+            ${state("B", "Full Body only", "Only a Full Body workout today: the same rows, under a Full Body label with score and level.")}${dayCard(DAYS.routineOnly)}
+            ${state("C", "Full Body + AI workouts", "A Full Body group first, then the AI workouts under their own label.")}${dayCard(DAYS.mixed)}
+            ${state("C", "Two different Full Body workouts + 4 AI workouts", "Newest first. The newest is open; tap an older one's label to open it.")}${dayCard(DAYS.heavy)}
+            ${state("C", "Same Full Body workout twice", "Each run is its own group, newest first; tap a label to open or close it.")}${dayCard(DAYS.sameTwice)}
           </div>${dayRules()}`)}
         ${col("FEED", "Video post", "A recorded Full Body clip keeps its routine context instead of posting as a plain GENERAL video.",
           `<div class="cv-panel mx-feed boxed fbc-panel">${label("Recorded routine")}${videoCard(SESS.video)}</div>`)}
@@ -528,7 +471,7 @@ window.FBCards = (function () {
           `<div class="cv-panel fbc-panel">
             ${label("Two different routines + AI workouts")}${myActivity("two")}
             ${label("Same routine twice today")}${myActivity("same")}
-            <div class="fbc-hint">${I("info", 14)}<span><b>Tap a Total Body or Cardio Blast tile</b> to open its detail sheet; tap <b>Share</b> for the "Share your day" sheet. Newest run sits first; the time under the name tells two runs of the same routine apart.</span></div>
+            <div class="fbc-hint">${I("info", 14)}<span><b>Tap a Full Body Max or Full Body Burn tile</b> to open its detail sheet; tap <b>Share</b> for the "Share your day" sheet. Newest run sits first; the time under the name tells two runs of the same routine apart.</span></div>
             ${label("Detail sheet (on tap)")}<div class="fbc-sheet-prev"><div class="bz-grip"></div>${logCard(MINE.tb1, true, true)}</div></div>`)}
         ${col("SHARE", "My Activities · Share your day", "What tapping Share in My Activities produces, for every kind of day. Post · Save · Share as in the app today.", shareColumn())}
         ${col("SHARE", "Results story", "9:16 image shared from a single routine's results screen, with the ring as the hero.",
@@ -537,22 +480,8 @@ window.FBCards = (function () {
     window.Icons.init(el);
   }
 
-  function breakdown(btn) {
-    const box = btn.previousElementSibling, open = box.hasAttribute("hidden");
-    if (open) box.removeAttribute("hidden"); else box.setAttribute("hidden", "");
-    btn.classList.toggle("open", open);
-    btn.querySelector("span").textContent = open ? "Hide breakdown" : "Breakdown";
-  }
-  function more(btn, noun) {
-    const box = btn.previousElementSibling;
-    const open = box.hasAttribute("hidden");
-    if (open) box.removeAttribute("hidden"); else box.setAttribute("hidden", "");
-    btn.classList.toggle("open", open);
-    const n = box.children.length;
-    noun = noun || "exercise";
-    btn.querySelector("span").textContent = open ? "Show less" : `${n} more ${noun}${n > 1 ? "s" : ""}`;
-  }
   function toggle(card) { card.classList.toggle("open"); }
+  function fold(btn) { const g = btn.parentElement, open = !g.classList.contains("open"); g.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); }
 
-  return { start, more, breakdown, toggle, detail, shareDay, act, ring };
+  return { start, toggle, fold, detail, shareDay, act, ring };
 })();

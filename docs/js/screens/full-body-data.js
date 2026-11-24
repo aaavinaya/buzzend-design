@@ -6,8 +6,8 @@
 window.FullBody = (function () {
 
   /* Per-exercise camera framing, lifted from the pose engine's gates (aiflow GUIDE).
-     Single-framing routines only mix exercises that share a framing; Total Body is the
-     one mixed routine and cues the user whenever the framing changes.
+     Every routine runs the front-on cardio moves first, then the side-on moves, so the user
+     repositions the phone once and is cued at that change.
      c = the exercise's identity colour (timer ring, progress segments, list tints). */
   const EX = {
     squat:    { n: "Squats",        i: "squat",     frame: "Side-on · phone at knee height", kcal: 0.45, c: "#C56DE2" },
@@ -20,45 +20,45 @@ window.FullBody = (function () {
   const REST_COLOR = "#64748B";
 
   const LEVELS = [
-    { id: "beginner",     n: "Beginner",     d: "Accessible reps · longer rest" },
-    { id: "intermediate", n: "Intermediate", d: "Moderate reps · balanced pace" },
-    { id: "expert",       n: "Expert",       d: "High reps · short rest · more rounds" },
+    { id: "beginner",     n: "Easy",   d: "Accessible reps · longer rest" },
+    { id: "intermediate", n: "Medium", d: "Moderate reps · balanced pace" },
+    { id: "expert",       n: "Hard",   d: "High reps · short rest · faster pace" },
   ];
 
   /* reps = target per exercise · sec = pacing target (seconds for that set, used for the
      "within pace" score and the soft time guide) · rest = seconds between sets · rounds = circuits. */
   const ROUTINES = [
     {
-      id: "total-body", name: "Total Body", focus: "Full body", setup: "mixed",
-      frame: "Side-on + front-on", grad: "linear-gradient(135deg,#C56DE2,#2F80ED 55%,#166E7A)",
-      desc: "Every move in one circuit — legs, push, power and cardio, back to back.",
-      steps: ["squat", "pushup", "burpee", "jumping", "highknee"],
+      id: "basics", icon: "fb-basics", name: "Trio", focus: "Beginner friendly", setup: "mixed",
+      frame: "Front-on + side-on", grad: "linear-gradient(135deg,#F5A623,#C56DE2 55%,#166E7A)",
+      desc: "Jumping jacks, high knees and squats — a simple full-body start.",
+      steps: ["jumping", "highknee", "squat"],
       levels: {
-        beginner:     { reps: { squat: 12, pushup: 8,  burpee: 6,  jumping: 20, highknee: 24 }, rest: 25, rounds: 1, sec: { squat: 30, pushup: 24, burpee: 24, jumping: 30, highknee: 28 } },
-        intermediate: { reps: { squat: 18, pushup: 12, burpee: 10, jumping: 30, highknee: 40 }, rest: 18, rounds: 1, sec: { squat: 40, pushup: 34, burpee: 36, jumping: 40, highknee: 40 } },
-        expert:       { reps: { squat: 25, pushup: 18, burpee: 15, jumping: 45, highknee: 60 }, rest: 12, rounds: 1, sec: { squat: 50, pushup: 46, burpee: 50, jumping: 55, highknee: 55 } },
+        beginner:     { reps: { jumping: 20, highknee: 20, squat: 15 }, rest: 25, rounds: 1, sec: { jumping: 30, highknee: 35, squat: 40 } },
+        intermediate: { reps: { jumping: 30, highknee: 35, squat: 20 }, rest: 20, rounds: 1, sec: { jumping: 40, highknee: 50, squat: 45 } },
+        expert:       { reps: { jumping: 50, highknee: 55, squat: 40 }, rest: 15, rounds: 1, sec: { jumping: 65, highknee: 65, squat: 80 } },
       },
     },
     {
-      id: "lower-power", name: "Lower Power", focus: "Legs + explosive", setup: "side",
-      frame: "Side-on · knee height", grad: "linear-gradient(135deg,#C56DE2,#2F80ED)",
-      desc: "A standing lower-body circuit: squats, then a burst of burpees.",
-      steps: ["squat", "burpee"],
+      id: "power", icon: "fb-strength", name: "Quad", focus: "Strength + cardio", setup: "mixed",
+      frame: "Front-on + side-on", grad: "linear-gradient(135deg,#166E7A,#C56DE2 55%,#F5A623)",
+      desc: "Cardio to warm up, then squats and push-ups for strength.",
+      steps: ["jumping", "highknee", "squat", "pushup"],
       levels: {
-        beginner:     { reps: { squat: 12, burpee: 6 },  rest: 25, rounds: 1, sec: { squat: 30, burpee: 24 } },
-        intermediate: { reps: { squat: 18, burpee: 10 }, rest: 18, rounds: 1, sec: { squat: 40, burpee: 36 } },
-        expert:       { reps: { squat: 25, burpee: 15 }, rest: 12, rounds: 1, sec: { squat: 50, burpee: 50 } },
+        beginner:     { reps: { jumping: 20, highknee: 25, squat: 15, pushup: 10 }, rest: 25, rounds: 1, sec: { jumping: 30, highknee: 45, squat: 40, pushup: 30 } },
+        intermediate: { reps: { jumping: 40, highknee: 40, squat: 30, pushup: 15 }, rest: 20, rounds: 1, sec: { jumping: 55, highknee: 55, squat: 70, pushup: 45 } },
+        expert:       { reps: { jumping: 50, highknee: 55, squat: 40, pushup: 25 }, rest: 15, rounds: 1, sec: { jumping: 65, highknee: 65, squat: 80, pushup: 65 } },
       },
     },
     {
-      id: "cardio-blast", name: "Cardio Blast", focus: "Cardio", setup: "front",
-      frame: "Front-on", grad: "linear-gradient(135deg,#166E7A,#A1663A)",
-      desc: "Face-on cardio intervals to spike your heart rate and keep it there.",
-      steps: ["jumping", "highknee"],
+      id: "total-body", icon: "fb-max", name: "Penta", focus: "All-out", setup: "mixed",
+      frame: "Front-on + side-on", grad: "linear-gradient(135deg,#C56DE2,#2F80ED 55%,#166E7A)",
+      desc: "Every move in one circuit — cardio, legs, push and a burpee finish.",
+      steps: ["jumping", "highknee", "squat", "pushup", "burpee"],
       levels: {
-        beginner:     { reps: { jumping: 20, highknee: 24 }, rest: 20, rounds: 1, sec: { jumping: 30, highknee: 28 } },
-        intermediate: { reps: { jumping: 30, highknee: 40 }, rest: 15, rounds: 1, sec: { jumping: 40, highknee: 40 } },
-        expert:       { reps: { jumping: 45, highknee: 60 }, rest: 10, rounds: 1, sec: { jumping: 55, highknee: 55 } },
+        beginner:     { reps: { jumping: 20, highknee: 25, squat: 15, pushup: 10, burpee: 10 }, rest: 25, rounds: 1, sec: { jumping: 30, highknee: 45, squat: 40, pushup: 30, burpee: 40 } },
+        intermediate: { reps: { jumping: 40, highknee: 40, squat: 30, pushup: 20, burpee: 15 }, rest: 20, rounds: 1, sec: { jumping: 55, highknee: 55, squat: 70, pushup: 60, burpee: 55 } },
+        expert:       { reps: { jumping: 60, highknee: 60, squat: 50, pushup: 30, burpee: 25 }, rest: 15, rounds: 1, sec: { jumping: 75, highknee: 70, squat: 100, pushup: 80, burpee: 85 } },
       },
     },
   ];
@@ -122,7 +122,7 @@ window.FullBody = (function () {
 
   /* status from the per-set results + whether the user ended early. */
   function status(results, planned, ended) {
-    if (ended) return { key: "interrupted", label: "Interrupted" };
+    if (ended) return { key: "ended", label: "Ended early" };
     const allDone = results.length >= planned && results.every((r) => r.done >= r.target);
     if (allDone) return { key: "completed", label: "Completed" };
     return { key: "partial", label: "Partially completed" };
@@ -131,7 +131,7 @@ window.FullBody = (function () {
   const cheer = (st) => ({
     completed: "Every target met — that's a clean sweep. Strong work! 💪",
     partial: "You showed up and put in real work. Chip away at those targets next time. 🙌",
-    interrupted: "Something came up — no worries. The work you did still counts. 👍",
+    ended: "Something came up — no worries. The work you did still counts. 👍",
   }[st]);
 
   return { EX, REST_COLOR, LEVELS, ROUTINES, routine, buildSequence, totalExercises, totalReps, estSeconds, estMinutes, score, stars, band, status, cheer };

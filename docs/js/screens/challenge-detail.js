@@ -33,7 +33,7 @@ window.CDetail = (function () {
       return `<div class="cd-m"><span class="rk">${b.rank}</span><div class="av" style="background-image:${grad(b.p.av)}">${m ? `<span class="medal">${m}</span>` : ""}</div>
         <span class="nm">${b.p.me ? "You" : b.p.name}${b.p.me ? '<span class="you">YOU</span>' : ""}${b.rank === 1 ? ' <span class="crown">· Leader</span>' : ""}</span>
         <span class="reps"><span class="z">${I("zap", 13)}</span>${fmt(b.v)} <small>reps</small></span></div>`; };
-    return `<div class="cd-attempts" style="padding-top:14px">${fmt(C.members)} members · ranked by reps</div>${B.map(row).join("")}<div style="height:14px"></div>`;
+    return `<div class="cd-attempts" style="padding-top:14px">${membersVal()} members · ranked by reps</div>${B.map(row).join("")}<div style="height:14px"></div>`;
   }
   function postsView() {
     if (!POSTS.length) return `<div class="cd-empty">${I("play", 34)}<div class="t">No posts yet</div><div class="d">Be the first to share a clip from this challenge.</div></div>`;
@@ -54,9 +54,20 @@ window.CDetail = (function () {
   }
 
   // ── CTA (role + status aware) ──
+  /* Join requests waiting for the creator (approval-gated challenges). */
+  const REQS0 = [
+    { id: "r1", name: "Priya Lama", username: "priya.lama", av: "#c9a6a6,#a87766" },
+    { id: "r2", name: "Om Joshi", username: "omjoshi", av: "#a6c9b5,#5e996f" },
+    { id: "r3", name: "Bina Thapa", username: "bina_t", av: "#caa6c9,#9a5e96" },
+  ];
+  let REQS = REQS0.slice();
+  /* CTA, following the app (ChallengeDetailView.ctaRow): approval ON → "Request to join"; after asking →
+     a disabled "Requested — waiting for approval" pill + Cancel; approval OFF → "Join Challenge". */
   function cta() {
     if (C.status === "ended" || C.status === "expired") return `<button class="cd-primary" disabled>Challenge ended</button>`;
-    if (cur.role === "viewer") return `<button class="cd-primary" onclick="CDetail.join()">${C.vis === "Private" ? I("lock", 17) + " Request to join" : "Join Challenge"}</button>`;
+    if (cur.role === "requested") return `<button class="cd-primary" disabled>Requested — waiting for approval</button>
+      <button class="cd-cancelreq" onclick="CDetail.cancelRequest()">Cancel</button>`;
+    if (cur.role === "viewer") return `<button class="cd-primary" onclick="CDetail.join()">${C.approval ? "Request to join" : "Join Challenge"}</button>`;
     return `<button class="cd-primary" onclick="CDetail.record()">${I("camera", 18)} Record ${exName()}</button>
       <button class="cd-chatbtn" onclick="CDetail.chat()">${I("comment", 20)}<span class="bdg">3</span></button>`;
   }
@@ -97,6 +108,25 @@ window.CDetail = (function () {
         ${champPrize ? `<div class="cd7-champ-prize">${I("medal", 14)} <span>${champPrize}</span></div>` : ""}</div>
       ${ru}</div>`;
   }
+  /* Private member limit (PrivateLimit, up to 10 incl. the admin). ONLY the admin sees "x / 10", the
+     almost-full note, the full banner and the support links; everyone else sees a normal private challenge. */
+  let PRIV = null;   // { limit: 10 | null (support raised it) } when this challenge is private
+  const isAdmin = () => cur.role === "creator";
+  const limited = () => PRIV && PRIV.limit;
+  const room = () => limited() ? PRIV.limit - C.members : Infinity;
+  const isFull = () => limited() && C.members >= PRIV.limit;
+  const membersVal = () => isAdmin() && limited() ? `${C.members} / ${PRIV.limit}` : fmt(C.members);
+  function limitBlock() {
+    if (!PRIV || !isAdmin() || !limited() || C.status === "ended") return "";
+    const left = room();
+    if (left <= 0) return `<div class="pl-full">
+      <div class="pl-full-h">${I("lock", 18)}<b>Your private challenge is full</b></div>
+      <div class="pl-full-d">${C.members} of ${PRIV.limit} members. New people can still request to join, but you can't approve them until a place frees up.</div>
+      <button class="pl-full-btn" onclick="CDetail.support()">${I("comment", 16)} Contact support for more members</button></div>`;
+    if (left <= 2) return `<div class="pl-note">${I("users", 14)}<span>${left} place${left > 1 ? "s" : ""} left · Need more? <button class="pl-link" onclick="CDetail.support()">Contact support</button></span></div>`;
+    return "";
+  }
+  function support() { PrivateLimit.contactSupport(C.title); }
   function v7() {
     /* The EXERCISE cell carries the exercise ILLUSTRATION, the other three carry stroke glyphs, and the
        app sizes them differently on purpose (28 vs 17): a stroke glyph fills its own box, while an
@@ -108,10 +138,10 @@ window.CDetail = (function () {
         <div class="h1">${C.title}</div>
         <div class="cr"><div class="av" style="background-image:${grad(C.byAv)}"></div>by ${C.by} ${badge()}</div></div>
       ${ended ? winnersBlock() : ""}
-      <div class="cd7-grid">${cell(exIcon(), "Exercise", exName(), 28)}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", fmt(C.members))}${cell("clock", ended ? "Ran for" : "Days left", ended ? C.days + "d" : daysLeft())}</div>
+      <div class="cd7-grid">${cell(exIcon(), "Exercise", exName(), 28)}${cell("activity", "Schedule", C.freq)}${cell("users", "Members", membersVal())}${cell("clock", ended ? "Ran for" : "Days left", ended ? C.days + "d" : daysLeft())}</div>
       ${about(mchip("calendar", C.range) + mchip(C.vis === "Public" ? "users" : "lock", C.vis) + mchip("shield", C.approval ? "Approval required" : "Open to join"))}
       ${!ended && hasPrizes ? prizesBlock() : ""}
-      <div class="cd7-cta">${cta()}</div>${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
+      <div class="cd7-cta">${cta()}</div>${limitBlock()}${joinRequests()}${tabbar()}<div class="cd-sub">${subview(cur.tab)}</div>`;
   }
 
   function render() { root.innerHTML = v7(); window.Icons.init(root); root.scrollTop = 0; }
@@ -120,7 +150,23 @@ window.CDetail = (function () {
   let root;
   function setTab(t) { cur.tab = t; render(); }
   function back() { location.href = "challenges.html"; }
-  function join() { cur.role = "member"; render(); Buzzend.alert({ icon: "trophy", title: "You're in!", message: "You joined “" + C.title + "”. Record a set to climb the board." }); }
+  function join() {
+    if (C.approval) {   // approval-gated: send a request, never a direct join
+      cur.role = "requested"; render();
+      Buzzend.alert({ icon: "send", title: "Request sent", message: "The creator of “" + C.title + "” will review your request to join." });
+      return;
+    }
+    if (isFull()) { PrivateLimit.joinFullDialog(); return; }
+    cur.role = "member"; render(); Buzzend.alert({ icon: "trophy", title: "You're in!", message: "You joined “" + C.title + "”. Record a set to climb the board." });
+  }
+  function cancelRequest() { cur.role = "viewer"; render(); }
+  // creator: "Join requests · N waiting for your review" under the CTA (only while there are requests)
+  const joinRequests = () => cur.role === "creator" && C.approval && REQS.length && C.status !== "ended"
+    ? `<div class="cd-jr">${JoinRequests.entry(REQS.length, "CDetail.openRequests()")}</div>` : "";
+  function openRequests() {
+    JoinRequests.open(REQS.slice(), { name: C.title, room,
+      onChange: (list, r, ok) => { REQS = list; if (ok) C.members += 1; render(); } });
+  }
   function record() { location.href = "../workout/moment.html"; }
 
   // sheets
@@ -153,7 +199,9 @@ window.CDetail = (function () {
   }
   function likers(i) { openPeople("Liked by", "heart", POSTS[i].likes, i + 1); }
   function viewers(i) { openPeople("Viewed by", "eye", POSTS[i].views, i + 4); }
-  function act(a) { close(); const msg = { edit: ["edit", "Edit challenge", "Opens the create wizard pre-filled with this challenge."], cover: ["image", "Change cover", "Pick a new cover image for this challenge."], invite: ["share", "Invite code: SQ7X2A", "Share this code or link so friends can join instantly."] }[a]; Buzzend.alert({ icon: msg[0], title: msg[1], message: msg[2] }); }
+  function act(a) { close(); const msg = { edit: ["edit", "Edit challenge", "Opens the create wizard pre-filled with this challenge."], cover: ["image", "Change cover", "Pick a new cover image for this challenge."], invite: ["share", "Invite code: SQ7X2A", isAdmin() && isFull()
+      ? "Your challenge is full. New people can request to join, but can't get in until a place frees up."
+      : "Share this code or link so friends can join instantly."] }[a]; Buzzend.alert({ icon: msg[0], title: msg[1], message: msg[2] }); }
 
   // report
   const REASONS = ["User is posting abusive content", "User may be under the age of 18", "Something else"];
@@ -181,13 +229,21 @@ window.CDetail = (function () {
   }
 
   function start(mountEl, role, tab, status) {
+    REQS = REQS0.slice();
     root = mountEl; cur.role = (role === "owner" ? "creator" : role) || "viewer"; cur.tab = tab === "posts" ? "posts" : "members";
     C.status = status || "active";   // preview: ?status=ended shows the Winners state
     const q = new URLSearchParams(location.search);
     const pc = q.get("prizes");   // preview: ?prizes=0|1|2|3
     C.prizes = PRIZES_ALL.slice(0, pc == null ? PRIZES_ALL.length : +pc);
     if (q.get("approval") != null) C.approval = q.get("approval") !== "0";   // preview: ?approval=0 → open to join
+    PRIV = null; C.vis = "Public"; C.members = 245; C.approval = q.get("approval") === "0" ? false : true;
+    if (status && status.startsWith("priv:")) {   // private-limit states (challenge-detail.html switcher)
+      const k = status.slice(5); C.status = "active"; C.vis = "Private"; PRIV = { limit: PrivateLimit.LIMIT };
+      ({ new: () => { C.members = 1; REQS = []; }, almost: () => { C.members = 8; }, full: () => { C.members = 10; },
+         nolimit: () => { C.members = 23; PRIV.limit = null; }, member: () => { C.members = 10; },
+         requested: () => { C.members = 10; }, joinfull: () => { C.members = 10; C.approval = false; } }[k] || (() => {}))();
+    }
     render();
   }
-  return { start, render, setTab, back, join, record, menu, postMenu, likers, viewers, act, report, pickReason, submitReport, renderReport, confirmLeave, doLeave, confirmDelete, doDelete, chat, close };
+  return { start, render, support, setTab, back, join, cancelRequest, openRequests, record, menu, postMenu, likers, viewers, act, report, pickReason, submitReport, renderReport, confirmLeave, doLeave, confirmDelete, doDelete, chat, close };
 })();

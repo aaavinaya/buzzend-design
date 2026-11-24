@@ -18,26 +18,84 @@
     <span class="g">Classic</span>
     <button data-v="poster" onclick="setV('poster')">Poster</button>
     <button data-v="winners" onclick="setV('winners')">Winners</button>
+    <span class="g">Private · up to 10</span>
+    <button data-v="pNew" onclick="setV('pNew')">Admin · 1 / 10</button>
+    <button data-v="pAlmost" onclick="setV('pAlmost')">Admin · 8 / 10</button>
+    <button data-v="pFull" onclick="setV('pFull')">Admin · full, requests waiting</button>
+    <button data-v="pNoLimit" onclick="setV('pNoLimit')">Admin · no limit</button>
+    <button data-v="pMember" onclick="setV('pMember')">Member view</button>
+    <button data-v="pRequested" onclick="setV('pRequested')">Viewer · requested</button>
+    <button data-v="pJoinFull" onclick="setV('pJoinFull')">Viewer · join by link (full)</button>
     <span class="g">Elimination</span>
-    <button data-v="upcoming" onclick="setV('upcoming')">Upcoming</button>
-    <button data-v="safe" onclick="setV('safe')">Safe</button>
-    <button data-v="risk" onclick="setV('risk')">At risk</button>
+    <button data-v="upcoming" onclick="setV('upcoming')">Not started</button>
+    <button data-v="upcomingM" onclick="setV('upcomingM')">Not started · member</button>
+    <button data-v="under" onclick="setV('under')">Under target</button>
+    <button data-v="done" onclick="setV('done')">Done today</button>
+    <button data-v="pending" onclick="setV('pending')">Results pending</button>
     <button data-v="out" onclick="setV('out')">Out</button>
-    <button data-v="locking" onclick="setV('locking')">Locking in</button>
+    <button data-v="viewer1" onclick="setV('viewer1')">Day 1 · joining closed</button>
+    <button data-v="closed" onclick="setV('closed')">Joining closed</button>
     <button data-v="won" onclick="setV('won')">Won</button>
-    <button data-v="final" onclick="setV('final')">Finished #2</button>
-    <button data-v="left" onclick="setV('left')">Left</button>
+    <button data-v="finished" onclick="setV('finished')">Finished 4th</button>
+    <button data-v="lostEnd" onclick="setV('lostEnd')">Ended · out</button>
     <button data-v="nowinner" onclick="setV('nowinner')">No winner</button>
-    <span class="g">Moments</span>
-    <button onclick="CElim.moment('through')">Through</button>
+    <button data-v="steps" onclick="setV('steps')">Steps</button>
+    <span class="g">Multi</span>
+    <button data-v="mStd" onclick="setV('mStd')">Standard</button>
+    <button data-v="mStd0" onclick="setV('mStd0')">Nobody started</button>
+    <button data-v="mStdEnd" onclick="setV('mStdEnd')">Ended</button>
+    <button data-v="mEl" onclick="setV('mEl')">Elim · 2 left</button>
+    <button data-v="mElSafe" onclick="setV('mElSafe')">Elim · safe</button>
+    <button data-v="mElOut" onclick="setV('mElOut')">Elim · out</button>
+    <button data-v="mElClosed" onclick="setV('mElClosed')">Elim · joining closed</button>
+    <button data-v="mElEnd" onclick="setV('mElEnd')">Elim · ended</button>
+    <span class="g">Full Body</span>
+    <button data-v="fStd" onclick="setV('fStd')">Standard</button>
+    <button data-v="fStd0" onclick="setV('fStd0')">0 reps</button>
+    <button data-v="fStdUp" onclick="setV('fStdUp')">Not started</button>
+    <button data-v="fStdFull" onclick="setV('fStdFull')">Private · full (viewer)</button>
+    <button data-v="fEl" onclick="setV('fEl')">Elim · not finished</button>
+    <button data-v="fElStop" onclick="setV('fElStop')">Elim · stopped</button>
+    <button data-v="fElDone" onclick="setV('fElDone')">Elim · done</button>
+    <button data-v="fElOut" onclick="setV('fElOut')">Elim · out</button>
+    <button data-v="fElEnd" onclick="setV('fElEnd')">Elim · won</button>
+    <span class="g">Role</span>
+    <button data-r="viewer" onclick="setRole('viewer')">Viewer</button>
+    <button data-r="requested" onclick="setRole('requested')">Requested</button>
+    <button data-r="member" onclick="setRole('member')">Member</button>
+    <button data-r="creator" onclick="setRole('creator')">Creator</button>
+    <span class="g">Pop-ups</span>
+    <button onclick="PrivateLimit.joinFullDialog()">Private · full (join by code)</button>
+    <button onclick="PrivateLimit.tooManyDialog(14, 'Squats Challenge')">Private · Public → Private refused</button>
+    <button onclick="CElim.moment('made')">Made it</button>
     <button onclick="CElim.moment('out')">Out</button>
     <button onclick="CElim.moment('won')">Won</button>
+    <button onclick="CElim.moment('finished')">Finished</button>
+    <button onclick="CMulti.moment('mMade')">Multi · day done</button>
+    <button onclick="CMulti.moment('mOut')">Multi · out</button>
+    <button onclick="CMulti.moment('fMade')">Full Body · day done</button>
+    <button onclick="CMulti.moment('fOut')">Full Body · out</button>
+    <button onclick="CMulti.moment('finished')">Multi · finished</button>
   </div>
+  <button class="cd-switch-btn" onclick="document.body.classList.toggle('cd-sw-open')" aria-label="Show states">☰ States</button>
   <style>
-    /* many states: let the switcher scroll sideways instead of overflowing the viewport */
-    .cd-switch { display: flex; align-items: center; max-width: calc(100vw - 24px); overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-    .cd-switch::-webkit-scrollbar { display: none; }
-    .cd-switch .g { font: 900 10px var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--text-tertiary); padding: 0 4px 0 10px; }
+    /* Prototype state picker: a scrollable panel on the left (groups stacked vertically), so every
+       use case is reachable with a normal scroll. Narrow windows: hidden behind a "States" button. */
+    .cd-switch { top: 16px; bottom: 16px; left: 16px; transform: none; width: 230px; flex-direction: column; align-items: stretch;
+      gap: 2px; padding: 10px; border-radius: 18px; overflow-y: auto; overscroll-behavior: contain; }
+    .cd-switch button { text-align: left; padding: 8px 12px; border-radius: 10px; white-space: normal; }
+    .cd-switch button:hover { background: var(--surface-alt); }
+    .cd-switch button.active { background: var(--primary); color: var(--on-primary); }
+    .cd-switch .g { font: 900 10.5px var(--font); letter-spacing: .6px; text-transform: uppercase; color: var(--text-tertiary);
+      padding: 12px 12px 4px; }
+    .cd-switch .g:first-child { padding-top: 2px; }
+    .cd-switch-btn { display: none; position: fixed; top: 16px; left: 16px; z-index: 130; border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-primary); border-radius: 999px; padding: 9px 14px; font: 800 13px var(--font); box-shadow: var(--shadow-card); cursor: pointer; }
+    @media (max-width: 1000px) {
+      .cd-switch-btn { display: block; }
+      .cd-switch { display: none; top: 62px; }
+      body.cd-sw-open .cd-switch { display: flex; }
+    }
   </style>
   <button class="theme-toggle" onclick="toggleTheme(); CDetail.render()" style="top:64px">🌙</button>
 
@@ -50,23 +108,40 @@
 
   <script src="../../js/components/dialog.js"></script>
   <script src="../../js/components/icons.js"></script>
+  <script src="../../js/components/join-requests.js"></script>
+  <script src="../../js/components/private-limit.js"></script>
   <script src="../../js/screens/social-data.js"></script>
   <script src="../../js/screens/challenge-detail.js"></script>
   <script src="../../js/screens/challenge-elim.js"></script>
+  <script src="../../js/screens/challenge-multi.js"></script>
   <script src="../../js/app.js"></script>
   <script>
     const _p = new URLSearchParams(location.search);
     const app = document.getElementById("app"), sb = document.getElementById("sb");
-    // Classic: poster | winners · Elimination: upcoming | safe | risk | out | locking | won | final | left | nowinner
-    const ELIM = ["upcoming", "safe", "risk", "out", "locking", "won", "final", "left", "nowinner"];
+    // Classic: poster | winners · Elimination (target-based): see the ELIM list
+    // private-limit states: [state, role] — the role is part of the state here (admin vs everyone else)
+    const PRIVS = { pNew: ["new", "creator"], pAlmost: ["almost", "creator"], pFull: ["full", "creator"], pNoLimit: ["nolimit", "creator"],
+      pMember: ["member", "member"], pRequested: ["requested", "requested"], pJoinFull: ["joinfull", "viewer"] };
+    const MULTI = ["mStd", "mStd0", "mStdEnd", "mEl", "mElSafe", "mElOut", "mElClosed", "mElEnd", "fStd", "fStd0", "fStdUp", "fStdFull", "fEl", "fElStop", "fElDone", "fElOut", "fElEnd"];
+    const ELIM = ["upcoming", "upcomingM", "under", "done", "pending", "out", "viewer1", "closed", "won", "finished", "lostEnd", "nowinner", "steps"];
+    // role: viewer | requested (asked to join, waiting) | member | creator (sees "Join requests")
+    let ROLE = _p.get("role") || "viewer", CUR = null;
     function setV(v) {
-      if (ELIM.includes(v)) CElim.start(app, v);
-      else CDetail.start(app, _p.get("role") || "viewer", _p.get("tab"), v === "winners" ? "ended" : null);
+      CUR = v;
+      if (PRIVS[v]) CDetail.start(app, PRIVS[v][1], _p.get("tab"), "priv:" + PRIVS[v][0]);
+      else if (ELIM.includes(v)) CElim.start(app, v, ROLE);
+      else if (MULTI.includes(v)) CMulti.start(app, v, ROLE);
+      else CDetail.start(app, ROLE, _p.get("tab"), v === "winners" ? "ended" : null);
       sb.style.color = "#fff";
       document.querySelectorAll(".state-switch button[data-v]").forEach(b => b.classList.toggle("active", b.dataset.v === v));
-      history.replaceState(null, "", "?v=" + v + (_p.get("role") ? "&role=" + _p.get("role") : ""));
+      document.querySelectorAll(".state-switch button[data-r]").forEach(b => b.classList.toggle("active", b.dataset.r === ROLE));
+      history.replaceState(null, "", "?v=" + v + "&role=" + ROLE);
+      const a = document.querySelector(".state-switch button.active"); if (a) a.scrollIntoView({ block: "nearest" });
     }
-    setV(_p.get("v") || (_p.get("status") === "ended" ? "winners" : _p.get("type") === "elimination" ? "safe" : "poster"));
+    function setRole(r) { ROLE = r; setV(CUR); }
+    // narrow screens: close the picker after choosing a state
+    document.querySelector(".cd-switch").addEventListener("click", (e) => { if (e.target.closest("button")) document.body.classList.remove("cd-sw-open"); });
+    setV(_p.get("v") || (_p.get("status") === "ended" ? "winners" : _p.get("type") === "elimination" ? "under" : "poster"));
   </script>
 </body>
 </html>

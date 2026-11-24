@@ -1,21 +1,21 @@
 {
   "version": 1,
-  "restColor": "#0EA5C6",
+  "restColor": "#64748B",
   "levels": [
     {
       "id": "beginner",
-      "name": "Beginner",
+      "name": "Easy",
       "description": "Accessible reps · longer rest"
     },
     {
       "id": "intermediate",
-      "name": "Intermediate",
+      "name": "Medium",
       "description": "Moderate reps · balanced pace"
     },
     {
       "id": "expert",
-      "name": "Expert",
-      "description": "High reps · short rest · more rounds"
+      "name": "Hard",
+      "description": "High reps · short rest · faster pace"
     }
   ],
   "framings": {
@@ -27,249 +27,278 @@
   "exercises": {
     "squat": {
       "name": "Squats",
-      "color": "#FF7A1A",
+      "color": "#C56DE2",
       "kcalPerRep": 0.45,
       "framing": "side_knee"
     },
     "burpee": {
       "name": "Burpees",
-      "color": "#EF4444",
+      "color": "#2F80ED",
       "kcalPerRep": 0.75,
       "framing": "side_low"
     },
     "pushup": {
       "name": "Push-ups",
-      "color": "#7C3AED",
+      "color": "#F5A623",
       "kcalPerRep": 0.35,
       "framing": "side_floor"
     },
     "jumping": {
       "name": "Jumping Jacks",
-      "color": "#00B37E",
+      "color": "#166E7A",
       "kcalPerRep": 0.25,
       "framing": "front"
     },
     "highknee": {
       "name": "High Knees",
-      "color": "#3B6EFF",
+      "color": "#A1663A",
       "kcalPerRep": 0.22,
       "framing": "front"
     }
   },
   "routines": [
     {
-      "id": "total-body",
-      "name": "Total Body",
-      "focus": "Full body",
-      "description": "Every move in one circuit — legs, push, power and cardio, back to back.",
-      "frame": "Side-on + front-on",
+      "id": "basics",
+      "name": "Trio",
+      "focus": "Beginner friendly",
+      "description": "Jumping jacks, high knees and squats — a simple full-body start.",
+      "frame": "Front-on + side-on",
       "setup": "mixed",
       "mixedFraming": true,
       "gradient": {
         "angle": 135,
         "stops": [
           {
-            "color": "#EF4444",
+            "color": "#F5A623",
             "location": 0
           },
           {
-            "color": "#7C3AED",
+            "color": "#C56DE2",
             "location": 0.55
           },
           {
-            "color": "#3B6EFF",
+            "color": "#166E7A",
             "location": 1
           }
         ]
       },
       "steps": [
-        "squat",
-        "pushup",
-        "burpee",
         "jumping",
-        "highknee"
+        "highknee",
+        "squat"
       ],
       "levels": {
         "beginner": {
           "reps": {
-            "squat": 12,
-            "pushup": 8,
-            "burpee": 6,
             "jumping": 20,
-            "highknee": 24
+            "highknee": 20,
+            "squat": 15
           },
           "rest": 25,
           "rounds": 1,
           "sec": {
-            "squat": 30,
-            "pushup": 24,
-            "burpee": 24,
             "jumping": 30,
-            "highknee": 28
+            "highknee": 35,
+            "squat": 40
           }
         },
         "intermediate": {
           "reps": {
-            "squat": 18,
-            "pushup": 12,
-            "burpee": 10,
             "jumping": 30,
-            "highknee": 40
+            "highknee": 35,
+            "squat": 20
           },
-          "rest": 18,
+          "rest": 20,
           "rounds": 1,
           "sec": {
-            "squat": 40,
-            "pushup": 34,
-            "burpee": 36,
             "jumping": 40,
-            "highknee": 40
+            "highknee": 50,
+            "squat": 45
           }
         },
         "expert": {
           "reps": {
-            "squat": 25,
-            "pushup": 18,
-            "burpee": 15,
-            "jumping": 45,
-            "highknee": 60
+            "jumping": 50,
+            "highknee": 55,
+            "squat": 40
           },
-          "rest": 12,
+          "rest": 15,
           "rounds": 1,
           "sec": {
-            "squat": 50,
-            "pushup": 46,
-            "burpee": 50,
-            "jumping": 55,
-            "highknee": 55
+            "jumping": 65,
+            "highknee": 65,
+            "squat": 80
           }
         }
       }
     },
     {
-      "id": "lower-power",
-      "name": "Lower Power",
-      "focus": "Legs + explosive",
-      "description": "A standing lower-body circuit: squats, then a burst of burpees.",
-      "frame": "Side-on · knee height",
-      "setup": "side",
-      "mixedFraming": false,
+      "id": "power",
+      "name": "Quad",
+      "focus": "Strength + cardio",
+      "description": "Cardio to warm up, then squats and push-ups for strength.",
+      "frame": "Front-on + side-on",
+      "setup": "mixed",
+      "mixedFraming": true,
       "gradient": {
         "angle": 135,
         "stops": [
           {
-            "color": "#FF6B00",
+            "color": "#166E7A",
             "location": 0
           },
           {
-            "color": "#FF9F43",
+            "color": "#C56DE2",
+            "location": 0.55
+          },
+          {
+            "color": "#F5A623",
             "location": 1
           }
         ]
       },
       "steps": [
+        "jumping",
+        "highknee",
         "squat",
+        "pushup"
+      ],
+      "levels": {
+        "beginner": {
+          "reps": {
+            "jumping": 20,
+            "highknee": 25,
+            "squat": 15,
+            "pushup": 10
+          },
+          "rest": 25,
+          "rounds": 1,
+          "sec": {
+            "jumping": 30,
+            "highknee": 45,
+            "squat": 40,
+            "pushup": 30
+          }
+        },
+        "intermediate": {
+          "reps": {
+            "jumping": 40,
+            "highknee": 40,
+            "squat": 30,
+            "pushup": 15
+          },
+          "rest": 20,
+          "rounds": 1,
+          "sec": {
+            "jumping": 55,
+            "highknee": 55,
+            "squat": 70,
+            "pushup": 45
+          }
+        },
+        "expert": {
+          "reps": {
+            "jumping": 50,
+            "highknee": 55,
+            "squat": 40,
+            "pushup": 25
+          },
+          "rest": 15,
+          "rounds": 1,
+          "sec": {
+            "jumping": 65,
+            "highknee": 65,
+            "squat": 80,
+            "pushup": 65
+          }
+        }
+      }
+    },
+    {
+      "id": "total-body",
+      "name": "Penta",
+      "focus": "All-out",
+      "description": "Every move in one circuit — cardio, legs, push and a burpee finish.",
+      "frame": "Front-on + side-on",
+      "setup": "mixed",
+      "mixedFraming": true,
+      "gradient": {
+        "angle": 135,
+        "stops": [
+          {
+            "color": "#C56DE2",
+            "location": 0
+          },
+          {
+            "color": "#2F80ED",
+            "location": 0.55
+          },
+          {
+            "color": "#166E7A",
+            "location": 1
+          }
+        ]
+      },
+      "steps": [
+        "jumping",
+        "highknee",
+        "squat",
+        "pushup",
         "burpee"
       ],
       "levels": {
         "beginner": {
           "reps": {
-            "squat": 12,
-            "burpee": 6
+            "jumping": 20,
+            "highknee": 25,
+            "squat": 15,
+            "pushup": 10,
+            "burpee": 10
           },
           "rest": 25,
           "rounds": 1,
           "sec": {
-            "squat": 30,
-            "burpee": 24
+            "jumping": 30,
+            "highknee": 45,
+            "squat": 40,
+            "pushup": 30,
+            "burpee": 40
           }
         },
         "intermediate": {
           "reps": {
-            "squat": 18,
-            "burpee": 10
-          },
-          "rest": 18,
-          "rounds": 1,
-          "sec": {
-            "squat": 40,
-            "burpee": 36
-          }
-        },
-        "expert": {
-          "reps": {
-            "squat": 25,
+            "jumping": 40,
+            "highknee": 40,
+            "squat": 30,
+            "pushup": 20,
             "burpee": 15
-          },
-          "rest": 12,
-          "rounds": 1,
-          "sec": {
-            "squat": 50,
-            "burpee": 50
-          }
-        }
-      }
-    },
-    {
-      "id": "cardio-blast",
-      "name": "Cardio Blast",
-      "focus": "Cardio",
-      "description": "Face-on cardio intervals to spike your heart rate and keep it there.",
-      "frame": "Front-on",
-      "setup": "front",
-      "mixedFraming": false,
-      "gradient": {
-        "angle": 135,
-        "stops": [
-          {
-            "color": "#00C98D",
-            "location": 0
-          },
-          {
-            "color": "#3B6EFF",
-            "location": 1
-          }
-        ]
-      },
-      "steps": [
-        "jumping",
-        "highknee"
-      ],
-      "levels": {
-        "beginner": {
-          "reps": {
-            "jumping": 20,
-            "highknee": 24
           },
           "rest": 20,
           "rounds": 1,
           "sec": {
-            "jumping": 30,
-            "highknee": 28
-          }
-        },
-        "intermediate": {
-          "reps": {
-            "jumping": 30,
-            "highknee": 40
-          },
-          "rest": 15,
-          "rounds": 1,
-          "sec": {
-            "jumping": 40,
-            "highknee": 40
+            "jumping": 55,
+            "highknee": 55,
+            "squat": 70,
+            "pushup": 60,
+            "burpee": 55
           }
         },
         "expert": {
           "reps": {
-            "jumping": 45,
-            "highknee": 60
+            "jumping": 60,
+            "highknee": 60,
+            "squat": 50,
+            "pushup": 30,
+            "burpee": 25
           },
-          "rest": 10,
+          "rest": 15,
           "rounds": 1,
           "sec": {
-            "jumping": 55,
-            "highknee": 55
+            "jumping": 75,
+            "highknee": 70,
+            "squat": 100,
+            "pushup": 80,
+            "burpee": 85
           }
         }
       }

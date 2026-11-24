@@ -19,7 +19,7 @@ window.FBWorkout = (function () {
   function start(el, opts) {
     root = el;
     opts = opts || {};
-    S = { view: "landing", routineId: opts.routine || FB.ROUTINES[0].id, level: opts.level || "intermediate" };
+    S = { view: "landing", routineId: opts.routine || FB.ROUTINES[0].id, level: opts.level || "beginner" };
     go("landing");
   }
 
@@ -56,7 +56,7 @@ window.FBWorkout = (function () {
     return `<div class="fb">
       <div class="fb-head">
         <button class="fb-back" onclick="location.href='../home/home-v7.html'">${I("back", 22)}</button>
-        <div><div class="fb-title">Full Body Workout</div><div class="fb-sub">Pick a routine. Total Body runs every move; the others keep one camera setup the whole way.</div></div>
+        <div><div class="fb-title">Full Body Workout</div><div class="fb-sub">Pick a routine. Full Body Basics and Full Body Max switch camera angle between moves; the others keep one setup the whole way.</div></div>
       </div>
       <div class="fb-cards">${FB.ROUTINES.map(card).join("")}</div>
     </div>`;

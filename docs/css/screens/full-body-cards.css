@@ -30,37 +30,10 @@ body > #content { width: 100%; min-width: 0; }
 .fbc-pill.lvl { color: var(--text-primary); background: color-mix(in srgb, var(--text-primary) 7%, transparent); }
 
 /* ── 1 · feed session card ── */
-.fbc-card .vb-top { align-items: flex-start; }
-.fbc-card .vb-who .s { color: var(--text-secondary); }
 .fbc-rname { color: var(--text-primary); font-weight: 900; }
-.fbc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
-.fbc-hero { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: none; }
-.fbc-stats { display: flex; border-top: 1px solid var(--divider); padding: 11px 0 10px; }
-.fbc-stats > div { flex: 1; text-align: center; }
-.fbc-stats > div + div { border-left: 1px solid var(--divider); }
-.fbc-stats b { display: block; font: 900 18px var(--font); color: var(--text-primary); line-height: 1.1; }
-.fbc-stats b small { font: 800 12px var(--font); color: var(--text-tertiary); }
-.fbc-stats span { font: 800 10px var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--text-tertiary); }
-.fbc-allhit b { color: var(--success); display: flex; align-items: center; justify-content: center; gap: 3px; }
-.fbc-allhit b small { color: color-mix(in srgb, var(--success) 70%, transparent); }
-.fbc-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--divider); }
 .fbc-ei { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; background: color-mix(in srgb, var(--exc) 13%, transparent); }
-.fbc-row .en { width: 98px; flex: none; font: 800 14px var(--font); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.fbc-bar { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--exc) 18%, transparent); overflow: hidden; }
-.fbc-bar i { display: block; height: 100%; border-radius: 3px; background: var(--exc); }
-.fbc-row .er { width: 46px; text-align: right; font: 900 14px var(--font); color: var(--text-primary); }
-.fbc-row .er small { font: 700 11px var(--font); color: var(--text-tertiary); }
-.fbc-ok { width: 14px; color: var(--success); display: grid; place-items: center; }
-.fbc-more { display: flex; align-items: center; gap: 6px; width: 100%; border: none; border-top: 1px solid var(--divider); background: none; cursor: pointer;
   padding: 10px 2px 4px; font: 800 12.5px var(--font); color: var(--primary); }
-.fbc-more .bz-ico { transform: rotate(90deg); transition: transform .15s; }
-.fbc-more.open .bz-ico { transform: rotate(-90deg); }
-.fbc-try { display: flex; align-items: center; gap: 11px; width: 100%; margin-top: 10px; padding: 9px 10px; cursor: pointer; text-align: left;
   border: 1px solid var(--border); border-radius: var(--r-md); background: color-mix(in srgb, var(--primary) 5%, var(--surface)); color: var(--text-tertiary); }
-.fbc-try:active { transform: scale(.99); }
-.fbc-try-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.fbc-try-tx b { font: 900 13.5px var(--font); color: var(--text-primary); }
-.fbc-try-tx span { font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 1px; }
 
 /* ── 2 · feed video post ── */
 .fbc-mbadge { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 4px; border-radius: var(--r-pill);
@@ -100,7 +73,6 @@ body > #content { width: 100%; min-width: 0; }
   background: var(--primary); color: var(--on-primary); font: 800 12px var(--font); }
 .fbc-again .bz-ico { color: var(--on-primary); }
 
-
 /* ── 6 · share story (always dark — it's an image) ── */
 .fbc-story { width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: 22px; padding: 20px 20px 16px; color: #fff;
   background: radial-gradient(120% 70% at 50% 20%, #3a2a6a 0%, #161427 60%, #0e0d18 100%); display: flex; flex-direction: column; align-items: center;
@@ -136,42 +108,11 @@ body > #content { width: 100%; min-width: 0; }
 .fbc-notes pre { font: 600 11px/1.5 ui-monospace, Menlo, monospace; background: var(--surface-alt); color: var(--text-primary); border-radius: var(--r-sm); padding: 10px 11px; overflow-x: auto; margin: 4px 0 10px; }
 .fbc-notes code { font: 700 11px ui-monospace, Menlo, monospace; color: var(--text-primary); background: var(--surface-alt); padding: 1px 4px; border-radius: 4px; }
 
-/* ── 0 · daily card (one per user per day) ── */
-.fbc-daymeta { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 0 12px; border-top: 1px solid var(--divider);
   font: 800 12px var(--font); color: var(--text-secondary); }
-.fbc-daymeta span { display: inline-flex; align-items: center; gap: 5px; }
-.fbc-daymeta .bz-ico { color: var(--text-tertiary); }
 /* a routine nested in the day: an inset tile so it reads as one unit, not five rows */
-.fbc-rb { border: 1px solid var(--border); border-radius: var(--r-md); padding: 11px 12px 4px; margin-bottom: 10px;
   background: color-mix(in srgb, var(--text-primary) 2.5%, var(--surface)); }
-.fbc-rb-h { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
-.fbc-rb-h .fbc-ring-in b { font-size: 15px; }
-.fbc-rb-tx { flex: 1; min-width: 0; }
-.fbc-rb-n { display: flex; align-items: center; gap: 7px; font: 900 15px var(--font); color: var(--text-primary); }
-.fbc-rb-n .fbc-pill { padding: 2px 8px; font-size: 10.5px; }
-.fbc-rb-m { font: 700 11.5px var(--font); color: var(--text-tertiary); margin: 2px 0 3px; }
-.fbc-rb-m .ok { color: var(--success); display: inline-flex; align-items: center; gap: 2px; }
-.fbc-rb-r { text-align: right; flex: none; }
-.fbc-rb-r b { display: block; font: 900 18px var(--font); color: var(--text-primary); line-height: 1; }
-.fbc-rb-r span { font: 800 10px var(--font); letter-spacing: .4px; text-transform: uppercase; color: var(--text-tertiary); }
-.fbc-rb-rows { margin-top: 8px; }
-.fbc-rb-rows .fbc-row:first-child { border-top: none; }
-.fbc-rb-btn { display: flex; align-items: center; gap: 5px; border: none; background: none; cursor: pointer; padding: 8px 0 6px;
   font: 800 12px var(--font); color: var(--primary); }
-.fbc-rb-btn .bz-ico { transform: rotate(90deg); transition: transform .15s; }
-.fbc-rb-btn.open .bz-ico { transform: rotate(-90deg); }
-.fbc-rb + .fbc-more-rows .fbc-rb, .fbc-more-rows .fbc-rb { margin-top: 0; }
-.fbc-day .fbc-more { border-top: none; padding-top: 2px; padding-bottom: 8px; }
-.fbc-sec { display: flex; align-items: center; gap: 6px; font: 900 11px var(--font); letter-spacing: .6px; text-transform: uppercase;
   color: var(--text-tertiary); padding: 6px 2px 4px; }
-.fbc-srow { display: flex; align-items: center; gap: 11px; padding: 8px 0; border-top: 1px solid var(--divider); }
-.fbc-sec + .fbc-srow { border-top: none; }
-.fbc-s-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.fbc-s-tx .en { display: flex; align-items: center; gap: 7px; font: 800 14.5px var(--font); color: var(--text-primary); }
-.fbc-s-tx .at { font: 700 11.5px var(--font); color: var(--text-tertiary); margin-top: 1px; }
-.fbc-srow .er { font: 900 15px var(--font); color: var(--text-primary); }
-.fbc-srow .er small { font: 700 11px var(--font); color: var(--text-tertiary); margin-left: 2px; }
-.fbc-new { font: 900 9.5px var(--font); letter-spacing: .4px; text-transform: uppercase; color: var(--on-primary); background: var(--primary);
   padding: 2px 6px; border-radius: var(--r-pill); }
 .fbc-rules { margin-top: 18px; }
 .fbc-tbl { width: 100%; border-collapse: collapse; margin: 2px 0 12px; font: 700 12px var(--font); }
@@ -335,3 +276,37 @@ button.fbc-xa:active { transform: scale(.97); }
 .fds .fds-hv b.long { font-size: calc(12 * var(--u)); }
 .fds-roomy .fds-hv b.long { font-size: calc(14 * var(--u)); }
 .fds-dense .fds-hv b.long { font-size: calc(10.5 * var(--u)); }
+
+/* ── Daily card: a Full Body workout = a labelled group of the normal exercise rows ── */
+.fbc-grp { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 2px 6px; border-top:1px solid var(--divider);
+  font:900 11px var(--font); letter-spacing:.5px; text-transform:uppercase; color:var(--text-tertiary); }
+.fbc-grp .l { display:inline-flex; align-items:center; gap:6px; }
+.fbc-grp .l .bz-ico { color:var(--primary); }
+.fbc-grp .r { letter-spacing:0; text-transform:none; font:800 12px var(--font); color:var(--text-secondary); white-space:nowrap; }
+.fbc-grp + .vb-row { border-top:none; }
+/* Full Body exercise row: progress bar + done/target */
+.fbc-fbrow .en { width: 112px; flex: none !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fbc-pb { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--exc) 18%, transparent); overflow: hidden; }
+.fbc-pb i { display: block; height: 100%; border-radius: 3px; background: var(--exc); }
+.fbc-fbrow .er { width: 46px; text-align: right; }
+.fbc-ck { width: 14px; flex: none; color: var(--success); display: grid; place-items: center; }
+/* 2+ Full Body workouts: tap the label to open / close */
+.fbc-grp-t { width: 100%; border-left: none; border-right: none; border-bottom: none; background: none; cursor: pointer; font-family: inherit; }
+.fbc-fbt-chev { display: inline-grid; color: var(--text-tertiary); transform: rotate(90deg); transition: transform .15s; }
+.fbc-fbg.open .fbc-fbt-chev { transform: rotate(-90deg); }
+.fbc-fbg-rows { display: none; }
+.fbc-fbg.open .fbc-fbg-rows { display: block; }
+.fbc-fbg-rows .vb-row:first-child { border-top: none; }
+
+/* Full Body heading — a real title, not a caption: icon tile · bold name · score·level pill */
+.fbc-fbt { padding: 12px 0 8px; text-transform: none; letter-spacing: 0; }
+.fbc-fbt .l { gap: 10px; min-width: 0; }
+.fbc-fbt-ic { width: 30px; height: 30px; flex: none; border-radius: 9px; display: grid; place-items: center;
+  color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, transparent); }
+.fbc-fbt-ic .bz-ico { color: var(--primary); }
+.fbc-fbt-n { font: 900 15px var(--font); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fbc-fbt .r { display: inline-flex; align-items: center; gap: 6px; }
+.fbc-fbt-p { flex: none; font: 800 11.5px var(--font); color: var(--text-secondary); background: var(--surface-alt);
+  padding: 4px 9px; border-radius: var(--r-pill); white-space: nowrap; }
+/* rows of a Full Body workout sit UNDER its title: no separator lines, a small left indent */
+.vb-row.fbc-fbrow { border-top: none; padding: 7px 0 7px 12px; }

@@ -23,10 +23,14 @@ window.ChallengeListCard = (function () {
 
   /* The app's default meta: `formatMembers(memberCount) · Frequency` → "3 members · Daily". */
   function metaOf(c) {
-    if (c.type === "elimination") {   // elimination: where the knockout stands, not member count
-      if (c.status === "ended") return c.winner === "You" ? "You won · last of " + c.members : "Winner: " + c.winner;
-      if (c.status === "open") return `${c.left} in · join closes in ${c.joinClosesIn}`;
-      return `Day ${c.day}/${c.days} · ${c.left} still in`;
+    if (c.mode === "multi" || c.mode === "fullbody") {   // Multi-workout / Full Body: the kind, then where it stands
+      const kind = c.mode === "multi" ? `Multi · ${c.workouts.length} workouts` : `Full Body · ${c.routine} · ${c.level}`;
+      return c.status === "open" ? `${kind} · ${c.joinedCount} joined` : `${kind} · Day ${c.day}/${c.days}`;
+    }
+    if (c.type === "elimination") {   // elimination: today's progress vs target, not member count
+      if (c.status === "ended") return c.winner === "You" ? "You won · 1st of " + c.joinedCount : "Winner: " + c.winner;
+      if (c.status === "open") return `${c.joinedCount} joined · join closes in ${c.joinClosesIn}`;
+      return `Day ${c.day}/${c.days} · today ${c.myToday}/${c.target}`;
     }
     const n = c.members || 0;
     const members = n === 1 ? "1 member" : `${window.Social.fmt(n)} members`;
