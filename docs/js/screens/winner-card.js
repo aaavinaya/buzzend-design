@@ -61,14 +61,14 @@ window.WinnerCard = (function () {
       <i class="d s" style="left:10px;top:118px"></i><i class="b" style="left:20px;top:150px;transform:rotate(60deg)"></i>
       ${sp("sm", "right:12px;top:116px")}<i class="d k" style="right:24px;top:150px"></i></div>`;
   }
+  /* The post is made automatically, so the header is the CHALLENGE (cover · title · "2h ◍ · Challenge
+     results"), never the winner — a winner seeing their own name as the author would think they had
+     posted it. The winner is the subject of the panel instead. */
   function header(s) {
-    const glyph = s.aud === "private" ? `${I("lock", 11)}<span class="fix">&nbsp;Challenge members</span>` : I(AUD[s.aud][0], 11);
-    const what = s.draw ? "was drawn as a winner" : "won a challenge";
-    const av = s.av ? `<div class="wc-av" style="background-image:${grad(s.av)}"></div>` : `<div class="wc-av ini">${ini(s.name)}</div>`;
-    return `<div class="wc-h">
-      <span onclick="event.stopPropagation();WinnerCard.profile('${s.id}')">${av}</span>
-      <div class="wc-who"><div class="n" onclick="event.stopPropagation();WinnerCard.profile('${s.id}')">${s.name}</div>
-        <div class="t">${s.t}&nbsp;${glyph}<span class="ell">&nbsp;·&nbsp;${what}</span></div></div>
+    const meta = s.aud === "private" ? `${I("lock", 11)}<span class="fix">&nbsp;Challenge members</span>`
+      : `${I(AUD[s.aud][0], 11)}<span class="ell">&nbsp;·&nbsp;Challenge results</span>`;
+    return `<div class="wc-h">${cover(s)}
+      <div class="wc-who"><div class="n">${s.title}</div><div class="t">${s.t}&nbsp;${meta}</div></div>
       <button class="wc-mm" onclick="event.stopPropagation();WinnerCard.menu('${s.id}')" aria-label="More">${I("more", 18)}</button></div>`;
   }
   function chips(s) {
@@ -79,14 +79,14 @@ window.WinnerCard = (function () {
     return c.length ? `<div class="wc-chips">${c.join("")}</div>` : "";
   }
   function panel(s) {
-    const v = fmt(s.total);
+    const v = fmt(s.total), me = viewer === "winner";
     const hav = s.av ? `<div class="wc-hav" style="background-image:${grad(s.av)}"></div>` : `<div class="wc-hav ini">${ini(s.name)}</div>`;
     const crown = s.place === 1 && !s.draw ? `<span class="wc-crown" aria-hidden="true">${I("crown", 26)}</span>` : "";
     return `<div class="wc-panel wc-${tierOf(s)}">${confetti()}
       <div class="wc-ribrow"><span class="wc-rib">${ribbon(s)}</span>${s.tie ? `<span class="wc-chip">Tied</span>` : ""}</div>
-      <div class="wc-hero">${crown}${hav}<span class="wc-trophy">${I("trophy", 14)}</span></div>
-      <div class="wc-nm">${s.name}</div>
-      <div class="wc-tt">${s.draw ? "drawn in" : "won"} “<b>${s.title}</b>”</div>
+      <div class="wc-hero" onclick="event.stopPropagation();WinnerCard.profile('${s.id}')">${crown}${hav}<span class="wc-trophy">${I("trophy", 14)}</span></div>
+      <div class="wc-nm" onclick="event.stopPropagation();WinnerCard.profile('${s.id}')">${me ? "You" : s.name}</div>
+      <div class="wc-tt">${s.draw ? (me ? "were drawn in" : "drawn in") : "won"} “<b>${s.title}</b>”</div>
       ${chips(s)}
       <div class="wc-stats">
         <div class="wc-st"><div class="v ${sizeCls(v)}">${v}</div><div class="k">${unit(s)}</div></div>
@@ -95,10 +95,10 @@ window.WinnerCard = (function () {
       ${s.prize ? `<div class="wc-prize">${I("medal", 15)}<span>Prize: <b>${s.prize}</b></span></div>` : ""}
     </div>`;
   }
-  function thumb(s) {
-    if (s.cover) return `<span class="wc-thumb" style="background:${s.cover}"></span>`;
-    if (s.mode === "SINGLE") return `<span class="wc-thumb">${W(s.ex, 24, "real")}</span>`;
-    return `<span class="wc-thumb" style="color:var(--primary)">${I("trophy", 16)}</span>`;
+  function cover(s) {   // challenge cover, else the workout art, else a trophy (Multi / Full Body)
+    if (s.cover) return `<span class="wc-cov" style="background:${s.cover}"></span>`;
+    if (s.mode === "SINGLE") return `<span class="wc-cov">${W(s.ex, 30, "real")}</span>`;
+    return `<span class="wc-cov" style="color:var(--primary)">${I("trophy", 18)}</span>`;
   }
   function bar(s) {
     const st = LIKE[s.id];
@@ -110,7 +110,6 @@ window.WinnerCard = (function () {
   function card(s) {
     return `<div class="wc-card" data-wc="${s.id}" onclick="WinnerCard.open('${s.id}')">
       ${header(s)}${panel(s)}
-      <button class="wc-link" onclick="event.stopPropagation();WinnerCard.open('${s.id}')">${thumb(s)}<span class="tx">View challenge</span>${I("chevron", 16)}</button>
       ${bar(s)}</div>`;
   }
   function repaint(id) {
@@ -224,11 +223,34 @@ window.WinnerCard = (function () {
     { place: 1, title: "Burpee Survivor", d: "Nov 2025" },
     { place: 2, title: "Plank Week", d: "Oct 2025" },
   ];
+  /* A filled trophy in the tier's metal — drawn from 6 shapes (cup, two handles, stem, base, plate) + a
+     highlight and a star, one linear gradient each. Ship it as one vector asset tinted per tier, or draw it. */
+  const METAL = { gold: ["#FFE594", "#F3BC3A", "#C98912", "#7A4E06"], silver: ["#FBFCFD", "#CDD4DC", "#929CA8", "#4E5661"],
+    bronze: ["#F0B98F", "#B97340", "#7A421D", "#4A2208"] };
+  function starPts(cx, cy, R, r) {
+    const p = []; for (let i = 0; i < 10; i++) { const a = Math.PI / 5 * i - Math.PI / 2, d = i % 2 ? r : R; p.push((cx + d * Math.cos(a)).toFixed(2) + "," + (cy + d * Math.sin(a)).toFixed(2)); }
+    return p.join(" ");
+  }
+  function trophyArt(tier, sz) {
+    const [a, b, c, d] = METAL[tier], g = "wct-" + tier, u = `url(#${g})`;
+    return `<svg width="${sz}" height="${sz}" viewBox="0 0 48 48" aria-hidden="true">
+      <defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".5" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient></defs>
+      <path d="M13.5 12H9.5a4.6 4.6 0 0 0 0 9.2h4.5M34.5 12h4a4.6 4.6 0 0 1 0 9.2H34" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M12.5 7h23v11.5a11.5 11.5 0 0 1-23 0z" fill="${u}"/>
+      <path d="M17 11v7.2a7 7 0 0 0 3.2 5.9" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2.2" stroke-linecap="round"/>
+      <polygon points="${starPts(24, 17.2, 4.6, 2)}" fill="${d}" fill-opacity=".38"/>
+      <path d="M21.2 29.6h5.6l1.1 5.2h-7.8z" fill="${u}"/>
+      <rect x="14.5" y="34.6" width="19" height="6.6" rx="2" fill="${u}"/>
+      <rect x="19.5" y="36.8" width="9" height="2.2" rx="1.1" fill="${d}" fill-opacity=".35"/></svg>`;
+  }
   function trophies(list, more) {
-    const tile = (t) => `<button class="tc-t wc-${t.draw ? "gold" : TIER[t.place]}" onclick="Buzzend.toast('Opens “${t.title}”',1600)">
-        <span class="tc-top"><span class="tc-disc">${t.place}</span>${t.draw ? `<span class="tc-draw">Draw</span>` : ""}</span>
-        <span class="tc-tt">${t.title}</span><span class="tc-d">${t.d}</span></button>`;
-    return `<div class="tc"><div class="tc-h">${I("trophy", 17)} Trophy case <span>· ${more ? more : list.length}</span></div>
+    const tile = (t) => { const tier = t.draw ? "gold" : TIER[t.place];
+      return `<button class="tc-t wc-${tier}" onclick="Buzzend.toast('Opens “${t.title}”',1600)">
+        <span class="tc-cup">${trophyArt(tier, 46)}</span>
+        <span class="tc-tt">${t.title}</span>
+        <span class="tc-pl">${t.draw ? "Drawn winner" : ORD[t.place] + " place"}</span>
+        <span class="tc-d">${t.d}</span></button>`; };
+    return `<div class="tc"><div class="tc-h">${I("trophy", 17)} Trophy case <span class="tc-n">${more ? more : list.length}</span></div>
       <div class="tc-row">${list.map(tile).join("")}${more ? `<div class="tc-more"><span class="tc-spin"></span></div>` : ""}</div></div>`;
   }
   function profileMock(who, list, more) {
@@ -264,33 +286,34 @@ window.WinnerCard = (function () {
   function spec() {
     const sw = (c) => `<span class="wc-sw" style="background:${c}"></span>`;
     return `<div class="wc-spec">
-      <h3>${I("info", 16)} Card shell (identical to the media card)</h3>
+      <h3>${I("info", 16)} Card shell (the media card's layout)</h3>
       <table><tr><th>Part</th><th>Value</th></tr>
         <tr><td>Card</td><td>surface · 1px border · radius 20 · card shadow · 14 top/bottom padding · 14 gap between cards. Width = screen − 32.</td></tr>
-        <tr><td>Header</td><td>18 left padding · avatar <b>38</b> (the media card's, not 40) · gap 10 · name 13.5 / 800 · line 2: 11.5 / 700 tertiary, <code>2h ◍ · won a challenge</code> (glyph 11). ⋯ 17 icon in a 44 target.</td></tr>
-        <tr><td>Line 2 variants</td><td>Draw: <code>2h ◍ · was drawn as a winner</code>. Private: <code>2h 🔒 Challenge members · won a challenge</code> (lock glyph 11, no emoji). Truncates at the end.</td></tr>
+        <tr><td>Header = the challenge</td><td>The post is automatic, so it never shows the winner as its author. 18 left padding · <b>challenge cover 38 × 38, radius 10</b> (a rounded square, so it never reads as a person; no cover → the workout art 30 on surface-alt, Multi / Full Body → trophy 18 in primary) · gap 10 · <b>challenge title</b> 13.5 / 800, 1 line · line 2: 11.5 / 700 tertiary, <code>2h ◍ · Challenge results</code> (glyph 11). ⋯ 17 icon in a 44 target. Tapping the header (or anywhere on the card) opens the challenge.</td></tr>
+        <tr><td>Line 2 variants</td><td>Private: <code>2h 🔒 Challenge members</code> (lock glyph 11, no emoji). Truncates at the end.</td></tr>
         <tr><td>Action bar</td><td>The shared bar (iOS <code>CommunityActionBar</code>, inset 8, share shown): divider · ♡ + count · ↗ · spacer · “who loved” red circle 30 (hidden at 0 likes, slot kept). <b>No view count.</b></td></tr>
-        <tr><td>View challenge</td><td>12 above the bar, 18 sides · thumb 30, radius 8 (cover photo, else the workout art on surface-alt, else a trophy for Multi / Full Body) · “View challenge” 13.5 / 800 primary · chevron 16 at the end.</td></tr></table>
+        <tr><td>No “View challenge” row</td><td>The header is the challenge now, so the bar sits 10 below the panel, as on the media card.</td></tr></table>
 
       <h3>${I("trophy", 16)} Celebration panel</h3>
       <table><tr><th>Part</th><th>Value</th></tr>
         <tr><td>Panel</td><td>11 below the header · 14 side margins · radius 16 · padding 16 / 14 / 14 · linear gradient 160° from t1 to t2 · centred. One radial white bloom (55% → 0) 220 × 150 centred 30 from the top, behind the avatar.</td></tr>
         <tr><td>Confetti</td><td>Static, corners only. Sparkle (4-point star, white) 14 at (12, 12) and 10 at (right 16, 14) and (right 12, 116). Dots 6 (white 75%) / 4 (white 60%) / 6 ink 16%. Bars 11 × 4 radius 2, white 70% or ink 14%, rotated −30° to 60°. Exact list in <code>winner-card.js › confetti()</code>.</td></tr>
-        <tr><td>Ribbon</td><td>Height 24 · padding 0 17 · ink fill · notched ends 7 deep (6-point path) · 11 / 900, tracking 1.4, ribbon-text colour. <code>1ST PLACE</code> · <code>2ND PLACE</code> · <code>3RD PLACE</code> · <code>DRAWN WINNER</code>.</td></tr>
-        <tr><td>Chips</td><td>Height 22 · pill · white 55% · ink 10.5 / 900 · icon 12 (workout art 16). <code>Tied</code> sits right of the ribbon (gap 6). Workout chips (Multi, 2–4), <code>Full Body</code> and <code>Elimination</code> sit in a row 9 below the title.</td></tr>
-        <tr><td>Avatar</td><td>72 · 22 below the ribbon · white 3 + tier ring 2.5 · shadow 0 8 18 black 18%. No photo: initials 24 / 900 ink on white 75%.</td></tr>
+        <tr><td>Ribbon</td><td>Height 24 · padding 0 17 · ribbon fill (gold / silver: the ink; bronze: cream #FFE2C6) · notched ends 7 deep (6-point path) · 11 / 900, tracking 1.4, ribbon-text colour. <code>1ST PLACE</code> · <code>2ND PLACE</code> · <code>3RD PLACE</code> · <code>DRAWN WINNER</code>.</td></tr>
+        <tr><td>Chips</td><td>Height 22 · pill · white 55% (bronze: black 20%) · ink 10.5 / 900 · icon 12 (workout art 16). <code>Tied</code> sits right of the ribbon (gap 6). Workout chips (Multi, 2–4), <code>Full Body</code> and <code>Elimination</code> sit in a row 9 below the title.</td></tr>
+        <tr><td>Avatar</td><td>72 · 22 below the ribbon · white 3 + tier ring 2.5 · shadow 0 8 18 black 18%. No photo: initials 24 / 900 ink on white 75% (bronze: #4A2208 on #FFE2C6). Tapping the photo or the name opens the winner's profile.</td></tr>
         <tr><td>Crown (1st only, not draws)</td><td>Lucide <code>crown</code> 26, centred, top −21 over the ring · fill #FFF4D2 · stroke ink 1.8.</td></tr>
-        <tr><td>Trophy disc</td><td>28 · ink fill · trophy 14 in ribbon-text colour · 2.5 white border · offset right −6, bottom −5.</td></tr>
-        <tr><td>Name / title</td><td>Name 18 / 900, 13 below the avatar, 1 line. Title line 13.5 / 700 with the title in 900, 2 lines max then “…”. <code>won “…”</code> / <code>drawn in “…”</code>.</td></tr>
-        <tr><td>Stats strip</td><td>13 below · white 42% · radius 12 · padding 9 · 3 equal cells, ink 16% dividers. Value 18 / 900 tabular (15 when it is over 7 characters, 13.5 over 9) · “of” 12 / 800 · label 10.5 / 800.</td></tr>
-        <tr><td>Prize</td><td>Only when set. 8 below · white 42% · radius 12 · padding 9 / 12 · medal 15 · <code>Prize: <b>…</b></code> 13 / 700 + 900 · wraps.</td></tr></table>
+        <tr><td>Trophy disc</td><td>28 · ribbon fill · trophy 14 in ribbon-text colour · 2.5 white border · offset right −6, bottom −5.</td></tr>
+        <tr><td>Name / title</td><td>Name 18 / 900, 13 below the avatar, 1 line. <b>On the winner's own card the name reads <code>You</code></b> (draw: <code>You</code> / <code>were drawn in “…”</code>). Title line 13.5 / 700 with the title in 900, 2 lines max then “…”. <code>won “…”</code> / <code>drawn in “…”</code>.</td></tr>
+        <tr><td>Stats strip</td><td>13 below · glass (white 42%; bronze: black 20%) · radius 12 · padding 9 · 3 equal cells, ink 16% dividers. Value 18 / 900 tabular (15 when it is over 7 characters, 13.5 over 9) · “of” 12 / 800 · label 10.5 / 800.</td></tr>
+        <tr><td>Prize</td><td>Only when set. 8 below · glass · radius 12 · padding 9 / 12 · medal 15 · <code>Prize: <b>…</b></code> 13 / 700 + 900 · wraps.</td></tr></table>
 
       <h3>${I("star", 16)} Tiers (text passes WCAG AA on the darker stop)</h3>
-      <table><tr><th>Tier</th><th>t1 → t2</th><th>Ink</th><th>Ribbon text</th><th>Ring</th></tr>
-        <tr><td>Gold (1st, draw)</td><td>${sw("#F6C651")}#F6C651 → ${sw("#DD992A")}#DD992A</td><td>${sw("#4A3300")}#4A3300 · 4.9:1</td><td>#FFE7A6</td><td>#B7791A</td></tr>
-        <tr><td>Silver (2nd)</td><td>${sw("#E3E8EE")}#E3E8EE → ${sw("#AEB7C1")}#AEB7C1</td><td>${sw("#2B323B")}#2B323B · 6.4:1</td><td>#EEF1F5</td><td>#77808C</td></tr>
-        <tr><td>Bronze (3rd)</td><td>${sw("#E6A769")}#E6A769 → ${sw("#C17E40")}#C17E40</td><td>${sw("#331A05")}#331A05 · 4.9:1</td><td>#FFE2C6</td><td>#A5673A</td></tr></table>
+      <table><tr><th>Tier</th><th>t1 → t2</th><th>Ink (text)</th><th>Ribbon</th><th>Ring</th></tr>
+        <tr><td>Gold (1st, draw)</td><td>${sw("#F6C651")}#F6C651 → ${sw("#DD992A")}#DD992A</td><td>${sw("#4A3300")}#4A3300 · 4.9:1</td><td>#FFE7A6 on #4A3300</td><td>#B7791A</td></tr>
+        <tr><td>Silver (2nd)</td><td>${sw("#E3E8EE")}#E3E8EE → ${sw("#AEB7C1")}#AEB7C1</td><td>${sw("#2B323B")}#2B323B · 6.4:1</td><td>#EEF1F5 on #2B323B</td><td>#77808C</td></tr>
+        <tr><td>Bronze (3rd)</td><td>${sw("#9E6038")}#9E6038 → ${sw("#5E3216")}#5E3216</td><td>${sw("#FFF1E2")}#FFF1E2 · 4.5:1</td><td>#4A2208 on #FFE2C6</td><td>#E6A769</td></tr></table>
       <p>The brief's gold ink <code>#5A3D00</code> is only 4.1:1 on <code>#DD992A</code>, so the panel uses <code>#4A3300</code>. The ring is the deeper badge tone (#B7791A etc.) because #E8B23E disappears on a gold panel. The panel keeps the same colours in dark mode.</p>
+      <p><b>Bronze is a dark copper with light text.</b> The first bronze (#E6A769 → #C17E40) sat right next to gold's darker stop and read as gold in the feed. A darker bronze can't carry dark text (it drops under 4.5:1), so bronze flips to cream text, a cream ribbon and a darker strip. Its light behind the avatar is warmer and shorter (110) so it stays off the name.</p>
 
       <h3>${I("sparkles", 16)} “You won!” sheet</h3>
       <ul><li>The Elimination result-sheet container (bottom sheet, grip, ✕). Confetti: 12 bars (tier t1 / t2 + primary) in the top 120.</li>
@@ -306,12 +329,14 @@ window.WinnerCard = (function () {
 
       <h3>${I("trophy", 16)} Trophy case</h3>
       <ul><li>Between the stats and the tabs. Hidden at 0 wins, on blocked profiles and on the brand page.</li>
-        <li>Title row: trophy 17 (gold #DD992A) · <code>Trophy case</code> 15 / 900 · <code>· 3</code> tertiary.</li>
-        <li>Tile 104 wide · surface · 1px border · radius 16 · padding 12 / 10 / 11 · place disc 30 (tier gradient, ink number 14 / 900) · title 12.5 / 800, 2 lines (height kept) · month 11 / 700 tertiary · <code>Draw</code> tag (9.5 / 900, gold badge) top-right, level with the disc.</li>
+        <li>Title row: trophy 17 (gold #DD992A) · <code>Trophy case</code> 15 / 900 · count in a small grey pill (11.5 / 800, surface-alt).</li>
+        <li><b>The trophy carries the place</b>: a gold, silver or bronze cup, not a 1 / 2 / 3 number. Filled vector trophy 46 (cup, handles, stem, base, plate, a white highlight and a faint star), one gradient per metal — gold #FFE594 → #F3BC3A → #C98912, silver #FBFCFD → #CDD4DC → #929CA8, bronze #F0B98F → #B97340 → #7A421D. It sits on a 60 circle tinted with the same metal (gold #FCEBC2 · silver #E4E8EE · bronze #F4DCC8, lighter in the middle). A draw uses the gold cup.</li>
+        <li>Tile 104 wide · surface · 1px border · radius 16 · padding 12 / 9 / 11 · centred · title 12.5 / 800, 2 lines (height kept) · place in words 11 / 900 in the metal's dark tone (<code>1st place</code> #8A5A0C · <code>2nd place</code> #5B6470 · <code>3rd place</code> #8A4B22 · <code>Drawn winner</code>; dark mode uses the light tones) · month 11 / 700 tertiary.</li>
         <li>Newest first, scrolls sideways, 10 apart, 16 edge padding; loads more at the end (a spinner tile while it loads).</li></ul>
 
       <h3>${I("flag", 16)} Decisions made here (tell me to change any)</h3>
-      <ul><li><b>The trophy disc is a badge on the avatar</b>, as on the in-app Winners card champion, not a separate row above the ribbon. That saves about 50 pt of height.</li>
+      <ul><li><b>The post comes from the challenge</b>, not from the winner, so nobody sees themselves as the author of something they didn't post. The winner reads <b>You</b> on their own card.</li>
+        <li><b>The trophy disc is a badge on the avatar</b>, as on the in-app Winners card champion, not a separate row above the ribbon. That saves about 50 pt of height.</li>
         <li><b>The action bar is the shared feed bar</b>: Share sits next to the heart and the “who loved” circle is on the right, as on every other card.</li>
         <li><b>The ⋯ menu for people who aren't the winner</b> has <b>Report post</b> only. The menu has no link to copy, because Share shares the image, not a post link.</li>
         <li><b>Share from someone else's card</b> opens the same image with the title <b>Share this win</b>. The winner sees <b>Share your win</b>.</li>
@@ -347,11 +372,12 @@ window.WinnerCard = (function () {
           <div><span class="lab">Viewing as</span><span class="wc-seg" id="wcV"><button class="on" data-v="other">Someone else</button><button data-v="winner">The winner</button></span></div>
         </div></div></div>
 
-      ${sec("feed", "In the feed", "A photo post, then the Winner card, then an Activity card. It stands out, and it uses the same header, radius and action bar as the other cards.",
+      ${sec("feed", "In the feed", "A photo post, then the Winner card, then an Activity card. It stands out, but keeps the same header layout, radius and action bar as the other cards.",
         `<div class="wc-cols">${item(`<div class="cv-panel mx-feed boxed">${photoPost()}${card(SAMPLES[0])}${activityCard()}</div>`)}
           ${item(`<div class="wc-howto"><b>Try it</b><ul>
-            <li>Tap the card or <b>View challenge</b> to open the challenge.</li>
-            <li>Tap the avatar or name to open the profile.</li>
+            <li>The post comes from the <b>challenge</b> (cover and title on top), not from the winner, because nobody posted it by hand.</li>
+            <li>Tap the card or its header to open the challenge. Tap the winner's photo or name to open their profile.</li>
+            <li>Switch <b>Viewing as</b> to <b>The winner</b>: their own card says <b>You</b> instead of their name.</li>
             <li>Tap ♡ to love it, and <b>Share</b> to open the share image.</li>
             <li><b>⋯</b> changes with <b>Viewing as</b> at the top: the winner gets Change audience and Delete, everyone else gets Report post.</li></ul></div>`)}</div>`)}
 
@@ -403,7 +429,7 @@ window.WinnerCard = (function () {
       document.querySelectorAll(`#${id} button`).forEach((x) => x.classList.toggle("on", x === b)); fn(b);
     });
     seg("wcW", (b) => document.getElementById("wcCanvas").style.setProperty("--cardw", b.dataset.w + "px"));
-    seg("wcV", (b) => { viewer = b.dataset.v; });
+    seg("wcV", (b) => { viewer = b.dataset.v; SAMPLES.forEach((x) => repaint(x.id)); });
     document.getElementById("wcTabs").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) tab(b.dataset.t); });
     const p = new URLSearchParams(location.search);
     if (p.get("w") === "430") document.querySelector('#wcW [data-w="398"]').click();

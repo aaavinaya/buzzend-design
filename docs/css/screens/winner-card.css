@@ -11,9 +11,16 @@
    ══════════════════════════════════════════════════════════════════════════════════════════════ */
 
 /* ── tiers ── */
-.wc-gold   { --t1:#F6C651; --t2:#DD992A; --ink:#4A3300; --rib:#FFE7A6; --ring:#B7791A; }
-.wc-silver { --t1:#E3E8EE; --t2:#AEB7C1; --ink:#2B323B; --rib:#EEF1F5; --ring:#77808C; }
-.wc-bronze { --t1:#E6A769; --t2:#C17E40; --ink:#331A05; --rib:#FFE2C6; --ring:#A5673A; }
+/* --ink text on the panel · --ribbg/--rib the ribbon and trophy disc · --glass the stats/prize strip ·
+   --chip chips and the share-image trophy disc · --bloom the light behind the avatar · --label the tier
+   word on a white surface (Trophy case). Bronze is a DARK copper with light text so it can never be
+   mistaken for gold (the old #E6A769 → #C17E40 sat right next to gold's darker stop). */
+.wc-gold   { --t1:#F6C651; --t2:#DD992A; --ink:#4A3300; --ribbg:#4A3300; --rib:#FFE7A6; --ring:#B7791A;
+  --glass:rgba(255,255,255,.42); --chip:rgba(255,255,255,.55); --bloom:rgba(255,255,255,.55); --bloomh:150px; --label:#8A5A0C; --labeld:#F3C766; --tint:#FCEBC2; }
+.wc-silver { --t1:#E3E8EE; --t2:#AEB7C1; --ink:#2B323B; --ribbg:#2B323B; --rib:#EEF1F5; --ring:#77808C;
+  --glass:rgba(255,255,255,.42); --chip:rgba(255,255,255,.55); --bloom:rgba(255,255,255,.55); --bloomh:150px; --label:#5B6470; --labeld:#C9D0D8; --tint:#E4E8EE; }
+.wc-bronze { --t1:#9E6038; --t2:#5E3216; --ink:#FFF1E2; --ribbg:#FFE2C6; --rib:#4A2208; --ring:#E6A769;
+  --glass:rgba(0,0,0,.2); --chip:rgba(0,0,0,.2); --bloom:rgba(255,214,170,.2); --bloomh:110px; --label:#8A4B22; --labeld:#E6A769; --tint:#F4DCC8; }
 
 /* ── page chrome: a sticky bar with the section tabs and the two switches; one section shows at a time
    and scrolls down normally (app.css makes <body> a centred flex row for phone screens — undone here) ── */
@@ -72,6 +79,9 @@ body.wc-body { display:block; padding:0; min-height:100vh; }
 /* header — identical to the media card (.cf-card-h): 38 avatar · name · "2h ◍ · won a challenge" · ⋯ */
 .wc-h { display:flex; align-items:center; gap:10px; padding:0 8px 0 18px; }
 .wc-av { width:38px; height:38px; border-radius:50%; flex:none; background-size:cover; background-position:center; }
+/* the post comes FROM the challenge: its cover (rounded square, so it never reads as a person) */
+.wc-cov { width:38px; height:38px; border-radius:10px; flex:none; background:var(--surface-alt); background-size:cover; background-position:center;
+  display:grid; place-items:center; overflow:hidden; }
 .wc-av.ini { display:grid; place-items:center; font:800 13px var(--font); color:var(--primary);
   background:color-mix(in srgb,var(--primary) 15%,var(--surface)); }
 .wc-who { flex:1; min-width:0; }
@@ -88,8 +98,8 @@ body.wc-body { display:block; padding:0; min-height:100vh; }
 .wc-panel { position:relative; margin:11px 14px 0; border-radius:16px; overflow:hidden; text-align:center; color:var(--ink);
   padding:16px 14px 14px; background:linear-gradient(160deg,var(--t1) 0%,var(--t2) 100%); isolation:isolate; }
 /* soft light bloom behind the avatar — one radial gradient, nothing shipped */
-.wc-panel::before { content:""; position:absolute; left:50%; top:30px; width:220px; height:150px; transform:translateX(-50%);
-  background:radial-gradient(closest-side,rgba(255,255,255,.55),rgba(255,255,255,0)); z-index:-1; }
+.wc-panel::before { content:""; position:absolute; left:50%; top:30px; width:220px; height:var(--bloomh); transform:translateX(-50%);
+  background:radial-gradient(closest-side,var(--bloom),transparent); z-index:-1; }
 
 /* static confetti: dots, short bars and 4-point sparkles, kept to the corners */
 .wc-cf { position:absolute; inset:0; pointer-events:none; z-index:-1; }
@@ -105,33 +115,34 @@ body.wc-body { display:block; padding:0; min-height:100vh; }
 
 /* the tier ribbon: an ink band with notched ends (a 6-point path natively) + the optional Tied chip */
 .wc-ribrow { display:flex; align-items:center; justify-content:center; gap:6px; }
-.wc-rib { display:inline-flex; align-items:center; height:24px; padding:0 17px; background:var(--ink); color:var(--rib);
+.wc-rib { display:inline-flex; align-items:center; height:24px; padding:0 17px; background:var(--ribbg); color:var(--rib);
   font:900 11px var(--font); letter-spacing:1.4px; white-space:nowrap;
   clip-path:polygon(0 0,100% 0,calc(100% - 7px) 50%,100% 100%,0 100%,7px 50%); }
 .wc-chip { display:inline-flex; align-items:center; gap:4px; height:22px; padding:0 9px; border-radius:var(--r-pill);
-  background:rgba(255,255,255,.55); color:var(--ink); font:900 10.5px var(--font); letter-spacing:.3px; white-space:nowrap; }
+  background:var(--chip); color:var(--ink); font:900 10.5px var(--font); letter-spacing:.3px; white-space:nowrap; }
 .wc-chip .bz-ico { width:12px; height:12px; }
 .wc-chip .bz-art { margin:0 -1px 0 -3px; }
 
 /* avatar 72 · white gap · tier ring · crown (1st only) · trophy disc */
-.wc-hero { position:relative; width:72px; height:72px; margin:22px auto 0; }
+.wc-hero { position:relative; width:72px; height:72px; margin:22px auto 0; cursor:pointer; }
 .wc-hav { width:72px; height:72px; border-radius:50%; background-size:cover; background-position:center;
   box-shadow:0 0 0 3px #fff, 0 0 0 5.5px var(--ring), 0 8px 18px rgba(0,0,0,.18); }
 .wc-hav.ini { display:grid; place-items:center; font:900 24px var(--font); color:var(--ink); background:rgba(255,255,255,.75); }
+.wc-bronze .wc-hav.ini { background:#FFE2C6; color:#4A2208; }
 .wc-crown { position:absolute; left:50%; top:-21px; transform:translateX(-50%); width:26px; height:26px; color:var(--ink); }
 .wc-crown svg { width:26px; height:26px; fill:#FFF4D2; stroke:var(--ink); stroke-width:1.8; }
-.wc-trophy { position:absolute; right:-6px; bottom:-5px; width:28px; height:28px; border-radius:50%; background:var(--ink); color:var(--rib);
+.wc-trophy { position:absolute; right:-6px; bottom:-5px; width:28px; height:28px; border-radius:50%; background:var(--ribbg); color:var(--rib);
   border:2.5px solid #fff; display:grid; place-items:center; }
 .wc-trophy .bz-ico { width:14px; height:14px; }
 
-.wc-nm { font:900 18px var(--font); margin-top:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 6px; }
+.wc-nm { font:900 18px var(--font); margin-top:13px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 6px; }
 .wc-tt { font:700 13.5px var(--font); line-height:1.35; margin-top:2px; padding:0 4px;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .wc-tt b { font-weight:900; }
 .wc-chips { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:9px; }
 
 /* stats: 3 equal cells on one frosted strip */
-.wc-stats { display:flex; margin-top:13px; background:rgba(255,255,255,.42); border-radius:12px; padding:9px 2px; }
+.wc-stats { display:flex; margin-top:13px; background:var(--glass); border-radius:12px; padding:9px 2px; }
 .wc-st { flex:1; min-width:0; padding:0 4px; }
 .wc-st + .wc-st { border-left:1px solid color-mix(in srgb,var(--ink) 16%,transparent); }
 .wc-st .v { font:900 18px var(--font); line-height:1.15; white-space:nowrap; font-variant-numeric:tabular-nums; letter-spacing:-.2px; }
@@ -140,16 +151,10 @@ body.wc-body { display:block; padding:0; min-height:100vh; }
 .wc-st .v small { font:800 12px var(--font); margin-right:2px; }
 .wc-st .k { font:800 10.5px var(--font); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-.wc-prize { display:flex; align-items:flex-start; justify-content:center; gap:7px; margin-top:8px; background:rgba(255,255,255,.42);
+.wc-prize { display:flex; align-items:flex-start; justify-content:center; gap:7px; margin-top:8px; background:var(--glass);
   border-radius:12px; padding:9px 12px; font:700 13px var(--font); line-height:1.35; text-align:left; }
 .wc-prize .bz-ico { width:15px; height:15px; flex:none; margin-top:1px; }
 .wc-prize b { font-weight:900; }
-
-/* "View challenge ›" — cover thumb (or the workout art when there's no cover) */
-.wc-link { display:flex; align-items:center; gap:10px; margin:12px 18px 0; padding:0; background:none; border:none; cursor:pointer; width:calc(100% - 36px); text-align:left; }
-.wc-thumb { width:30px; height:30px; border-radius:8px; flex:none; background:var(--surface-alt); display:grid; place-items:center; background-size:cover; overflow:hidden; }
-.wc-link .tx { flex:1; min-width:0; font:800 13.5px var(--font); color:var(--primary); }
-.wc-link .bz-ico { color:var(--primary); width:16px; height:16px; flex:none; }
 
 /* ═════════ 2 · "YOU WON!" SHEET (the Elimination result sheet container) ═════════ */
 .wc-sheetprev { background:var(--surface); border-radius:22px 22px 0 0; box-shadow:var(--shadow-sheet); padding:8px 20px 22px; margin-bottom:16px; position:relative; overflow:hidden; }
@@ -190,9 +195,9 @@ html[data-theme="dark"] .wy-prize, [data-theme="dark"] .wy-prize { color:#f3c766
 .ws-cf .b { width:4cqw; height:1.4cqw; border-radius:.7cqw; background:#fff; opacity:.7; }
 .ws-cf .k { background:var(--ink); opacity:.16; }
 .ws-cf .sp { width:5cqw; height:5cqw; color:#fff; } .ws-cf .sp svg { width:100%; height:100%; fill:currentColor; stroke:none; }
-.ws-trophy { width:12cqw; height:12cqw; margin:0 auto; border-radius:50%; background:rgba(255,255,255,.5); display:grid; place-items:center; color:var(--ink); }
+.ws-trophy { width:12cqw; height:12cqw; margin:0 auto; border-radius:50%; background:var(--chip); display:grid; place-items:center; color:var(--ink); }
 .ws-trophy .bz-ico { width:6.6cqw; height:6.6cqw; }
-.ws-rib { display:inline-flex; align-items:center; height:7.4cqw; padding:0 6cqw; margin-top:2.6cqw; background:var(--ink); color:var(--rib);
+.ws-rib { display:inline-flex; align-items:center; height:7.4cqw; padding:0 6cqw; margin-top:2.6cqw; background:var(--ribbg); color:var(--rib);
   font:900 3.6cqw var(--font); letter-spacing:.5cqw; clip-path:polygon(0 0,100% 0,calc(100% - 2.4cqw) 50%,100% 100%,0 100%,2.4cqw 50%); }
 .ws-av { position:relative; z-index:2; width:25cqw; height:25cqw; border-radius:50%; margin:-13cqw auto 0; background-size:cover;
   box-shadow:0 0 0 1.3cqw #FFFDF7, 0 0 0 2.3cqw var(--ring); display:grid; place-items:center; font:900 8cqw var(--font); color:var(--ink); }
@@ -230,18 +235,21 @@ html[data-theme="dark"] .wy-prize, [data-theme="dark"] .wy-prize { color:#f3c766
 .tc { padding:14px 0 4px; }
 .tc-h { display:flex; align-items:center; gap:7px; padding:0 16px 10px; font:900 15px var(--font); color:var(--text-primary); }
 .tc-h .bz-ico { width:17px; height:17px; color:#DD992A; }
-.tc-h span { color:var(--text-tertiary); font-weight:800; }
+.tc-n { font:800 11.5px var(--font); color:var(--text-secondary); background:var(--surface-alt); border-radius:99px; padding:2px 8px; }
 .tc-row { display:flex; gap:10px; overflow-x:auto; padding:2px 16px 12px; scrollbar-width:none; }
 .tc-row::-webkit-scrollbar { display:none; }
 .tc-t { flex:none; width:104px; background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow-card);
-  padding:12px 10px 11px; text-align:left; cursor:pointer; display:flex; flex-direction:column; }
-.tc-top { display:flex; align-items:flex-start; justify-content:space-between; }
-.tc-disc { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; font:900 14px var(--font); color:var(--ink);
-  background:linear-gradient(160deg,var(--t1),var(--t2)); box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px color-mix(in srgb,var(--ring) 55%,transparent); }
-.tc-tt { font:800 12.5px var(--font); color:var(--text-primary); line-height:1.3; margin-top:10px; height:2.6em;
+  padding:12px 9px 11px; text-align:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; }
+/* the trophy itself carries the place: a gold, silver or bronze cup on a soft tint of the same metal */
+.tc-cup { width:60px; height:60px; border-radius:50%; display:grid; place-items:center;
+  background:radial-gradient(circle at 50% 38%, color-mix(in srgb,var(--tint) 55%,var(--surface)), var(--tint) 72%); }
+[data-theme="dark"] .tc-cup { background:radial-gradient(circle at 50% 38%, color-mix(in srgb,var(--tint) 22%,var(--surface)), color-mix(in srgb,var(--tint) 12%,var(--surface)) 72%); }
+.tc-cup svg { display:block; filter:drop-shadow(0 2px 2px rgba(0,0,0,.18)); }
+.tc-tt { font:800 12.5px var(--font); color:var(--text-primary); line-height:1.3; margin-top:9px; height:2.6em; width:100%;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.tc-d { font:700 11px var(--font); color:var(--text-tertiary); margin-top:4px; display:flex; align-items:center; gap:6px; }
-.tc-draw { font:900 9.5px var(--font); letter-spacing:.3px; color:#B7791A; background:rgba(220,160,40,.16); border-radius:99px; padding:2px 6px; }
+.tc-pl { font:900 11px var(--font); color:var(--label); margin-top:5px; }
+[data-theme="dark"] .tc-pl { color:var(--labeld); }
+.tc-d { font:700 11px var(--font); color:var(--text-tertiary); margin-top:1px; }
 .tc-more { flex:none; width:58px; border-radius:16px; border:1px dashed var(--border); display:grid; place-items:center; color:var(--text-tertiary); }
 .tc-spin { width:18px; height:18px; border-radius:50%; border:2.5px solid var(--border); border-top-color:var(--primary); animation:tcspin .8s linear infinite; }
 @keyframes tcspin { to { transform:rotate(360deg); } }
